@@ -49,5 +49,5 @@ for target in sys.argv[1:]:
 		hashes = [r['hash'] for r in res]
 		hash_sets.append(set(hashes))
 
-fmt = '%24s: urls=%.3f hashes=%.3f fails=%02d'
-print fmt % (host, jaccard(url_sets), jaccard(hash_sets), fail_count)
+                fmt = '%24s: urls=%.3f hashes=%.3f fails=%02d'
+                print fmt % (host, jaccard(url_sets), jaccard(hash_sets), fail_count)
