@@ -35,8 +35,15 @@ def process_main(sys_args):
 	# Dictionary mapping each URL to the number of occurrences
 	# For a site that returns exactly the same resources with every attempt,
 	# the number of occurrences for all URLs should be constant
+	# Handles multiple occurrences of the same URL within a single result
+	# page by using tuple (url, unique) as the key, where unique is incremented
 	url_occ_dict = {}
 
+	# Map each resource URL to a list of hashes it returns
+	# We will be interested in resources that return multiple different hashes
+	# for the same URL (in different trials)?
+	url_hash_dict = {}	
+	
 	# Iterate over all of the runs for a given URL.
 	# We're particularly interested in whether they
 	# saw different URLs or different contents at
@@ -54,46 +61,105 @@ def process_main(sys_args):
 			
 			res = results['resources']
 			urls = [r['url'] for r in res]
-			url_occ_dict = update_url_occurrences(url_occ_dict, urls)
-			url_sets.append(set(urls))
-			
 			hashes = [r['hash'] for r in res]
+			url_sets.append(set(urls))
 			hash_sets.append(set(hashes))
+
+			url_occ_dict = update_url_occurrences(url_occ_dict, urls)
+			url_hash_dict = update_url_hashes(url_hash_dict, res)
 				
 	fmt = '%24s: urls=%.3f hashes=%.3f fails=%02d'
 	print fmt % (host, jaccard(url_sets), jaccard(hash_sets), fail_count)
-	inconsistent_url_dict = extract_inconsistent_urls(url_occ_dict,n_trials)
-	parse_urls(inconsistent_url_dict.keys())
+	inconsistent_url_dict = extract_inconsistent_urls(url_occ_dict,n_trials,fail_count)
+	print_dict(inconsistent_url_dict)
+	inconsistent_res_dict = extract_inconsistent_resources(url_hash_dict)
+	print_dict(inconsistent_res_dict)
+	#parse_urls(inconsistent_url_dict.keys())
 	
 
-# Write a function to compare URL sets acquired from different targets
+# Maps any resource URL encountered to # of occurrences across all trials
+# To be consistent across all trials, total # of occurrences should be some
+# multiple of the (n_trials-fail_count)(generally 1*(n_trials-fail_count) 
+# unless the resource url appears multiple times in the same result page)
 def update_url_occurrences(url_occ_dict, urls):
-	for url in urls:
+	# TODO:
+	# For now, making the simplifying assumption that url can only occur
+	# once in a list of resources
+	for url in set(urls):
 		if url in url_occ_dict:
 			url_occ_dict[url] += 1
 		else:
 			url_occ_dict[url] = 1
 	return url_occ_dict
 
-def print_dict(d):
-	for k,v in d.items():
-		print k, ": ", v
+# Maps resource url to the hash(es) of the site returned by it and maps those
+# hashes to their respective number of occurrences
+def update_url_hashes(url_hash_dict, res):
+	processed_urls = []
+	for r in res:
+		url = r['url']
+		h = r['hash']
+		sz = r['size']
 
-def extract_inconsistent_urls(url_occ_dict, n_trials):
+		# ignore failed resource fetches
+		# TODO: check this
+		if sz == 0:
+			continue
+		# TODO: for now, skip duplicate URLs
+		if url in processed_urls:
+			continue
+		processed_urls.append(url)
+
+		if url in url_hash_dict:
+			hashes = url_hash_dict[url]
+			if h in hashes:
+				hashes[h] += 1
+			else:
+				hashes[h] = 1
+		else:
+			new_h_dict = {}
+			new_h_dict[h] = 1
+			url_hash_dict[url] = new_h_dict
+	return url_hash_dict
+
+# TODO: improve this; this method breaks down if a URL with the same resource
+# is accessed more than once in a single result page
+def extract_inconsistent_urls(url_occ_dict, n_trials, fail_count):
 	inconsistent_url_dict = {}
 	for url in sorted(url_occ_dict.keys()):
 		url_occs = url_occ_dict[url]
-		assert url_occs <= n_trials
-		if url_occ_dict[url] < n_trials:
+		# This assertion only works if a resource is accessed at most once
+		# in a result page
+		#assert url_occs <= (n_trials-fail_count)
+		if url_occ_dict[url] < (n_trials-fail_count):
 			inconsistent_url_dict[url] = url_occs
 	return inconsistent_url_dict
-			
 
+# Isolates any resources that returned more than one hash across all trials
+def extract_inconsistent_resources(url_hash_dict):
+	inconsistent_res_dict = {}
+	for url in url_hash_dict.keys():
+		h_dict = url_hash_dict[url]
+		if len(h_dict) > 1:
+			inconsistent_res_dict[url] = h_dict
+	return inconsistent_res_dict
+
+# Inserts list of urls into a trie-like data structure
+# Then prints the data structure
+# TODO: figure out what more you can do with this; eg. extracting
+# common prefixes, isolating where the differences occur between
+# similar URLs
 def parse_urls(url_list):
 	url_trie = {}
 	for url in url_list:
-		url_trie = urltrie.insert_url(url,url_trie)
+		url_trie = urltrie.insert_url(url,url_trie,True)
 	urltrie.print_trie(url_trie,0)
+	urltrie.print_url_netlocs(url_trie)
+
+# Simple utility for printing a dictionary in a more readable way
+def print_dict(d):
+	for k,v in sorted(d.items()):
+		print k, ": ", v
 
 def main():
 	if len(sys.argv) < 2:
