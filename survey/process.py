@@ -67,14 +67,24 @@ def process_main(sys_args):
 
 			url_occ_dict = update_url_occurrences(url_occ_dict, urls)
 			url_hash_dict = update_url_hashes(url_hash_dict, res)
-				
+
+							
 	fmt = '%24s: urls=%.3f hashes=%.3f fails=%02d'
-	print fmt % (host, jaccard(url_sets), jaccard(hash_sets), fail_count)
+	print fmt % (host, jaccard(url_sets), jaccard(hash_sets), fail_count),
+	print "\n","="*80,"\n",
+
+	print "Inconsistent URLs:"
 	inconsistent_url_dict = extract_inconsistent_urls(url_occ_dict,n_trials,fail_count)
 	print_dict(inconsistent_url_dict)
+	print "\n","="*80,"\n",
+
+	print "Inconsistent Resources:"
 	inconsistent_res_dict = extract_inconsistent_resources(url_hash_dict)
 	print_dict(inconsistent_res_dict)
-	#parse_urls(inconsistent_url_dict.keys())
+	print "\n","="*80,"\n",
+
+	print "Parsed Urls:"
+	parse_urls(inconsistent_url_dict.keys())
 	
 
 # Maps any resource URL encountered to # of occurrences across all trials
@@ -153,11 +163,22 @@ def parse_urls(url_list):
 	url_trie = {}
 	for url in url_list:
 		url_trie = urltrie.insert_url(url,url_trie,True)
-	urltrie.print_trie(url_trie,0)
-	urltrie.print_url_netlocs(url_trie)
+	print "Url Trie:"
+	urltrie.print_trie(url_trie)
+
+	compression_level = 2
+	print "\n","="*80
+	print "compressed trie (level",compression_level,"):"
+	compressed_trie = {}
+	compressed_trie = urltrie.get_compressed_trie(url_trie,compression_level)
+	urltrie.print_trie(compressed_trie)
+	#print "\n","All netlocs in trie:"
+	#urltrie.print_url_netlocs(url_trie)
 
 # Simple utility for printing a dictionary in a more readable way
 def print_dict(d):
+	if len(d) == 0:
+		print "Warning: print_dict: dictionary empty"
 	for k,v in sorted(d.items()):
 		print k, ": ", v
 
