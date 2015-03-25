@@ -174,7 +174,7 @@ def print_sim_url_tab(sim_url_tab):
         for (seg_n,seg_text) in sorted(tab_url.keys()):
             variation_list = tab_url[(seg_n,seg_text)]
             if len(variation_list) > 0:
-                print seg_n,
+                print "Seg",seg_n,
                 for seg_variation in variation_list:
                     print "\t",seg_variation
         print '-'*40
