@@ -5,27 +5,50 @@
   Rather than splitting URLs into a hierarchical data structure, URLs that
   are not sufficiently similar will be stored as unrelated entries, whereas
   URLs that meet some "similarity threshold" will be stored with some
-  redundancy
+  redundancy.
 
   The overall data structure for storing all inconsistent URLs in a page will
-  be a list of a list of dictionaries. The top level list will contain all
-  the sets of similar URLs
+  be a list of dictionaries. The top level list will contain all the sets of 
+  similar URLs.
   
-  Each element of that list will be a list of dictionaries representing a set
-  of similar URLs. Each dictionary in that list will be a segment of a split
-  URL. Segments that are the same across all similar URLs will be dictionaries
-  of size 1.
+  Each element of that list will be a dictionary representing a set
+  of similar URLs. Each dictionary has keys representing each segment and
+  as a value has a list of possible variations for the segment within a set
+  of similar URLs.
+
+  The keys are tuples of the form (Seg #, Seg text) where the number is nec-
+  essary because a dictionary is unordered and we ultimately want to be able
+  to reconstruct the original URL in some recognizable way, which means main-
+  taining the original order of the segments. The seg text is the text of the
+  segment if it has only one possible value among a set of similar URLs; which
+  must be the case for a certain percent of segments in a set of URLs for them
+  to be considered similar; this percent is specified as the "similarity thres-
+  hold". If the segment text has only one possible variation in a list of similar
+  URLs, the value will be an empty list.
+
+  If the segment corresponds to a segment that varies across a set of similar
+  URLs, the segment text will be set to a "wildcard symbol" and the possible
+  variations of the segment text will be stored in the list corresponding to that
+  key value pair.
+
+  NB. Currently in the case of non-empty variation lists, the data structure just 
+  lists all possible variations with no repetition, and therefore says nothing about
+  the number of occurrences of each variation. TODO: this might be useful to add,
+  (But considering the things that vary are often things like access ids, and they
+  are always different, it might not be necessary.
 
   list of similar URLs
   -------------------------------------------------------------
   |* |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
   -------------------------------------------------------------
    |
-   |   List of URL parts
-   |   ex. [http://, www, cnzz, mmstat, com, 9, gif, abc=1, rnd=###]
-   |   ----------------------------------------
-   +-->|* |  |  |  |  |  |  |  |  |  |  |  |  |
-       ----------------------------------------
+   |   Dict of URL parts
+   |   Key: (Segment # in URL, Segment Text or wildcard)
+   |   Value: [list of possible variations on segment text or empty list]
+   |  
+   |   -------------------------------------------------------
+   +-->|(Seg #, seg text)|  |  |  |  |  |  |  |  |  |  |  |  |
+       -------------------------------------------------------
         |
         |
         +-->[] or list of variations in order of appearance
@@ -81,7 +104,6 @@ def update_tab_url(tab_url, new_url_list):
     #return tab_url
 
 
-
 # New table URL is stored as a dictionary
 # Keys are tuples of the form (segment #, segment text)
 # Values are initially empty lists; if value is a variation, segment text
@@ -116,6 +138,12 @@ def split_url(url):
 
 # 2 URLs are similar under a given similarity threshhold if their respective
 # lists have a % of differences <= sim_thresh
+# Any value of seg text compared against the wild_sym should count as a dif-
+# ference
+# TODO: this could theoretically screw things up; some URLs might fail the
+# sim threshold after a certain number of wild symbols have been inserted but
+# not before; do we have to re-check similarity of previous URLs once a wild
+# is inserted? - For now, assume no.
 def check_urls_sim(tab_url, new_url, sim_thresh):
     assert (sim_thresh >= 0)
     assert (sim_thresh <= 1)
@@ -125,7 +153,7 @@ def check_urls_sim(tab_url, new_url, sim_thresh):
         diff_count = 0
         total_len = len(tab_url)
         for i in xrange(0,len(tab_url)):
-            if tab_url[i] != new_url[i]: #&& tab_url[i] != wild_sym:
+            if tab_url[i] != new_url[i]: 
                 diff_count += 1
             if (float(diff_count)/total_len) > (1-sim_thresh):
                 return False
@@ -150,4 +178,5 @@ def print_sim_url_tab(sim_url_tab):
                 for seg_variation in variation_list:
                     print "\t",seg_variation
         print '-'*40
-        
+
+    

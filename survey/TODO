@@ -1,0 +1,22 @@
+TODO for final project
+================================================================================
+Process.py
+--------------------------------------------------------------------------------
+	- Want a way to sort similar URLs that have one or more different part
+	  Perhaps a fine-grained splitting of URLs? Look for sets that share
+	  almost all elements, separate out the different parts
+	  - Would involve splitting the netloc by '.', path by '/', params by ';'
+	    query by '&', fragment by something else
+	  - Looks like there can also be queries or params in other parts of the
+	    URL... So have to do splitting within each section
+          - Want to keep split parts in order
+	  - Perhaps allow a customizable "similarity threshold", meaning a number
+	    of differences to tolerate before considreing something a separate URL
+	    or could there be a way of determining this dynamically?
+	  - Some URLs have other URLs within them, as part of the query for instance
+	  - URLs that are split into different length lists would automatically be
+	    considered non-similar
+	  - Data structure implementation: a list of lists of dictionaries	
+	  - Additional assumption: all URLs that could possibly be considered similar
+	    will be grouped together
+
