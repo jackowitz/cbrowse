@@ -3,6 +3,9 @@
 import json
 import sys
 import urltrie
+import urltable
+
+sim_thresh = 0.75
 
 def jaccard(sets):
 	if len(sets) == 0:
@@ -84,8 +87,14 @@ def process_main(sys_args):
 	print_dict(inconsistent_res_dict)
 	print "\n","="*80,"\n",
 
-	print "Parsed Urls:"
+	print "Trie-parsed URLs:"
 	parse_urls(inconsistent_url_dict.keys())
+	print "\n","="*80,"\n",
+
+	print "Tabulated URLs:"
+	inconsistent_url_tab = urltable.create_sim_url_tab(inconsistent_url_dict.keys(),
+							   sim_thresh)
+	urltable.print_sim_url_tab(inconsistent_url_tab)
 	
 
 # Maps any resource URL encountered to # of occurrences across all trials

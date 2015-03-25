@@ -25,6 +25,7 @@
 #   param1=p1;param2=p2;      param1=p1;param2=p2;
 
 import urlparse
+import helper
 import sys
 
 def insert_url(url,trie,split_sections):
@@ -111,8 +112,6 @@ def get_num_elts(trie):
             level_sum += get_num_elts(trie[t])
         return level_sum
 
-def remove_empty_strings(l):
-    return filter(lambda elt: elt != '', l)
     
 """
 test_trie = {"a":{"b":{"c":1},"g":{"h":3}},"d":{"e":{"f":2}}}
