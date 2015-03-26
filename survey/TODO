@@ -1,0 +1,28 @@
+TODO for final project
+================================================================================
+Process.py
+--------------------------------------------------------------------------------
+
+Urltable.py
+--------------------------------------------------------------------------------
+	  - Looks like there can also be queries or params in other parts of the
+	    URL... So have to do splitting within each section
+	  - Perhaps allow a customizable "similarity threshold", meaning a number
+	    of differences to tolerate before considreing something a separate URL
+	    or could there be a way of determining this dynamically?
+	    - Need to improve the similarity threshold; some URLs have a ton of params
+	      that are different but are fundamentally the same but can't lower sim
+	      threshold universally; perhaps weight different segments higher?
+	    - For example, if all netloc segments and path same, URLs very likely 
+	      should be considered similar
+	  - There is additional splitting that should be done; examples:
+	    - amazon.com, https://pixel.adsafeprotected.com... commas within query
+	      javascript? param is called "jsinfo"
+	    - At the same time, there are sometimes unique comma-separated lists of 
+	      numbers as param values; necessarily want to split those
+
+Urltrie.py
+--------------------------------------------------------------------------------
+	    
+
+
