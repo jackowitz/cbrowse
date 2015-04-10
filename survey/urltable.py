@@ -60,6 +60,12 @@ import helper
 import sys
 
 wild_sym = '##!!##'
+scheme_code = 0
+netloc_code = 1
+param_code = 2
+path_code = 3
+query_code = 4
+frag_code = 5
 
 # Similarity threshold expressed as a percent of varying elements
 # within a URL
@@ -75,32 +81,41 @@ def insert_url(sim_url_table, new_url, sim_thresh):
     new_url_list = split_url(new_url)
     for i,tab_url in enumerate(sim_url_table):
         tab_url_list = sorted(tab_url.keys())
-        if check_urls_sim(helper.strip(tab_url_list,1), new_url_list, sim_thresh) == True:
-            #updated_tab_url = update_tab_url(tab_url, new_url_list)
+        if check_urls_sim(tab_url_list, 
+                          new_url_list,
+                          sim_thresh) == True:
             update_tab_url(tab_url, new_url_list)
-            #sim_url_table[i] = updated_tab_url
             return
     new_tab_url = create_tab_url(new_url_list)
     sim_url_table.append(new_tab_url)
     return
 
-# Tab URL keys are tuples of the form (seg #, seg text)
+# Tab URL keys are tuples of the form (seg #, seg text, seg type)
 # values are lists, either empty or containing the list of possible values
 # for the segment among similar URLs
+# New_URL_list is of form [(seg text, seg type)], all comparison should
+# be done on the basis of seg text, but both pieces of information must be
+# stored
+# NB: by not comparing seg types, this leaves open an unlikely bug where a
+# case like www.example.com/path/a and www.example.com/path?a could be 
+# stored as the same URL
 def update_tab_url(tab_url, new_url_list):
     tab_url_segs = sorted(tab_url.keys())
     assert len(tab_url_segs) == len(new_url_list)
     for i in xrange(0,len(tab_url_segs)):
-        if tab_url_segs[i][1] == wild_sym:
-            if not new_url_list[i] in tab_url[tab_url_segs[i]]:
-                tab_url[tab_url_segs[i]].append(new_url_list[i])
-        elif tab_url_segs[i][1] != new_url_list[i]:
-            old_seg_text = tab_url_segs[i][1]
+        if tab_url_segs[i][1] == wild_sym: #seg text
+            #if this text variant isn't already in list add it
+            if not new_url_list[i][0] in tab_url[tab_url_segs[i]]: 
+                tab_url[tab_url_segs[i]].append(new_url_list[i][0])
+        #Otherwise, need to change top-level text to wild, and update variation list with old text
+        elif tab_url_segs[i][1] != new_url_list[i][0]:
             old_seg_num = tab_url_segs[i][0]
+            old_seg_text = tab_url_segs[i][1]
+            old_seg_type = tab_url_segs[i][2]
             del(tab_url[tab_url_segs[i]])
-            tab_url[(old_seg_num,wild_sym)] = []
-            tab_url[(old_seg_num,wild_sym)].append(old_seg_text)
-            tab_url[(old_seg_num,wild_sym)].append(new_url_list[i])
+            tab_url[(old_seg_num,wild_sym,old_seg_type)] = []
+            tab_url[(old_seg_num,wild_sym,old_seg_type)].append(old_seg_text)
+            tab_url[(old_seg_num,wild_sym,old_seg_type)].append(new_url_list[i][0])
     #return tab_url
 
 
@@ -111,14 +126,16 @@ def update_tab_url(tab_url, new_url_list):
 # actual values of the segment text
 def create_tab_url(new_url_list):
     new_tab_url = {}
-    for i,u_seg in enumerate(new_url_list):
-        new_tab_url[(i,u_seg)] = []
+    for i,(u_seg,seg_type) in enumerate(new_url_list):
+        new_tab_url[(i,u_seg,seg_type)] = []
     return new_tab_url
 
 
 def split_url(url):
     url_list = []
     scheme,netloc,path,params,query,fragment = urlparse.urlparse(url)
+#    print scheme,netloc,path,params,query,fragment
+#    print urlparse.urlunparse((scheme,netloc,path,params,query,fragment))
     netloc_list = helper.remove_empty_strings(netloc.split('.'))
     path_list = helper.remove_empty_strings(path.split('/'))
     params_list = helper.remove_empty_strings(params.split(';'))
@@ -126,12 +143,12 @@ def split_url(url):
     frag_list = helper.remove_empty_strings(fragment.split('&'))
 
     # TODO: can further split up these subsections later as necessary
-    url_list.append((scheme,"sch"))
-    url_list.extend(helper.zipwith(netloc_list,"nl")) #TODO: queries or params within netloc?
-    url_list.extend(helper.zipwith(path_list,"pth"))
-    url_list.extend(helper.zipwith(params_list,"pms"))
-    url_list.extend(helper.zipwith(query_list,"qry"))
-    url_list.extend(helper.zipwith(frag_list,"frg"))
+    url_list.append((scheme,scheme_code))
+    url_list.extend(helper.zipwith(netloc_list, netloc_code)) #TODO: queries or params within netloc?
+    url_list.extend(helper.zipwith(path_list,path_code))
+    url_list.extend(helper.zipwith(params_list,param_code))
+    url_list.extend(helper.zipwith(query_list,query_code))
+    url_list.extend(helper.zipwith(frag_list,frag_code))
         
     return url_list
 
@@ -149,33 +166,103 @@ def check_urls_sim(tab_url, new_url, sim_thresh):
     if len(tab_url) != len(new_url):
         return False
     else:
-        diff_count = 0
-        total_len = len(tab_url)
+        tab_url_texts = helper.strip(tab_url,1)
+        tab_url_stypes = helper.strip(tab_url,2)
+        new_url_texts = helper.strip(new_url,0)
+        new_url_stypes = helper.strip(new_url,1)
+
+        sim_score = 0
+        max_score = 0
         for i in xrange(0,len(tab_url)):
-            if tab_url[i] != new_url[i]: 
-                diff_count += 1
-            if (float(diff_count)/total_len) > (1-sim_thresh):
-                return False
-        return True
+            # TODO: come back to this.
+            # for now, skip wild syms because they cause issues
+            if tab_url_texts == wild_sym:
+                continue
+            # weight similarity in netloc twice as heavily
+            if tab_url_stypes[i] == netloc_code:
+                max_score += 2
+            else:
+                max_score += 1
+            # if text & type match exactly, sim_score increases
+            if tab_url_stypes[i] == new_url_stypes[i]:
+                if tab_url_texts[i] == new_url_texts[i]:
+                    if new_url_stypes[i] == netloc_code:
+                        sim_score += 2
+                    else:
+                        sim_score += 1
+                # if name of parameter the same, sim_score increases
+                # NB: if params aren't of form x=y, this amounts to 
+                # testing the texts against each other directly
+                # and will always be false
+                elif tab_url_stypes[i] == param_code:
+                    t_param_name = tab_url_texts[i].split('=',1)[0]
+                    n_param_name = new_url_texts[i].split('=',1)[0]
+                    if t_param_name == n_param_name:
+                        sim_score += 1
+        if ((float(sim_score)/max_score) < sim_thresh):
+            return False
+        else:
+            return True
         
 def print_sim_url_tab(sim_url_tab):
     print '-'*40
     for tab_url in sim_url_tab:
-        # Reconstruct url using url_unparse
-        # Probably have to add some metadata to be able to reconstruct it
-        # for now, just dump it with a generic separator
-        for (seg_n,seg_text) in sorted(tab_url.keys()):
-            if seg_text == wild_sym:
-                print seg_text,":",seg_n,"::",
-            else:
-                print seg_text,'::',
-        print
-        for (seg_n,seg_text) in sorted(tab_url.keys()):
-            variation_list = tab_url[(seg_n,seg_text)]
+
+        reconstructed_url = reconstruct_url(tab_url)
+        print reconstructed_url
+
+        for (seg_n,seg_text,seg_type) in sorted(tab_url.keys()):
+            variation_list = tab_url[(seg_n,seg_text,seg_type)]
             if len(variation_list) > 0:
                 print "Seg",seg_n,
                 for seg_variation in variation_list:
                     print "\t",seg_variation
         print '-'*40
 
+def reconstruct_url(tab_url):
+    url_headers = sorted(tab_url.keys())
+    tab_url_ns = helper.strip(url_headers,0)
+    tab_url_texts = helper.strip(url_headers,1)
+    tab_url_stypes = helper.strip(url_headers,2)
     
+    scheme = ""
+    netloc = ""
+    path = ""
+    params = ""
+    query = ""
+    fragment = ""
+    
+    # Really ugly code that is basically just unsplitting based on
+    # what part of a url the original segment came from
+    for i in xrange(0,len(url_headers)):
+        if tab_url_stypes[i] == scheme_code:
+            scheme += (repl_wild(tab_url_texts[i],tab_url_ns[i]))
+        elif tab_url_stypes[i] == netloc_code:
+            if netloc != "":
+                netloc += '.'
+            netloc += (repl_wild(tab_url_texts[i],tab_url_ns[i]))
+        elif tab_url_stypes[i] == path_code:
+            path += ('/' + (repl_wild(tab_url_texts[i],tab_url_ns[i])))
+        elif tab_url_stypes[i] == param_code:
+            if params != "":
+                params += ';'
+            params += (repl_wild(tab_url_texts[i],tab_url_ns[i]))
+        elif tab_url_stypes[i] == query_code:
+            if query != "":
+                query += '&'
+            query += (repl_wild(tab_url_texts[i],tab_url_ns[i]))
+        #TODO: I don't know the fragment separator
+        elif tab_url_stypes[i] == frag_code:
+            if fragment != "":
+                fragment += '&'
+            fragment += (repl_wild(tab_url_texts[i],tab_url_ns[i]))
+        else:
+            print "bug: reconstruct url: invalid segment code"
+    path += '/'
+    
+    return urlparse.urlunparse((scheme,netloc,path,params,query,fragment))
+    
+def repl_wild(text,num):
+    if text == wild_sym:
+        text += ("::"+ (str(num)))
+    return text

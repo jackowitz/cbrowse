@@ -46,8 +46,13 @@ def process_main(sys_args):
 	# Map each resource URL to a list of hashes it returns
 	# We will be interested in resources that return multiple different hashes
 	# for the same URL (in different trials)?
-	url_hash_dict = {}	
-	
+	url_hash_dict = {}
+
+	# Map each resourse hash to a list of URLs that return it:
+        # This mapping is the inverse of the above, but is even more interesting for
+        # the purpose of URL canonicalization
+        hash_url_dict = {}
+
 	# Iterate over all of the runs for a given URL.
 	# We're particularly interested in whether they
 	# saw different URLs or different contents at
@@ -69,8 +74,9 @@ def process_main(sys_args):
 			url_sets.append(set(urls))
 			hash_sets.append(set(hashes))
 
-			url_occ_dict = update_url_occurrences(url_occ_dict, urls)
-			url_hash_dict = update_url_hashes(url_hash_dict, res)
+			update_url_occurrences(url_occ_dict, urls)
+                        update_url_hashes(url_hash_dict, hash_url_dict, res)
+                        #hash_url_dict = update_hash_urls(hash_url_dict, res)
 
 							
 	fmt = '%24s: urls=%.3f hashes=%.3f fails=%02d'
@@ -87,9 +93,14 @@ def process_main(sys_args):
 	print_dict(inconsistent_res_dict)
 	print "\n","="*80,"\n",
 
-	print "Trie-parsed URLs:"
-	parse_urls(inconsistent_url_dict.keys())
-	print "\n","="*80,"\n",
+        print "Synonym URLs:"
+        synonym_url_dict = extract_synonym_urls(hash_url_dict)
+        print_dict(synonym_url_dict)
+        print "\n","="*80
+
+	#print "Trie-parsed URLs:"
+	#parse_urls(inconsistent_url_dict.keys())
+	#print "\n","="*80,"\n",
 
 	print "Tabulated URLs:"
 	inconsistent_url_tab = urltable.create_sim_url_tab(inconsistent_url_dict.keys(),
@@ -102,7 +113,7 @@ def process_main(sys_args):
 # multiple of the (n_trials-fail_count)(generally 1*(n_trials-fail_count) 
 # unless the resource url appears multiple times in the same result page)
 def update_url_occurrences(url_occ_dict, urls):
-	# TODO:
+	# TODO: 
 	# For now, making the simplifying assumption that url can only occur
 	# once in a list of resources
 	for url in set(urls):
@@ -110,11 +121,10 @@ def update_url_occurrences(url_occ_dict, urls):
 			url_occ_dict[url] += 1
 		else:
 			url_occ_dict[url] = 1
-	return url_occ_dict
 
 # Maps resource url to the hash(es) of the site returned by it and maps those
 # hashes to their respective number of occurrences
-def update_url_hashes(url_hash_dict, res):
+def update_url_hashes(url_hash_dict, hash_url_dict, res):
 	processed_urls = []
 	for r in res:
 		url = r['url']
@@ -140,7 +150,20 @@ def update_url_hashes(url_hash_dict, res):
 			new_h_dict = {}
 			new_h_dict[h] = 1
 			url_hash_dict[url] = new_h_dict
-	return url_hash_dict
+
+                if h in hash_url_dict:
+                        urls = hash_url_dict[h]
+                        if url in urls:
+                                urls[url] += 1
+                        else:
+                                urls[url] = 1
+                else:
+                        new_url_dict = {}
+                        new_url_dict[url] = 1
+                        hash_url_dict[h] = new_url_dict
+	#return url_hash_dict
+
+        
 
 # TODO: improve this; this method breaks down if a URL with the same resource
 # is accessed more than once in a single result page
@@ -163,6 +186,17 @@ def extract_inconsistent_resources(url_hash_dict):
 		if len(h_dict) > 1:
 			inconsistent_res_dict[url] = h_dict
 	return inconsistent_res_dict
+
+def extract_synonym_urls(hash_url_dict):
+        synonym_url_dict = {}
+        for h in hash_url_dict.keys():
+                url_dict = hash_url_dict[h]
+                if len(url_dict) > 1:
+                        synonym_url_dict[h] = url_dict
+        return synonym_url_dict
+
+# Perform the inverse: make note of any different resources that contain the
+# same hash
 
 # Inserts list of urls into a trie-like data structure
 # Then prints the data structure

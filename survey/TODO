@@ -1,7 +1,27 @@
 TODO for final project
 ================================================================================
+
+first thing todo next: associate a hash with each URL given to urltable
+      This won't work for URLs that map to multiple hashes; for inconsistent res
+      ources, instead of a single hash, maybe pass some indicator that the URL
+      is associated with multiple hashes and therefore isn't a good candidate
+      for URL synonyms
+
 Process.py
 --------------------------------------------------------------------------------
+
+	  - Improve the inconsistent URL finding algorithm specifically in the case
+	    where a URL appears multiple times in a single result dictionary
+	  - Also consider just tabulating all URLs, not just inconsistent ones
+  	  - Do a top level reverse mapping from hash to all URLs that produce the 
+	    hash; we're particularly interested in sets of URLs that produce the 
+	    same hash because they automatically have unnecessary information
+	  - Possibly examine ALL URLs for potentially redundant information
+	    - Harder to isolate unnecessary parts of URL if the unnecessary parts
+	      are consistent across all calls, but this should be part of the 
+	      analysis nevertheless
+	  - Might want some way to map each hash to a unique, smaller number
+	    so it's easier to detect hash equivalence by eye
 
 Urltable.py
 --------------------------------------------------------------------------------
@@ -27,17 +47,14 @@ Urltable.py
 	    - Maybe tie into weighting certain parts of URL more highly? netloc?
 	    - If the names of all the parameters are the same but one URL has one
 	      more, those actually might be good candidates for similarity
-	  - Need a way to reconstruct URLs from parts
-	    - Probably also want to be able to reconstruct URL with some segments 
-	      removed
-	    - This requires maintaining information about where each segment came
-	      from
-	  - Update other functions to be compatible with this additional storage of
-	    information.
-
+          - Want some way to associate a hash with each inconsistent URL such that
+	    - If a group of similar URLs all share a hash, a new URL can be const-
+	      tructed that eliminates their unnecessary uniqueifying parts
 
 Urltrie.py
 --------------------------------------------------------------------------------
+
+
 
 
 ================================================================================
