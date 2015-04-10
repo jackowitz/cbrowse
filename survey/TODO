@@ -20,14 +20,38 @@ Urltable.py
 	      javascript? param is called "jsinfo"
 	    - At the same time, there are sometimes unique comma-separated lists of 
 	      numbers as param values; necessarily want to split those
-	  - Right now urls of different lengths are automatically not similar; may
+	  - Right now urls of different lengths are automatically not similar; may-
 	      be this shouldn't be the case?
 	    - See ebay.com-detailed.txt
 	    - http://srx.main.ebayrtm.com/rtm... one has an extra parameter
 	    - Maybe tie into weighting certain parts of URL more highly? netloc?
+	    - If the names of all the parameters are the same but one URL has one
+	      more, those actually might be good candidates for similarity
+	  - Need a way to reconstruct URLs from parts
+	    - Probably also want to be able to reconstruct URL with some segments 
+	      removed
+	    - This requires maintaining information about where each segment came
+	      from
+	  - Update other functions to be compatible with this additional storage of
+	    information.
+
 
 Urltrie.py
 --------------------------------------------------------------------------------
-	    
 
 
+================================================================================
+Final product spec
+================================================================================
+	- Possibly taking consistent parts of returned webpages and somehow
+	  reconstructing the sites returned by Slimer and archiving them?
+	- Removing or somehow standardizing the inconistent elements before arc-
+	  hiving or at least modifying the elements in some way to show that
+	  they might not be part of the "common browsing experience"
+	- Currently displaying the plain html page displays something that is 
+	  barely anything like the original page in most cases
+	- How can I synthesize something that looks like the actual original
+	  page with all the inconsistent elements removed or somehow marked?
+	  Do I have to somehow automatically save all the relevant media files?
+	
+	  

@@ -119,21 +119,20 @@ def create_tab_url(new_url_list):
 def split_url(url):
     url_list = []
     scheme,netloc,path,params,query,fragment = urlparse.urlparse(url)
-    netloc_list = netloc.split('.')
-    path_list = path.split('/')
-    params_list = params.split(';')
-    query_list = query.split('&')
-    frag_list = fragment.split('&')
+    netloc_list = helper.remove_empty_strings(netloc.split('.'))
+    path_list = helper.remove_empty_strings(path.split('/'))
+    params_list = helper.remove_empty_strings(params.split(';'))
+    query_list = helper.remove_empty_strings(query.split('&'))
+    frag_list = helper.remove_empty_strings(fragment.split('&'))
 
     # TODO: can further split up these subsections later as necessary
-    url_list.append(scheme)
-    url_list.extend(netloc_list) #TODO: queries or params within netloc?
-    url_list.extend(path_list)
-    url_list.extend(params_list)
-    url_list.extend(query_list)
-    url_list.extend(frag_list)
-    url_list = helper.remove_empty_strings(url_list)
-    
+    url_list.append((scheme,"sch"))
+    url_list.extend(helper.zipwith(netloc_list,"nl")) #TODO: queries or params within netloc?
+    url_list.extend(helper.zipwith(path_list,"pth"))
+    url_list.extend(helper.zipwith(params_list,"pms"))
+    url_list.extend(helper.zipwith(query_list,"qry"))
+    url_list.extend(helper.zipwith(frag_list,"frg"))
+        
     return url_list
 
 # 2 URLs are similar under a given similarity threshhold if their respective
