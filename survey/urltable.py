@@ -295,7 +295,15 @@ def reduce_sim_urls(sim_url_list, sim_thresh):
             print "Reduce sim URLs: url no longer similar to reduced URL"
         res_url = intersect_urls(res_url, url)
 
-    out_url = reconstruct_url(res_url)
+    res_url_final = remove_empty_segs(res_url)
+    out_url = reconstruct_url(res_url_final)
+    return out_url
+
+def remove_empty_segs(url_list):
+    out_url = []
+    for (n,txt,ty) in url_list:
+        if txt <> "":
+            out_url.append((n,txt,ty))
     return out_url
         
 
@@ -340,7 +348,7 @@ def intersect_urls(res_url, in_url):
             s_res_url[i] = (res_url_n, new_res_txt, res_url_ty)
         else:
             print "skipping segment",res_url_txt
-    
+
     return s_res_url
         
     
