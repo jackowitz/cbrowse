@@ -43,7 +43,7 @@
   -------------------------------------------------------------
    |
    |   Dict of URL parts
-   |   Key: (Segment # in URL, Segment Text or wildcard)
+   |   Key: (Segment # in URL, Segment Text or wildcard, segment type)
    |   Value: [list of possible variations on segment text or empty list]
    |  
    |   -------------------------------------------------------
@@ -52,7 +52,7 @@
         |
         |
         +-->[] or list of variations in order of appearance
-
+ 
 """
 
 import urlparse
@@ -79,7 +79,7 @@ def create_sim_url_tab(url_list, sim_thresh):
 
 def insert_url(sim_url_table, new_url, sim_thresh):
     new_url_list = split_url(new_url)
-    for i,tab_url in enumerate(sim_url_table):
+    for tab_url in sim_url_table:
         tab_url_list = sorted(tab_url.keys())
         if check_urls_sim(tab_url_list, 
                           new_url_list,
@@ -103,19 +103,27 @@ def update_tab_url(tab_url, new_url_list):
     tab_url_segs = sorted(tab_url.keys())
     assert len(tab_url_segs) == len(new_url_list)
     for i in xrange(0,len(tab_url_segs)):
-        if tab_url_segs[i][1] == wild_sym: #seg text
+
+        tab_url_seg = tab_url_segs[i]
+        tab_url_n = tab_url_seg[0]
+        tab_url_txt = tab_url_seg[1]
+        tab_url_ty = tab_url_seg[2]
+
+        new_url_seg = new_url_list[i]
+        new_url_n = new_url_seg[0]
+        new_url_txt = new_url_seg[1]
+        new_url_ty = new_url_seg[2]
+
+        if tab_url_txt == wild_sym: #seg text
             #if this text variant isn't already in list add it
-            if not new_url_list[i][0] in tab_url[tab_url_segs[i]]: 
-                tab_url[tab_url_segs[i]].append(new_url_list[i][0])
+            if not new_url_txt in tab_url[tab_url_seg]: 
+                tab_url[tab_url_seg].append(new_url_txt)
         #Otherwise, need to change top-level text to wild, and update variation list with old text
-        elif tab_url_segs[i][1] != new_url_list[i][0]:
-            old_seg_num = tab_url_segs[i][0]
-            old_seg_text = tab_url_segs[i][1]
-            old_seg_type = tab_url_segs[i][2]
-            del(tab_url[tab_url_segs[i]])
-            tab_url[(old_seg_num,wild_sym,old_seg_type)] = []
-            tab_url[(old_seg_num,wild_sym,old_seg_type)].append(old_seg_text)
-            tab_url[(old_seg_num,wild_sym,old_seg_type)].append(new_url_list[i][0])
+        elif tab_url_txt != new_url_txt:
+            del(tab_url[tab_url_seg])
+            tab_url[(tab_url_n,wild_sym,tab_url_ty)] = []
+            tab_url[(tab_url_n,wild_sym,tab_url_ty)].append(tab_url_txt)
+            tab_url[(tab_url_n,wild_sym,tab_url_ty)].append(new_url_txt)
     #return tab_url
 
 
@@ -126,8 +134,8 @@ def update_tab_url(tab_url, new_url_list):
 # actual values of the segment text
 def create_tab_url(new_url_list):
     new_tab_url = {}
-    for i,(u_seg,seg_type) in enumerate(new_url_list):
-        new_tab_url[(i,u_seg,seg_type)] = []
+    for seg in new_url_list:
+        new_tab_url[seg] = []
     return new_tab_url
 
 
@@ -149,8 +157,12 @@ def split_url(url):
     url_list.extend(helper.zipwith(params_list,param_code))
     url_list.extend(helper.zipwith(query_list,query_code))
     url_list.extend(helper.zipwith(frag_list,frag_code))
-        
-    return url_list
+
+    out_list = []
+    for i,(seg_txt,seg_ty) in enumerate(url_list):
+        out_list.append((i,seg_txt,seg_ty))
+
+    return out_list
 
 # 2 URLs are similar under a given similarity threshhold if their respective
 # lists have a % of differences <= sim_thresh
@@ -168,8 +180,8 @@ def check_urls_sim(tab_url, new_url, sim_thresh):
     else:
         tab_url_texts = helper.strip(tab_url,1)
         tab_url_stypes = helper.strip(tab_url,2)
-        new_url_texts = helper.strip(new_url,0)
-        new_url_stypes = helper.strip(new_url,1)
+        new_url_texts = helper.strip(new_url,1)
+        new_url_stypes = helper.strip(new_url,2)
 
         sim_score = 0
         max_score = 0
@@ -208,7 +220,8 @@ def print_sim_url_tab(sim_url_tab):
     print '-'*40
     for tab_url in sim_url_tab:
 
-        reconstructed_url = reconstruct_url(tab_url)
+        tab_url_headers = sorted(tab_url.keys())
+        reconstructed_url = reconstruct_url(tab_url_headers)
         print reconstructed_url
 
         for (seg_n,seg_text,seg_type) in sorted(tab_url.keys()):
@@ -219,11 +232,11 @@ def print_sim_url_tab(sim_url_tab):
                     print "\t",seg_variation
         print '-'*40
 
-def reconstruct_url(tab_url):
-    url_headers = sorted(tab_url.keys())
-    tab_url_ns = helper.strip(url_headers,0)
-    tab_url_texts = helper.strip(url_headers,1)
-    tab_url_stypes = helper.strip(url_headers,2)
+def reconstruct_url(tab_url_list):
+
+    tab_url_ns = helper.strip(tab_url_list,0)
+    tab_url_texts = helper.strip(tab_url_list,1)
+    tab_url_stypes = helper.strip(tab_url_list,2)
     
     scheme = ""
     netloc = ""
@@ -234,7 +247,7 @@ def reconstruct_url(tab_url):
     
     # Really ugly code that is basically just unsplitting based on
     # what part of a url the original segment came from
-    for i in xrange(0,len(url_headers)):
+    for i in xrange(0,len(tab_url_list)):
         if tab_url_stypes[i] == scheme_code:
             scheme += (repl_wild(tab_url_texts[i],tab_url_ns[i]))
         elif tab_url_stypes[i] == netloc_code:
@@ -266,3 +279,68 @@ def repl_wild(text,num):
     if text == wild_sym:
         text += ("::"+ (str(num)))
     return text
+
+
+def reduce_sim_urls(sim_url_list, sim_thresh):
+    split_urls = []
+    for url in sim_url_list:
+        # Representing each URL as a list of elements of form
+        # (seg_n, seg_txt, seg_ty)
+        url_seg_list = split_url(url)
+        split_urls.append(url_seg_list)
+    
+    res_url = split_urls[0]
+    for url in split_urls:
+        if not check_urls_sim(res_url, url, sim_thresh):
+            print "Reduce sim URLs: url no longer similar to reduced URL"
+        res_url = intersect_urls(res_url, url)
+
+    out_url = reconstruct_url(res_url)
+    return out_url
+        
+
+# Both URLs represented as lists (seg_n, seg_txt, seg_ty)
+# TODO: This breaks down if one URL in a set of similar URLs has an
+# extra segment somewhere in the middle; try to fix this
+def intersect_urls(res_url, in_url):
+    s_res_url = sorted(res_url)
+    s_in_url = sorted(in_url)
+    
+    for i in xrange(0,len(s_res_url)):
+        res_url_seg = s_res_url[i]
+        in_url_seg = s_in_url[i]
+
+        res_url_n = res_url_seg[0]
+        res_url_txt = res_url_seg[1]
+        res_url_ty = res_url_seg[2]
+
+        in_url_n = in_url_seg[0]
+        in_url_txt = in_url_seg[1]
+        in_url_ty = in_url_seg[2]
+
+        # Even once a segment has been deleted from result, it should
+        # still be represented until the end
+        assert (res_url_n == in_url_n)
+
+        # If type of segments being compared isn't same, something has
+        # gone wrong
+        assert (res_url_ty == in_url_ty)
+
+        # if text not the same but seg number is, this segment
+        # needs to be removed
+        if res_url_txt <> in_url_txt:
+            new_res_txt = ""
+            if res_url_ty == param_code or res_url_ty == query_code:
+                r_key_name = res_url_txt.split("=",1)[0]
+                i_key_name = res_url_txt.split("=",1)[0]
+                if r_key_name == i_key_name:
+                    new_res_txt = r_key_name+"="
+
+            print "removing segment",res_url_txt
+            s_res_url[i] = (res_url_n, new_res_txt, res_url_ty)
+        else:
+            print "skipping segment",res_url_txt
+    
+    return s_res_url
+        
+    

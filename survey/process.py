@@ -5,7 +5,7 @@ import sys
 import urltrie
 import urltable
 
-sim_thresh = 0.75
+sim_thresh = 0.60
 
 def jaccard(sets):
 	if len(sets) == 0:
