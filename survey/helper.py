@@ -2,6 +2,12 @@
 
 import sys
 
+debug = False
+
+def printd(s):
+    if debug:
+        print s
+
 def remove_empty_strings(l):
     return filter(lambda elt: elt != '', l)
 
@@ -25,4 +31,11 @@ def zipwith(l, d):
         l2.append((lx,d))
     return l2
 
-
+# This taken from:
+# http://stackoverflow.com/questions/18776420/python-replacing-
+# element-in-list-without-list-comprehension-slicing-or-using
+def listReplace(l, X, Y):
+    for i,v in enumerate(l):
+        if v == X:
+            l.pop(i)
+            l.insert(i, Y)

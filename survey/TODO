@@ -1,11 +1,9 @@
 TODO for final project
 ================================================================================
 
-first thing todo next: associate a hash with each URL given to urltable
-      This won't work for URLs that map to multiple hashes; for inconsistent res
-      ources, instead of a single hash, maybe pass some indicator that the URL
-      is associated with multiple hashes and therefore isn't a good candidate
-      for URL synonyms
+NEXT action item: take reduced URLs, pipe them to slimer and hash returns
+          For each reduced URL, determine whether or not it was successful in 
+	  returning the same contents
 
 Process.py
 --------------------------------------------------------------------------------
@@ -13,7 +11,7 @@ Process.py
 	  - Improve the inconsistent URL finding algorithm specifically in the case
 	    where a URL appears multiple times in a single result dictionary
 	  - Also consider just tabulating all URLs, not just inconsistent ones
-  	  - Do a top level reverse mapping from hash to all URLs that produce the 
+DONE  	  - Do a top level reverse mapping from hash to all URLs that produce the 
 	    hash; we're particularly interested in sets of URLs that produce the 
 	    same hash because they automatically have unnecessary information
 	  - Possibly examine ALL URLs for potentially redundant information
@@ -25,36 +23,49 @@ Process.py
 
 Urltable.py
 --------------------------------------------------------------------------------
-	  - Looks like there can also be queries or params in other parts of the
-	    URL... So have to do splitting within each section
-	  - Perhaps allow a customizable "similarity threshold", meaning a number
+MAYBE	  - Looks like there can also be queries or params in other parts of the
+	    URL... So have to do splitting within each 
+IN PROG	  - Perhaps allow a customizable "similarity threshold", meaning a number
 	    of differences to tolerate before considreing something a separate URL
 	    or could there be a way of determining this dynamically?
-	    - Need to improve the similarity threshold; some URLs have a ton of params
+DONE	    - Need to improve the similarity threshold; some URLs have a ton of params
 	      that are different but are fundamentally the same but can't lower sim
 	      threshold universally; perhaps weight different segments higher?
-	    - For example, if all netloc segments and path same, URLs very likely 
+DONE	    - For example, if all netloc segments and path same, URLs very likely 
 	      should be considered similar
 	  - There is additional splitting that should be done; examples:
 	    - amazon.com, https://pixel.adsafeprotected.com... commas within query
 	      javascript? param is called "jsinfo"
 	    - At the same time, there are sometimes unique comma-separated lists of 
 	      numbers as param values; necessarily want to split those
-	  - Right now urls of different lengths are automatically not similar; may-
+IN PROG	  - Right now urls of different lengths are automatically not similar; may-
 	      be this shouldn't be the case?
 	    - See ebay.com-detailed.txt
 	    - http://srx.main.ebayrtm.com/rtm... one has an extra parameter
 	    - Maybe tie into weighting certain parts of URL more highly? netloc?
 	    - If the names of all the parameters are the same but one URL has one
 	      more, those actually might be good candidates for similarity
-          - Want some way to associate a hash with each inconsistent URL such that
+NOT DOING - Want some way to associate a hash with each inconsistent URL such that
 	    - If a group of similar URLs all share a hash, a new URL can be const-
 	      tructed that eliminates their unnecessary uniqueifying parts
+DONE	  - Need to fix intersect URLs so that it can handle URLs of different lens
+	    and potentially somewhat different #s of segments
+	    - Consider: extra segment in the middle
+	    - Extra segment at the end
+	    - Equal # of segments, but different types
+	    - Ended up just accepting that a set of synonym URLs might not be red-
+	      ucible to a single reduced URL if the structure of the synonym URLs
+	      isn't sufficiently similar
 
 Urltrie.py
 --------------------------------------------------------------------------------
 
 
+survey.js
+--------------------------------------------------------------------------------
+	  - Need to pipe simplified URLs from process.py back to this
+	  - Probably a lighter-weight version of this though; just want the hash
+	    of their contents
 
 
 ================================================================================

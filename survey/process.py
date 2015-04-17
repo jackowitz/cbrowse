@@ -85,12 +85,14 @@ def process_main(sys_args):
 
 	print "Inconsistent URLs:"
 	inconsistent_url_dict = extract_inconsistent_urls(url_occ_dict,n_trials,fail_count)
-	print_dict(inconsistent_url_dict)
+        print "<Omitted>"
+	#print_dict(inconsistent_url_dict)
 	print "\n","="*80,"\n",
 
 	print "Inconsistent Resources:"
 	inconsistent_res_dict = extract_inconsistent_resources(url_hash_dict)
-	print_dict(inconsistent_res_dict)
+        print "<Omitted>"
+	#print_dict(inconsistent_res_dict)
 	print "\n","="*80,"\n",
 
         print "Synonym URLs:"
@@ -106,6 +108,13 @@ def process_main(sys_args):
 	inconsistent_url_tab = urltable.create_sim_url_tab(inconsistent_url_dict.keys(),
 							   sim_thresh)
 	urltable.print_sim_url_tab(inconsistent_url_tab)
+        print "\n","="*80
+
+        print "Reduced Synonym URLs:"
+        reduce_synonym_urls(synonym_url_dict)
+        print_syn_url_reductions(synonym_url_dict, False)
+        
+
 	
 
 # Maps any resource URL encountered to # of occurrences across all trials
@@ -194,6 +203,28 @@ def extract_synonym_urls(hash_url_dict):
                 if len(url_dict) > 1:
                         synonym_url_dict[h] = url_dict
         return synonym_url_dict
+
+# Reduce sets of synonym URLs and store the results in a table mapping hash to
+# a tuple that contains the original synonym url list and the reduced version
+def reduce_synonym_urls(syn_url_dict):
+        for h in syn_url_dict.keys():
+                syn_url_list = syn_url_dict[h]
+                reduced_urls = urltable.reduce_syn_urls(syn_url_list, sim_thresh)
+                syn_url_dict[h] = (syn_url_list,reduced_urls)
+
+# Print the list of reduced URLs and optionally the original sets from which
+# they were distilled
+def print_syn_url_reductions(syn_url_dict, show_sets):
+        for h in syn_url_dict.keys():
+                syn_url_list = syn_url_dict[h][0]
+                reduced_urls = syn_url_dict[h][1]
+                print h,":"
+                for red_url in reduced_urls:
+                        print "\t",red_url
+                if show_sets:
+                        for url in syn_url_list:
+                                print "\t\t",url
+
 
 # Perform the inverse: make note of any different resources that contain the
 # same hash

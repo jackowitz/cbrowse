@@ -264,7 +264,6 @@ def reconstruct_url(tab_url_list):
             if query != "":
                 query += '&'
             query += (repl_wild(tab_url_texts[i],tab_url_ns[i]))
-        #TODO: I don't know the fragment separator
         elif tab_url_stypes[i] == frag_code:
             if fragment != "":
                 fragment += '&'
@@ -280,24 +279,45 @@ def repl_wild(text,num):
         text += ("::"+ (str(num)))
     return text
 
+# Reduce a set of similar URLs to list of simplified URLs that represent the most
+# reduced versions of the different URL templates across URLs in the set
+def reduce_syn_urls(syn_url_list, sim_thresh):
+    split_urls = [] # list of lists of url segments
+    res_urls = [] # list of resulting "reduced" URLs, ideally much smaller
+                  # than size of synonym URL set
+    out_urls = [] # Reduced urls after being "reconstructed" into viable URLs
 
-def reduce_sim_urls(sim_url_list, sim_thresh):
-    split_urls = []
-    for url in sim_url_list:
+    for url in syn_url_list:
         # Representing each URL as a list of elements of form
         # (seg_n, seg_txt, seg_ty)
         url_seg_list = split_url(url)
         split_urls.append(url_seg_list)
     
-    res_url = split_urls[0]
-    for url in split_urls:
-        if not check_urls_sim(res_url, url, sim_thresh):
-            print "Reduce sim URLs: url no longer similar to reduced URL"
-        res_url = intersect_urls(res_url, url)
+    res_urls.append(split_urls[0])
 
-    res_url_final = remove_empty_segs(res_url)
-    out_url = reconstruct_url(res_url_final)
-    return out_url
+    for url in split_urls:
+        found_match = False
+        for res_url in res_urls:
+            # If url can't be reduced to this res_url, try another
+            if not check_urls_sim(res_url, url, sim_thresh):
+                continue
+            else:
+                (success, res_url2) = intersect_urls(res_url, url)
+                if success:
+                    helper.listReplace(res_urls, res_url, res_url2)
+                    found_match = True
+                else:
+                    continue
+        if not found_match:
+            res_urls.append(url)
+    
+
+    for res_url in res_urls:
+        res_url_final = remove_empty_segs(res_url)
+        out_url = reconstruct_url(res_url_final)
+        out_urls.append(out_url)
+
+    return out_urls
 
 def remove_empty_segs(url_list):
     out_url = []
@@ -308,11 +328,13 @@ def remove_empty_segs(url_list):
         
 
 # Both URLs represented as lists (seg_n, seg_txt, seg_ty)
-# TODO: This breaks down if one URL in a set of similar URLs has an
-# extra segment somewhere in the middle; try to fix this
+# Return value is (success_status, resulting_url)
+# Intersection will fail if types of two segments being compared aren't the same
 def intersect_urls(res_url, in_url):
     s_res_url = sorted(res_url)
     s_in_url = sorted(in_url)
+
+    assert (len(s_res_url) == len(s_in_url))
     
     for i in xrange(0,len(s_res_url)):
         res_url_seg = s_res_url[i]
@@ -330,25 +352,27 @@ def intersect_urls(res_url, in_url):
         # still be represented until the end
         assert (res_url_n == in_url_n)
 
-        # If type of segments being compared isn't same, something has
-        # gone wrong
-        assert (res_url_ty == in_url_ty)
+        # If type of segments being compared isn't same, URLs can't be
+        # compared
+        if (res_url_ty != in_url_ty):
+            return (False, "")
 
         # if text not the same but seg number is, this segment
         # needs to be removed
         if res_url_txt <> in_url_txt:
             new_res_txt = ""
-            if res_url_ty == param_code or res_url_ty == query_code:
+            if res_url_ty == param_code or res_url_ty == query_code or res_url_ty == frag_code:
+
                 r_key_name = res_url_txt.split("=",1)[0]
                 i_key_name = res_url_txt.split("=",1)[0]
                 if r_key_name == i_key_name:
                     new_res_txt = r_key_name+"="
 
-            print "removing segment",res_url_txt
+            helper.printd ("removing segment"+res_url_txt)
             s_res_url[i] = (res_url_n, new_res_txt, res_url_ty)
         else:
-            print "skipping segment",res_url_txt
+            helper.printd ("skipping segment"+res_url_txt)
 
-    return s_res_url
+    return (True, s_res_url)
         
     
