@@ -361,12 +361,12 @@ def intersect_urls(res_url, in_url):
         # needs to be removed
         if res_url_txt <> in_url_txt:
             new_res_txt = ""
-            if res_url_ty == param_code or res_url_ty == query_code or res_url_ty == frag_code:
-
-                r_key_name = res_url_txt.split("=",1)[0]
-                i_key_name = res_url_txt.split("=",1)[0]
-                if r_key_name == i_key_name:
-                    new_res_txt = r_key_name+"="
+            #TODO: potentially change back
+            #if res_url_ty == param_code or res_url_ty == query_code or res_url_ty == frag_code:
+             #   r_key_name = res_url_txt.split("=",1)[0]
+              #  i_key_name = res_url_txt.split("=",1)[0]
+               # if r_key_name == i_key_name:
+                #    new_res_txt = r_key_name+"="
 
             helper.printd ("removing segment"+res_url_txt)
             s_res_url[i] = (res_url_n, new_res_txt, res_url_ty)
