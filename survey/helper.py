@@ -2,7 +2,7 @@
 
 import sys
 
-debug = False
+debug = True
 
 def printd(s):
     if debug:

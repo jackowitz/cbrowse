@@ -1,7 +1,7 @@
 TODO for final project
 ================================================================================
 
-Immediately next: l. 281 in process.py - add sanity test
+Figure out why sanity test is failing
 
 Process.py
 --------------------------------------------------------------------------------

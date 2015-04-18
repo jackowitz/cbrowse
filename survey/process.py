@@ -241,7 +241,6 @@ def write_sym_url_data(host, syn_url_dict, out_file, full_urls):
         fout.write("Number of synonym url sets: "+str(len(syn_url_dict.keys()))+"\n")
         
         for h in syn_url_dict.keys():
-                syn_url_list = syn_url_dict[h][0]
                 reduced_urls = syn_url_dict[h][1]
                 total_reduced_urls += len(reduced_urls)
                 
@@ -262,6 +261,8 @@ def fetch_reduced_urls(host, syn_url_dict, out_file, share_file):
         # the form (syn_list, reduced_url_map) where reduced_url_map is a dictionary
         # mapping each reduced URL to a tuple of the form (success?, hash)
         # This hopefully allows flexible analysis to be done on the results later
+        # (syn_list is actually a dictionary mapping each URL in the synonym set
+        # to its number of occurrences)
         fails = 0
         succs_w_match = 0
         succs_no_match = 0
@@ -272,17 +273,24 @@ def fetch_reduced_urls(host, syn_url_dict, out_file, share_file):
         fout = open(out_file, 'a')
 
         for h in syn_url_dict.keys():
-                syn_url_list = syn_url_dict[h][0]
+                syn_url_list = sorted(syn_url_dict[h][0].keys())
+                                             
                 reduced_urls = syn_url_dict[h][1]
                 reduced_url_map = {}
 
-                sanity_url = syn_url_list[0] # For sanity test; original URL should
-                                             # certainly return stored hash
+                assert (len(syn_url_list) > 0)
+
+                # For sanity test; original URL from synonym set should
+                # definitely return same hash as original
+                sanity_url = syn_url_list[0] 
+                helper.printd("Sanity Test URL: "+sanity_url+"\n")
+                fetch_and_compare(h,sanity_url,share_file,reduced_url_map,\
+                                  fails,succs_no_match,succs_w_match,True)
                         
                 for url in reduced_urls:
                         (fails,succs_no_match,succs_w_match) = \
                                 fetch_and_compare(h,url,share_file,reduced_url_map,\
-                                                  fails,succs_no_match,succs_w_match)
+                                                  fails,succs_no_match,succs_w_match,False)
                         
                 res_syn_url_dict[h] = (syn_url_list, reduced_url_map)
         
@@ -294,10 +302,13 @@ def fetch_reduced_urls(host, syn_url_dict, out_file, share_file):
 
         return res_syn_url_dict
 
-# fetches url, compares with original hash, updates vaule of fail, swm (success_w_match)
+# fetches url, compares with original hash, updates value of fail, swm (success_w_match)
 # snm (success_no_match) in response
-def fetch_and_compare(orig_hash, url, share_file, reduced_url_map, fail, snm, swm,):
-        helper.printd("Fetching reduced url "+url)
+# If sanity_check true, don't add result to reduced_url_map or update counter, just print
+# result
+def fetch_and_compare(orig_h, url, share_file, reduced_url_map, \
+                      fail, snm, swm, sanity_check):
+        helper.printd("Fetching url "+url)
         proc_fetch = subprocess.call(['slimerjs', 'fetchsyn.js', \
                                       url, share_file])
         with open(share_file) as data_file:
@@ -307,10 +318,17 @@ def fetch_and_compare(orig_hash, url, share_file, reduced_url_map, fail, snm, sw
                 if results['status'] != 'success':
                         fail += 1
                         reduced_url_map[url] = (False,'')
-                        continue
-                        
+                        return (fail,snm,swm)
+
                 new_h = results['page']['hash']
-                if new_h == h:
+                helper.printd("Synonym set Hash: "+str(orig_h)+"\n")
+                helper.printd("Reduced URL Hash: "+str(new_h)+"\n")
+
+                if sanity_check:
+                        assert (new_h == orig_h)
+                        return (0,0,0)
+                        
+                if new_h == orig_h:
                         swm += 1
                 else:
                         snm += 1
