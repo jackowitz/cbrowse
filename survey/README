@@ -1,0 +1,80 @@
+Assumptions I should mention:
+================================================================================
+About the directory hierarchy:
+      
+                    survey
+		      |
+	+-------------+--------------+
+	|			     |
+      resultstats*                results**
+        |			     |
+        +-----------+----------+     +------------+
+        |	    |          |		  |
+	agg*       temp*     <tons of 	     <site dirs>
+		   	     .txt files>          |
+						  |
+						  |	
+			     	             <fetch no. dirs>
+					          |
+					       +--+-------+
+					       |	  |
+					     <pages>   results.json
+					     
+      - * The user must create all files with an * before running dprocess.sh
+      - ** To run map.sh, the empty directory results must exist
+      - process.py assumes that a directory "resultstats/temp" exists for 
+        communicating with its synonym URL fetching subprocess
+      - Also assumes that directory "resultstats/agg" exists which contains files 
+        that aggregate some data from processing all websites
+      - If the tester wants to save these aggregate data files, it is important to 
+        copy them somewhere else because otherwise dprocess.sh will try to delete them
+      - dprocess.sh assumes result json files are called results.json and
+        stored in "<hostname>/<fetch_num>/results.json"
+	- As long as the tester uses "map.sh" to generate the results, the input
+	  to dprocess.sh will be placed in the correct place
+
+Testing process:
+================================================================================
+Date  : 4/17/15 15:00
+Test 1: Piped reduced URLs with empty params left to slimer, hashed results and 
+        compared to hash of original synonym set
+Result: NONE of the reduced URLs produced contents which hashed to the same value
+	as the original resource
+
+Date  : 4/18/15 14:00
+Test 2: Piped Reduced URLs with non-matching segments completely removed to slimer,
+        hashed results and compared to original synonym hash
+Result: For huffingtonpost.com, which had a massive 92 reduced URLs from 41 synonym
+	URL sets, not one reduced URL result hashed to the same value
+
+Date  : 4/18/15 17:00
+Test 3: Sanity test: re-fetch one of the urls in the original synonym set and hash
+        its contents, compare to original stored hash for synonym set
+	If it isn't the same, that suggests maybe there are time-sensitive params
+	within the URLs that no longer check out, causing the reduced URLs to fail
+Result: Sanity test is failing on all links. That should not be the case. Is the
+	problem slimer, or something in my program?
+
+Date  : 4/19/15 13:00
+Test 4: Re-generated all input data using map.sh script, re-ran dprocess.sh
+Result: Again came to conclusion that every site which has a reduced URL and runs
+	sanity check is failing the assertion that result of fetching sanity check
+	is same as original hash associated with sanity URL
+	(see process.py, fetch_reduced_urls)
+
+Date  : 4/19/15 16:00
+Test 5:	Determined something was funky with the fetchsyn.js script, and realized
+        that I'm comparing the wrong 2 hashes. Instead of comparing the hash of
+	the page contents with the hash of the result body, when re-fetching the
+	reduced URLs I should search the returned resources for the URL I fetched
+	and compare its hash with the original hash.
+Result: More of the websites are passing the sanity test, although not all. Finally
+	getting some reduced URLs to hash to the same contents as the original syn-
+	onym set.
+
+Date  : 
+Test 6: In the cases where the reduced URL is hashing to the same contents as the 
+        original synonym URL, it would be useful to confirm that the contents aren't
+	just an empty page of some kind.
+Result: 
+     	
