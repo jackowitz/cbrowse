@@ -1,0 +1,400 @@
+Host: 163.com
+Number of synonym url sets: 18
+Number of reduced URLs: 35
+------------------------------------------------------------
+Host: 360.cn
+Number of synonym url sets: 3
+Number of reduced URLs: 4
+------------------------------------------------------------
+Host: adcash.com
+Number of synonym url sets: 3
+Number of reduced URLs: 4
+------------------------------------------------------------
+Host: adobe.com
+Number of synonym url sets: 2
+Number of reduced URLs: 4
+------------------------------------------------------------
+Host: alibaba.com
+Number of synonym url sets: 2
+Number of reduced URLs: 2
+------------------------------------------------------------
+Host: aliexpress.com
+Number of synonym url sets: 63
+Number of reduced URLs: 63
+------------------------------------------------------------
+Host: alipay.com
+Number of synonym url sets: 1
+Number of reduced URLs: 1
+------------------------------------------------------------
+Host: amazon.cn
+Number of synonym url sets: 2
+Number of reduced URLs: 2
+------------------------------------------------------------
+Host: amazon.co.jp
+Number of synonym url sets: 3
+Number of reduced URLs: 3
+------------------------------------------------------------
+Host: amazon.com
+Number of synonym url sets: 26
+Number of reduced URLs: 27
+------------------------------------------------------------
+Host: amazon.co.uk
+Number of synonym url sets: 2
+Number of reduced URLs: 2
+------------------------------------------------------------
+Host: amazon.de
+Number of synonym url sets: 2
+Number of reduced URLs: 2
+------------------------------------------------------------
+Host: apple.com
+Number of synonym url sets: 1
+Number of reduced URLs: 1
+------------------------------------------------------------
+Host: ask.com
+Number of synonym url sets: 9
+Number of reduced URLs: 16
+------------------------------------------------------------
+Host: baidu.com
+Number of synonym url sets: 0
+Number of reduced URLs: 0
+------------------------------------------------------------
+Host: bbc.co.uk
+Number of synonym url sets: 1
+Number of reduced URLs: 3
+------------------------------------------------------------
+Host: bing.com
+Number of synonym url sets: 0
+Number of reduced URLs: 0
+------------------------------------------------------------
+Host: blogger.com
+Number of synonym url sets: 0
+Number of reduced URLs: 0
+------------------------------------------------------------
+Host: blogspot.com
+Number of synonym url sets: 0
+Number of reduced URLs: 0
+------------------------------------------------------------
+Host: chinadaily.com.cn
+Number of synonym url sets: 8
+Number of reduced URLs: 9
+------------------------------------------------------------
+Host: cnn.com
+Number of synonym url sets: 26
+Number of reduced URLs: 34
+------------------------------------------------------------
+Host: cntv.cn
+Number of synonym url sets: 0
+Number of reduced URLs: 0
+------------------------------------------------------------
+Host: craigslist.org
+Number of synonym url sets: 0
+Number of reduced URLs: 0
+------------------------------------------------------------
+Host: dailymotion.com
+Number of synonym url sets: 36
+Number of reduced URLs: 107
+------------------------------------------------------------
+Host: diply.com
+Number of synonym url sets: 0
+Number of reduced URLs: 0
+------------------------------------------------------------
+Host: dropbox.com
+Number of synonym url sets: 0
+Number of reduced URLs: 0
+------------------------------------------------------------
+Host: ebay.com
+Number of synonym url sets: 5
+Number of reduced URLs: 6
+------------------------------------------------------------
+Host: ebay.co.uk
+Number of synonym url sets: 3
+Number of reduced URLs: 5
+------------------------------------------------------------
+Host: ebay.de
+Number of synonym url sets: 4
+Number of reduced URLs: 6
+------------------------------------------------------------
+Host: espn.go.com
+Number of synonym url sets: 1
+Number of reduced URLs: 1
+------------------------------------------------------------
+Host: facebook.com
+Number of synonym url sets: 0
+Number of reduced URLs: 0
+------------------------------------------------------------
+Host: fc2.com
+Number of synonym url sets: 8
+Number of reduced URLs: 12
+------------------------------------------------------------
+Host: flipkart.com
+Number of synonym url sets: 2
+Number of reduced URLs: 3
+------------------------------------------------------------
+Host: gmw.cn
+Number of synonym url sets: 16
+Number of reduced URLs: 18
+------------------------------------------------------------
+Host: go.com
+Number of synonym url sets: 4
+Number of reduced URLs: 5
+------------------------------------------------------------
+Host: googleadservices.com
+Number of synonym url sets: 0
+Number of reduced URLs: 0
+------------------------------------------------------------
+Host: google.ca
+Number of synonym url sets: 0
+Number of reduced URLs: 0
+------------------------------------------------------------
+Host: google.co.in
+Number of synonym url sets: 0
+Number of reduced URLs: 0
+------------------------------------------------------------
+Host: google.co.jp
+Number of synonym url sets: 0
+Number of reduced URLs: 0
+------------------------------------------------------------
+Host: google.com
+Number of synonym url sets: 0
+Number of reduced URLs: 0
+------------------------------------------------------------
+Host: google.com.au
+Number of synonym url sets: 0
+Number of reduced URLs: 0
+------------------------------------------------------------
+Host: google.com.br
+Number of synonym url sets: 0
+Number of reduced URLs: 0
+------------------------------------------------------------
+Host: google.com.hk
+Number of synonym url sets: 0
+Number of reduced URLs: 0
+------------------------------------------------------------
+Host: google.com.mx
+Number of synonym url sets: 0
+Number of reduced URLs: 0
+------------------------------------------------------------
+Host: google.com.tr
+Number of synonym url sets: 0
+Number of reduced URLs: 0
+------------------------------------------------------------
+Host: google.co.uk
+Number of synonym url sets: 0
+Number of reduced URLs: 0
+------------------------------------------------------------
+Host: google.de
+Number of synonym url sets: 0
+Number of reduced URLs: 0
+------------------------------------------------------------
+Host: google.es
+Number of synonym url sets: 0
+Number of reduced URLs: 0
+------------------------------------------------------------
+Host: google.fr
+Number of synonym url sets: 0
+Number of reduced URLs: 0
+------------------------------------------------------------
+Host: google.it
+Number of synonym url sets: 0
+Number of reduced URLs: 0
+------------------------------------------------------------
+Host: google.pl
+Number of synonym url sets: 0
+Number of reduced URLs: 0
+------------------------------------------------------------
+Host: google.ru
+Number of synonym url sets: 0
+Number of reduced URLs: 0
+------------------------------------------------------------
+Host: googleusercontent.com
+Number of synonym url sets: 0
+Number of reduced URLs: 0
+------------------------------------------------------------
+Host: hao123.com
+Number of synonym url sets: 7
+Number of reduced URLs: 13
+------------------------------------------------------------
+Host: huffingtonpost.com
+Number of synonym url sets: 30
+Number of reduced URLs: 50
+------------------------------------------------------------
+Host: imdb.com
+Number of synonym url sets: 5
+Number of reduced URLs: 22
+------------------------------------------------------------
+Host: imgur.com
+Number of synonym url sets: 6
+Number of reduced URLs: 6
+------------------------------------------------------------
+Host: instagram.com
+Number of synonym url sets: 0
+Number of reduced URLs: 0
+------------------------------------------------------------
+Host: kickass.so
+Number of synonym url sets: 0
+Number of reduced URLs: 0
+------------------------------------------------------------
+Host: linkedin.com
+Number of synonym url sets: 0
+Number of reduced URLs: 0
+------------------------------------------------------------
+Host: live.com
+Number of synonym url sets: 0
+Number of reduced URLs: 0
+------------------------------------------------------------
+Host: mail.ru
+Number of synonym url sets: 0
+Number of reduced URLs: 0
+------------------------------------------------------------
+Host: microsoft.com
+Number of synonym url sets: 9
+Number of reduced URLs: 9
+------------------------------------------------------------
+Host: msn.com
+Number of synonym url sets: 3
+Number of reduced URLs: 4
+------------------------------------------------------------
+Host: naver.com
+Number of synonym url sets: 4
+Number of reduced URLs: 7
+------------------------------------------------------------
+Host: netflix.com
+Number of synonym url sets: 0
+Number of reduced URLs: 0
+------------------------------------------------------------
+Host: nicovideo.jp
+Number of synonym url sets: 6
+Number of reduced URLs: 9
+------------------------------------------------------------
+Host: ok.ru
+Number of synonym url sets: 0
+Number of reduced URLs: 0
+------------------------------------------------------------
+Host: onclickads.net
+Number of synonym url sets: 2
+Number of reduced URLs: 3
+------------------------------------------------------------
+Host: paypal.com
+Number of synonym url sets: 0
+Number of reduced URLs: 0
+------------------------------------------------------------
+Host: people.com.cn
+Number of synonym url sets: 5
+Number of reduced URLs: 5
+------------------------------------------------------------
+Host: pinterest.com
+Number of synonym url sets: 0
+Number of reduced URLs: 0
+------------------------------------------------------------
+Host: pornhub.com
+Number of synonym url sets: 8
+Number of reduced URLs: 11
+------------------------------------------------------------
+Host: qq.com
+Number of synonym url sets: 1
+Number of reduced URLs: 2
+------------------------------------------------------------
+Host: rakuten.co.jp
+Number of synonym url sets: 26
+Number of reduced URLs: 32
+------------------------------------------------------------
+Host: reddit.com
+Number of synonym url sets: 2
+Number of reduced URLs: 3
+------------------------------------------------------------
+Host: sina.com.cn
+Number of synonym url sets: 15
+Number of reduced URLs: 22
+------------------------------------------------------------
+Host: sohu.com
+Number of synonym url sets: 14
+Number of reduced URLs: 24
+------------------------------------------------------------
+Host: soso.com
+Number of synonym url sets: 0
+Number of reduced URLs: 0
+------------------------------------------------------------
+Host: stackoverflow.com
+Number of synonym url sets: 2
+Number of reduced URLs: 2
+------------------------------------------------------------
+Host: taobao.com
+Number of synonym url sets: 46
+Number of reduced URLs: 46
+------------------------------------------------------------
+Host: t.co
+Number of synonym url sets: 0
+Number of reduced URLs: 0
+------------------------------------------------------------
+Host: tmall.com
+Number of synonym url sets: 5
+Number of reduced URLs: 6
+------------------------------------------------------------
+Host: tudou.com
+Number of synonym url sets: 2
+Number of reduced URLs: 2
+------------------------------------------------------------
+Host: tumblr.com
+Number of synonym url sets: 0
+Number of reduced URLs: 0
+------------------------------------------------------------
+Host: twitter.com
+Number of synonym url sets: 0
+Number of reduced URLs: 0
+------------------------------------------------------------
+Host: vk.com
+Number of synonym url sets: 3
+Number of reduced URLs: 3
+------------------------------------------------------------
+Host: weibo.com
+Number of synonym url sets: 1
+Number of reduced URLs: 1
+------------------------------------------------------------
+Host: wikia.com
+Number of synonym url sets: 8
+Number of reduced URLs: 9
+------------------------------------------------------------
+Host: wikipedia.org
+Number of synonym url sets: 0
+Number of reduced URLs: 0
+------------------------------------------------------------
+Host: wordpress.com
+Number of synonym url sets: 0
+Number of reduced URLs: 0
+------------------------------------------------------------
+Host: xhamster.com
+Number of synonym url sets: 1
+Number of reduced URLs: 2
+------------------------------------------------------------
+Host: xinhuanet.com
+Number of synonym url sets: 0
+Number of reduced URLs: 0
+------------------------------------------------------------
+Host: xvideos.com
+Number of synonym url sets: 0
+Number of reduced URLs: 0
+------------------------------------------------------------
+Host: yahoo.co.jp
+Number of synonym url sets: 3
+Number of reduced URLs: 4
+------------------------------------------------------------
+Host: yahoo.com
+Number of synonym url sets: 0
+Number of reduced URLs: 0
+------------------------------------------------------------
+Host: yandex.ru
+Number of synonym url sets: 3
+Number of reduced URLs: 3
+------------------------------------------------------------
+Host: youku.com
+Number of synonym url sets: 20
+Number of reduced URLs: 20
+------------------------------------------------------------
+Host: youradexchange.com
+Number of synonym url sets: 0
+Number of reduced URLs: 0
+------------------------------------------------------------
+Host: youtube.com
+Number of synonym url sets: 1
+Number of reduced URLs: 1
+------------------------------------------------------------

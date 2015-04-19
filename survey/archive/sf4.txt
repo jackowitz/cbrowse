@@ -1,0 +1,415 @@
+Host: 360.cn
+Fails: 0
+Succs w/ match: 1
+Succs no match: 3
+--------------------------------------
+Host: adcash.com
+Fails: 0
+Succs w/ match: 0
+Succs no match: 4
+--------------------------------------
+Host: adobe.com
+Fails: 0
+Succs w/ match: 1
+Succs no match: 3
+--------------------------------------
+Host: alibaba.com
+Fails: 0
+Succs w/ match: 0
+Succs no match: 2
+--------------------------------------
+Host: aliexpress.com
+Fails: 63
+Succs w/ match: 0
+Succs no match: 0
+--------------------------------------
+Host: alipay.com
+Fails: 0
+Succs w/ match: 0
+Succs no match: 1
+--------------------------------------
+Host: amazon.cn
+Fails: 0
+Succs w/ match: 1
+Succs no match: 1
+--------------------------------------
+Host: amazon.co.jp
+Fails: 1
+Succs w/ match: 0
+Succs no match: 2
+--------------------------------------
+Host: amazon.co.uk
+Fails: 0
+Succs w/ match: 0
+Succs no match: 2
+--------------------------------------
+Host: amazon.de
+Fails: 0
+Succs w/ match: 0
+Succs no match: 2
+--------------------------------------
+Host: apple.com
+Fails: 0
+Succs w/ match: 1
+Succs no match: 0
+--------------------------------------
+Host: baidu.com
+Fails: 0
+Succs w/ match: 0
+Succs no match: 0
+--------------------------------------
+Host: bbc.co.uk
+Fails: 0
+Succs w/ match: 0
+Succs no match: 3
+--------------------------------------
+Host: bing.com
+Fails: 0
+Succs w/ match: 0
+Succs no match: 0
+--------------------------------------
+Host: blogger.com
+Fails: 0
+Succs w/ match: 0
+Succs no match: 0
+--------------------------------------
+Host: blogspot.com
+Fails: 0
+Succs w/ match: 0
+Succs no match: 0
+--------------------------------------
+Host: cntv.cn
+Fails: 0
+Succs w/ match: 0
+Succs no match: 0
+--------------------------------------
+Host: craigslist.org
+Fails: 0
+Succs w/ match: 0
+Succs no match: 0
+--------------------------------------
+Host: diply.com
+Fails: 0
+Succs w/ match: 0
+Succs no match: 0
+--------------------------------------
+Host: dropbox.com
+Fails: 0
+Succs w/ match: 0
+Succs no match: 0
+--------------------------------------
+Host: ebay.com
+Fails: 2
+Succs w/ match: 3
+Succs no match: 1
+--------------------------------------
+Host: ebay.co.uk
+Fails: 0
+Succs w/ match: 4
+Succs no match: 1
+--------------------------------------
+Host: ebay.de
+Fails: 1
+Succs w/ match: 4
+Succs no match: 1
+--------------------------------------
+Host: espn.go.com
+Fails: 0
+Succs w/ match: 0
+Succs no match: 1
+--------------------------------------
+Host: facebook.com
+Fails: 0
+Succs w/ match: 0
+Succs no match: 0
+--------------------------------------
+Host: fc2.com
+Fails: 0
+Succs w/ match: 4
+Succs no match: 8
+--------------------------------------
+Host: flipkart.com
+Fails: 0
+Succs w/ match: 2
+Succs no match: 1
+--------------------------------------
+Host: go.com
+Fails: 1
+Succs w/ match: 2
+Succs no match: 2
+--------------------------------------
+Host: googleadservices.com
+Fails: 0
+Succs w/ match: 0
+Succs no match: 0
+--------------------------------------
+Host: google.ca
+Fails: 0
+Succs w/ match: 0
+Succs no match: 0
+--------------------------------------
+Host: google.co.in
+Fails: 0
+Succs w/ match: 0
+Succs no match: 0
+--------------------------------------
+Host: google.co.jp
+Fails: 0
+Succs w/ match: 0
+Succs no match: 0
+--------------------------------------
+Host: google.com
+Fails: 0
+Succs w/ match: 0
+Succs no match: 0
+--------------------------------------
+Host: google.com.au
+Fails: 0
+Succs w/ match: 0
+Succs no match: 0
+--------------------------------------
+Host: google.com.br
+Fails: 0
+Succs w/ match: 0
+Succs no match: 0
+--------------------------------------
+Host: google.com.hk
+Fails: 0
+Succs w/ match: 0
+Succs no match: 0
+--------------------------------------
+Host: google.com.mx
+Fails: 0
+Succs w/ match: 0
+Succs no match: 0
+--------------------------------------
+Host: google.com.tr
+Fails: 0
+Succs w/ match: 0
+Succs no match: 0
+--------------------------------------
+Host: google.co.uk
+Fails: 0
+Succs w/ match: 0
+Succs no match: 0
+--------------------------------------
+Host: google.de
+Fails: 0
+Succs w/ match: 0
+Succs no match: 0
+--------------------------------------
+Host: google.es
+Fails: 0
+Succs w/ match: 0
+Succs no match: 0
+--------------------------------------
+Host: google.fr
+Fails: 0
+Succs w/ match: 0
+Succs no match: 0
+--------------------------------------
+Host: google.it
+Fails: 0
+Succs w/ match: 0
+Succs no match: 0
+--------------------------------------
+Host: google.pl
+Fails: 0
+Succs w/ match: 0
+Succs no match: 0
+--------------------------------------
+Host: google.ru
+Fails: 0
+Succs w/ match: 0
+Succs no match: 0
+--------------------------------------
+Host: googleusercontent.com
+Fails: 0
+Succs w/ match: 0
+Succs no match: 0
+--------------------------------------
+Host: imgur.com
+Fails: 1
+Succs w/ match: 1
+Succs no match: 4
+--------------------------------------
+Host: instagram.com
+Fails: 0
+Succs w/ match: 0
+Succs no match: 0
+--------------------------------------
+Host: kickass.so
+Fails: 0
+Succs w/ match: 0
+Succs no match: 0
+--------------------------------------
+Host: linkedin.com
+Fails: 0
+Succs w/ match: 0
+Succs no match: 0
+--------------------------------------
+Host: live.com
+Fails: 0
+Succs w/ match: 0
+Succs no match: 0
+--------------------------------------
+Host: mail.ru
+Fails: 0
+Succs w/ match: 0
+Succs no match: 0
+--------------------------------------
+Host: msn.com
+Fails: 0
+Succs w/ match: 1
+Succs no match: 3
+--------------------------------------
+Host: naver.com
+Fails: 0
+Succs w/ match: 2
+Succs no match: 5
+--------------------------------------
+Host: netflix.com
+Fails: 0
+Succs w/ match: 0
+Succs no match: 0
+--------------------------------------
+Host: nicovideo.jp
+Fails: 1
+Succs w/ match: 0
+Succs no match: 8
+--------------------------------------
+Host: ok.ru
+Fails: 0
+Succs w/ match: 0
+Succs no match: 0
+--------------------------------------
+Host: paypal.com
+Fails: 0
+Succs w/ match: 0
+Succs no match: 0
+--------------------------------------
+Host: people.com.cn
+Fails: 0
+Succs w/ match: 2
+Succs no match: 3
+--------------------------------------
+Host: pinterest.com
+Fails: 0
+Succs w/ match: 0
+Succs no match: 0
+--------------------------------------
+Host: pornhub.com
+Fails: 6
+Succs w/ match: 0
+Succs no match: 5
+--------------------------------------
+Host: qq.com
+Fails: 0
+Succs w/ match: 1
+Succs no match: 1
+--------------------------------------
+Host: rakuten.co.jp
+Fails: 0
+Succs w/ match: 4
+Succs no match: 28
+--------------------------------------
+Host: reddit.com
+Fails: 0
+Succs w/ match: 2
+Succs no match: 1
+--------------------------------------
+Host: sina.com.cn
+Fails: 0
+Succs w/ match: 2
+Succs no match: 20
+--------------------------------------
+Host: soso.com
+Fails: 0
+Succs w/ match: 0
+Succs no match: 0
+--------------------------------------
+Host: stackoverflow.com
+Fails: 0
+Succs w/ match: 1
+Succs no match: 1
+--------------------------------------
+Host: taobao.com
+Fails: 44
+Succs w/ match: 2
+Succs no match: 0
+--------------------------------------
+Host: t.co
+Fails: 0
+Succs w/ match: 0
+Succs no match: 0
+--------------------------------------
+Host: tudou.com
+Fails: 0
+Succs w/ match: 0
+Succs no match: 2
+--------------------------------------
+Host: tumblr.com
+Fails: 0
+Succs w/ match: 0
+Succs no match: 0
+--------------------------------------
+Host: twitter.com
+Fails: 0
+Succs w/ match: 0
+Succs no match: 0
+--------------------------------------
+Host: vk.com
+Fails: 0
+Succs w/ match: 1
+Succs no match: 2
+--------------------------------------
+Host: weibo.com
+Fails: 0
+Succs w/ match: 0
+Succs no match: 1
+--------------------------------------
+Host: wikipedia.org
+Fails: 0
+Succs w/ match: 0
+Succs no match: 0
+--------------------------------------
+Host: wordpress.com
+Fails: 0
+Succs w/ match: 0
+Succs no match: 0
+--------------------------------------
+Host: xhamster.com
+Fails: 0
+Succs w/ match: 0
+Succs no match: 2
+--------------------------------------
+Host: xinhuanet.com
+Fails: 0
+Succs w/ match: 0
+Succs no match: 0
+--------------------------------------
+Host: xvideos.com
+Fails: 0
+Succs w/ match: 0
+Succs no match: 0
+--------------------------------------
+Host: yahoo.co.jp
+Fails: 0
+Succs w/ match: 1
+Succs no match: 3
+--------------------------------------
+Host: yahoo.com
+Fails: 0
+Succs w/ match: 0
+Succs no match: 0
+--------------------------------------
+Host: youradexchange.com
+Fails: 0
+Succs w/ match: 0
+Succs no match: 0
+--------------------------------------
+Host: youtube.com
+Fails: 0
+Succs w/ match: 0
+Succs no match: 1
+--------------------------------------

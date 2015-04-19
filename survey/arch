@@ -1,0 +1,20 @@
+#!/bin/bash
+
+if [ $# -gt 1 ]
+then
+    echo "usage: arch [archive_name]"
+fi
+
+archdir='archive'
+archno=$( ls $archdir | wc -l )
+
+if [ $# -eq 1 ]
+then
+    archno=$1
+fi
+
+srcdir='resultstats/agg'
+echo 'creating archive '$archno
+cp -uv $srcdir'/syndata.txt' $archdir'/sd'$archno'.txt'
+cp -uv $srcdir'/synfetchresults.txt' $archdir'/sf'$archno'.txt'
+

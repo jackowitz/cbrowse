@@ -364,14 +364,14 @@ def intersect_urls(res_url, in_url):
             #TODO: potentially change back
             #if res_url_ty == param_code or res_url_ty == query_code or res_url_ty == frag_code:
              #   r_key_name = res_url_txt.split("=",1)[0]
-              #  i_key_name = res_url_txt.split("=",1)[0]
-               # if r_key_name == i_key_name:
-                #    new_res_txt = r_key_name+"="
+             #   i_key_name = res_url_txt.split("=",1)[0]
+             #   if r_key_name == i_key_name:
+             #       new_res_txt = r_key_name+"="
 
-            helper.printd ("removing segment"+res_url_txt)
+            helper.printd ("removing segment: "+in_url_txt)
             s_res_url[i] = (res_url_n, new_res_txt, res_url_ty)
-        else:
-            helper.printd ("skipping segment"+res_url_txt)
+        #else:
+            #helper.printd ("skipping segment"+res_url_txt)
 
     return (True, s_res_url)
         

@@ -115,7 +115,7 @@ def process_main(sys_args):
         print "\n","="*80
 
         print "Reduced Synonym URLs:"
-        share_file = "resultstats/temp/synhash.txt"
+        share_file = "resultstats/temp/synhash"
         syn_fetch_file = "resultstats/agg/synfetchresults.txt"
         syn_data_file = "resultstats/agg/syndata.txt"
         reduce_synonym_urls(synonym_url_dict)
@@ -254,7 +254,7 @@ def write_sym_url_data(host, syn_url_dict, out_file, full_urls):
         fout.write("-"*60+"\n")
                 
 
-def fetch_reduced_urls(host, syn_url_dict, out_file, share_file):
+def fetch_reduced_urls(host, syn_url_dict, out_file, share_file_base):
 
         # Every reduced URL can fail, succeed but not match, or succeed and match
         # This function will create a new table mapping each hash to a tuple of
@@ -266,6 +266,10 @@ def fetch_reduced_urls(host, syn_url_dict, out_file, share_file):
         fails = 0
         succs_w_match = 0
         succs_no_match = 0
+        
+        # TODO: might change this if I decide to preserve all intermediate json objects fetched
+        # in fetching URLs
+        share_file = share_file_base+"_"+host+".txt"
 
         res_syn_url_dict = {}
 
@@ -320,9 +324,11 @@ def fetch_and_compare(orig_h, url, share_file, reduced_url_map, \
                         reduced_url_map[url] = (False,'')
                         return (fail,snm,swm)
 
-                new_h = results['page']['hash']
+                fetched_resource = find_dict_by_k_v(results['resources'], 'url', url)
+                new_h = fetched_resource['hash']
+
                 helper.printd("Synonym set Hash: "+str(orig_h)+"\n")
-                helper.printd("Reduced URL Hash: "+str(new_h)+"\n")
+                helper.printd("Fetched URL Hash: "+str(new_h)+"\n")
 
                 if sanity_check:
                         assert (new_h == orig_h)
@@ -334,6 +340,15 @@ def fetch_and_compare(orig_h, url, share_file, reduced_url_map, \
                         snm += 1
                 reduced_url_map[url] = (True,new_h)
         return (fail,snm,swm)
+
+def find_dict_by_k_v(dict_list, key, value):
+        for d in dict_list:
+                if not (key in d.keys()):
+                        helper.printd("find_dict_by_k_v failed: "+key+", "+value+"\n")
+                        return {}
+                if d[key] == value:
+                        return d
+
 
 # Perform the inverse: make note of any different resources that contain the
 # same hash

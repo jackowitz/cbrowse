@@ -1,7 +1,10 @@
 TODO for final project
 ================================================================================
 
-Figure out why sanity test is failing
+Improve hash comparison on fetched reduced URLS
+perhaps even search all resources returned for the hash of the synonym set
+if a resource URL has the same hash and is similar to the original, attribute that
+to the website automatically "filling in" some parameters and call it a success
 
 Process.py
 --------------------------------------------------------------------------------
@@ -25,6 +28,7 @@ DONE        - For each reduced URL, determine whether or not it was successful i
 	    - Add a basic sanity test that re-fetches one of the URLs in the syn-
 	      onym set and hashes its contents and compares that to the stored
 	      hash
+
 
 
 

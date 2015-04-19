@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html class="ng-scope" ng-app="diplyApp"><head lang="en"><style type="text/css">@charset "UTF-8";[ng\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide:not(.ng-hide-animate){display:none !important;}ng\:form{display:block;}</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <!-- Render Styles from Bundle -->
+    
+    <link href="/Content/new_homepage_styles?v=E51A63LYiJJMKsPG2U1CMvrmLFL3PFAq0Oh303y9VpY1" rel="stylesheet">
+
+    
+    
+    
+    <link href="http://fonts.googleapis.com/css?family=Roboto:400,100,500,700,300" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    <title>Diply.com | Go for a Dip!</title>
+
+
+    <!-- fav and touch icons -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/Content/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="/Content/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="/Content/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="/Content/ico/apple-touch-icon-57-precomposed.png">
+    <link rel="shortcut icon" type="image/x-icon" href="/content/ico/favicon.ico">
+
+
+    <base href="/">
+
+</head>
+<body>
+    
+    <div class="diply-modal-cover" id="js_modal_cover" data-active-modal="">
+        <!-- SIGN IN MODAL-->
+        <div class="diply-modal" id="diply_signin_modal" onclick="Modal.Core.default(event)">
+            <a class="modal-close visible-xs" href="javascript:void(0)" onclick="Modal.Signin.hide()">
+                <i class="fa fa-fw fa-times"></i>
+            </a>
+            <div class="modal-header">
+                <div class="modal-header-title">
+                    Join the Diply Community
+                </div>
+                <div class="modal-header-subtitle">
+                    We have double dip donuts!
+                </div>
+            </div>
+            <div class="modal-body signin-body">
+<form class="ng-pristine ng-valid" action="/account/externallogin" method="post"><input name="__RequestVerificationToken" value="6eg3wccEvBJ87e3_OkFsxFEHJolSrUHstIdVTb8BSVkOjJGjWsEl4kIUCmuuwRK2DjVWqTJuNKjTPipAwXZt4itBtWw1" type="hidden">                    <input name="provider" id="providerInput" type="hidden">
+                    <button value="facebook" onclick="javascript: $('#providerInput').val('facebook'); $(this).parent().submit();" class="diply-signup-btn diply-signup-facebook">
+                        <i class="fa fa-fw fa-facebook"></i>
+                         Sign In With Facebook
+                    </button>
+                    <button value="twitter" onclick="javascript: $('#providerInput').val('twitter'); $(this).parent().submit();" class="diply-signup-btn diply-signup-twitter">
+                        <i class="fa fa-fw fa-twitter"></i>
+                         Sign In with Twitter
+                    </button>
+                    <button value="googleplus" onclick="javascript: $('#providerInput').val('google'); $(this).parent().submit();" class="diply-signup-btn diply-signup-google">
+                        <i class="fa fa-fw fa-google-plus"></i>
+                         Sign In with Google
+                    </button>
+</form>
+                
+
+                <hr>
+
+                Don't Have An Account? Click a Service to Make One!
+            </div>
+        </div>
+        <!-- END SIGN IN MODAL -->
+        <!-- GENERAL PURPOSE MODAL -->
+        <div class="diply-modal" id="diply_general_modal" onclick="Modal.Core.default(event)">
+            <div class="modal-header">
+                <div class="modal-header-title"></div>
+                <div class="modal-header-subtitle"></div>
+            </div>
+            <div class="modal-body"></div>
+        </div>
+    </div>
+
+
+    
+<div class="diply-nav-anti-jitterbug">
+    <div class="diply-nav ng-scope" ng-controller="NavController">
+        <div class="diply-float-wrap relative">
+            <div class="display-table">
+                <div class="display-row relative">
+                    <div class="display-cell diply-brand-nav">
+                        <a href="/" ui-sref="home" onclick="angularizer.Home.scrollToTop()">
+                            <img src="/Content/static/Diply-New-Designs/diply-logo-nav.png" alt="Diply: Go For a Dip!">
+                        </a>
+                    </div><!-- /.diply-brand -->
+
+                    <div class="diply-navlinks-float">
+                        <div class="diply-navlink nohover">
+                                    <!-- SIGN IN MODAL -->
+                                <div class="diply-nav-create">
+                                    <a href="javascript:void(0)" class="diply-nav-create-btn no-user" onclick="Modal.Signin.show()">
+                                        Sign In
+                                    </a>
+                                </div>
+                                    <!-- END SIGN IN MODAL -->
+                        </div>
+                        <a class="diply-navlink" id="nav-explore">
+                            <p class="navlink-text explore">Explore</p>
+                        </a>
+                        <a href="/c/videos" class="diply-navlink hidden-sm hidden-xs">
+                            <p class="navlink-text">Watch</p>
+                        </a>
+                        <a href="/c/life/fun" class="diply-navlink hidden-sm hidden-xs">
+                            <p class="navlink-text">Laugh</p>
+                        </a>
+                        <a href="/c/life/inspirational" class="diply-navlink hidden-sm hidden-xs">
+                            <p class="navlink-text">Inspire</p>
+                        </a>
+
+
+
+                    </div><!-- /.diply-navlinks-float -->
+                </div>
+            </div>
+        </div><!-- /.diply-float-wrap -->
+        <!-- Explore Shelf -->
+        <!-- ngInclude: undefined -->
+        <!-- / Explore Shelf -->
+    </div><!-- /.diply-nav -->
+</div>
+
+
+
+    <!-- uiView:  --><div class="ng-scope" ui-view="" id="testBody"></div>
+
+    <script src="/bundles/new_homepage_scripts?v=xjZqMsV1Jxoj6gft1Bg3k52LoLtQwgMfPJ7YgwS2f6w1"></script>
+
+
+<!--<div data-ng-include="'templates/blocks/header.html'"></div>-->
+    <!-- Angular Base -->
+    
+
+    <!-- Components/Libs -->
+    
+
+    <!-- Main -->
+    
+
+    <!-- Services -->
+    
+
+    <!-- Controllers -->
+    
+
+    <!-- Directives -->
+    
+
+    <!-- Other -->
+    
+    
+
+
+</body></html>

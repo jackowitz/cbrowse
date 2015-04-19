@@ -1,0 +1,1226 @@
+<!DOCTYPE html>
+<html class="ng-scope" ng-app="diplyApp"><head lang="en"><style type="text/css">@charset "UTF-8";[ng\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide:not(.ng-hide-animate){display:none !important;}ng\:form{display:block;}</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <!-- Render Styles from Bundle -->
+    
+    <link href="/Content/new_homepage_styles?v=E51A63LYiJJMKsPG2U1CMvrmLFL3PFAq0Oh303y9VpY1" rel="stylesheet">
+
+    
+    
+    
+    <link href="http://fonts.googleapis.com/css?family=Roboto:400,100,500,700,300" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    <title>Diply.com | Go for a Dip!</title>
+
+
+    <!-- fav and touch icons -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/Content/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="/Content/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="/Content/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="/Content/ico/apple-touch-icon-57-precomposed.png">
+    <link rel="shortcut icon" type="image/x-icon" href="/content/ico/favicon.ico">
+
+
+    <base href="/">
+
+</head>
+<body>
+    
+    <div class="diply-modal-cover" id="js_modal_cover" data-active-modal="">
+        <!-- SIGN IN MODAL-->
+        <div class="diply-modal" id="diply_signin_modal" onclick="Modal.Core.default(event)">
+            <a class="modal-close visible-xs" href="javascript:void(0)" onclick="Modal.Signin.hide()">
+                <i class="fa fa-fw fa-times"></i>
+            </a>
+            <div class="modal-header">
+                <div class="modal-header-title">
+                    Join the Diply Community
+                </div>
+                <div class="modal-header-subtitle">
+                    We have double dip donuts!
+                </div>
+            </div>
+            <div class="modal-body signin-body">
+<form class="ng-pristine ng-valid" action="/account/externallogin" method="post"><input name="__RequestVerificationToken" value="3A_lQs5Orn_6g4xK4ueRQvjU5QZszKVvJQQ4EqjaUXTs5AbUZPnEWE9V4lVmIl29ShhzTLYq-JHK3sCFjXkYDiAViDk1" type="hidden">                    <input name="provider" id="providerInput" type="hidden">
+                    <button value="facebook" onclick="javascript: $('#providerInput').val('facebook'); $(this).parent().submit();" class="diply-signup-btn diply-signup-facebook">
+                        <i class="fa fa-fw fa-facebook"></i>
+                         Sign In With Facebook
+                    </button>
+                    <button value="twitter" onclick="javascript: $('#providerInput').val('twitter'); $(this).parent().submit();" class="diply-signup-btn diply-signup-twitter">
+                        <i class="fa fa-fw fa-twitter"></i>
+                         Sign In with Twitter
+                    </button>
+                    <button value="googleplus" onclick="javascript: $('#providerInput').val('google'); $(this).parent().submit();" class="diply-signup-btn diply-signup-google">
+                        <i class="fa fa-fw fa-google-plus"></i>
+                         Sign In with Google
+                    </button>
+</form>
+                
+
+                <hr>
+
+                Don't Have An Account? Click a Service to Make One!
+            </div>
+        </div>
+        <!-- END SIGN IN MODAL -->
+        <!-- GENERAL PURPOSE MODAL -->
+        <div class="diply-modal" id="diply_general_modal" onclick="Modal.Core.default(event)">
+            <div class="modal-header">
+                <div class="modal-header-title"></div>
+                <div class="modal-header-subtitle"></div>
+            </div>
+            <div class="modal-body"></div>
+        </div>
+    </div>
+
+
+    
+<div class="diply-nav-anti-jitterbug">
+    <div class="diply-nav ng-scope" ng-controller="NavController">
+        <div class="diply-float-wrap relative">
+            <div class="display-table">
+                <div class="display-row relative">
+                    <div class="display-cell diply-brand-nav">
+                        <a href="/" ui-sref="home" onclick="angularizer.Home.scrollToTop()">
+                            <img src="/Content/static/Diply-New-Designs/diply-logo-nav.png" alt="Diply: Go For a Dip!">
+                        </a>
+                    </div><!-- /.diply-brand -->
+
+                    <div class="diply-navlinks-float">
+                        <div class="diply-navlink nohover">
+                                    <!-- SIGN IN MODAL -->
+                                <div class="diply-nav-create">
+                                    <a href="javascript:void(0)" class="diply-nav-create-btn no-user" onclick="Modal.Signin.show()">
+                                        Sign In
+                                    </a>
+                                </div>
+                                    <!-- END SIGN IN MODAL -->
+                        </div>
+                        <a class="diply-navlink" id="nav-explore">
+                            <p class="navlink-text explore">Explore</p>
+                        </a>
+                        <a href="/c/videos" class="diply-navlink hidden-sm hidden-xs">
+                            <p class="navlink-text">Watch</p>
+                        </a>
+                        <a href="/c/life/fun" class="diply-navlink hidden-sm hidden-xs">
+                            <p class="navlink-text">Laugh</p>
+                        </a>
+                        <a href="/c/life/inspirational" class="diply-navlink hidden-sm hidden-xs">
+                            <p class="navlink-text">Inspire</p>
+                        </a>
+
+
+
+                    </div><!-- /.diply-navlinks-float -->
+                </div>
+            </div>
+        </div><!-- /.diply-float-wrap -->
+        <!-- Explore Shelf -->
+        <!-- ngInclude: undefined --><ng-include class="ng-scope" src="%27/Content/static/diply-new-angular/src/app/explore/explore.html%27"><div class="diply-explore-shelf ng-scope" ng-controller="ExploreController">
+    <div class="diply-explore-inner">
+    <a class="diply-explore-close" href="javascript:void(0)"><i class="fa fa-fw fa-times"></i></a>
+        <!-- Left Side: Trending -->
+        <div class="diply-explore-left">
+            <a href="/different-solutions/intriguing-beautiful-living-spaces/107518" class="left-image hidden-xs" style="background-image: url(http://cdn.diply.com/img/d3f2ad75-14a4-453e-8a07-694b489fb4f9_m.jpg);">
+                <div class="left-image-overlay">
+                    <span class="h3 white image-overlay-text ng-binding">16 Of The World's Most Intriguing And...</span>
+                </div>
+            </a>
+            <a href="/diply-news/hangry-debate-resolved-doctors-weigh-in/109237" class="left-image hidden-xs" style="background-image: url(http://cdn.diply.com/img/2ba027a0-969a-457d-9378-62031b5a1b56_m.jpg);">
+                <div class="left-image-overlay">
+                    <span class="h3 white image-overlay-text ng-binding">Feeling Hangry? A Doctor Explains If You...</span>
+                </div>
+            </a>
+            <!-- Would like to remove hidden-xs from two above if possible -->
+            <a href="/different-solutions/before-and-after-cats-grown-up/109444" class="left-image hidden-xs" style="background-image: url(http://cdn.diply.com/img/9bf59bdb-ef8a-4292-a13e-4e3c3f99f393_m.jpg);">
+                <div class="left-image-overlay">
+                    <span class="h3 white image-overlay-text ng-binding">19 Before And After Photos Of Cats That...</span>
+                </div>
+            </a>
+            <a href="/different-solutions/facts-about-disney-world/109296" class="left-image hidden-xs" style="background-image: url(http://cdn.diply.com/img/37a5ceea-1594-49e2-a4bd-1c19177ab97c_m.jpg);">
+                <div class="left-image-overlay">
+                    <span class="h3 white image-overlay-text ng-binding">20 Fascinating Facts You Don't Know About...</span>
+                </div>
+            </a>
+        </div>
+
+        <!-- Right Side: Cats(Meow)/Search -->
+        <div class="diply-explore-right">
+            <div class="top-row">
+                <h3 class="explore-heading">Looking for Something?</h3>
+            </div>
+            <div class="middle-row">
+                <div class="right-col">
+                    <ul class="cat-list">
+                        <li>
+                            <a href="/c/life/animals">
+                                <i class="fa fa-fw fa-paw"></i>
+                                Animals
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/c/life/diy">
+                                <i class="fa fa-fw fa-paint-brush"></i>
+                                DIY
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/c/life/entertainment-life">
+                                <i class="fa fa-fw fa-star"></i>
+                                Entertainment
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/c/culture/food-life">
+                                <i class="fa fa-fw fa-cutlery"></i>
+                                Food
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="right-col">
+                    <ul class="cat-list">
+                        <li>
+                            <a href="/c/life/inspirational">
+                                <i class="fa fa-fw fa-lightbulb-o"></i>
+                                Inspire
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/c/life/fun">
+                                <i class="fa fa-fw fa-smile-o"></i>
+                                Laugh
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/c/life">
+                                <i class="fa fa-fw fa-heart"></i>
+                                Life
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/c/news">
+                                <i class="fa fa-fw fa-newspaper-o"></i>
+                                News
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="right-col">
+                    <ul class="cat-list">
+                        <li>
+                            <a href="/c/culture/photography">
+                                <i class="fa fa-fw fa-camera"></i>
+                                Photography
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/c/style">
+                                <i class="fa fa-fw fa-group"></i>
+                                Style
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/shop">
+                                <i class="fa fa-fw fa-shopping-cart"></i>
+                                Shop
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/c/culture/tech">
+                                <i class="fa fa-fw fa-desktop"></i>
+                                Technology
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="bottom-row">
+                <input class="diply-search ng-pristine ng-untouched ng-valid" placeholder="Search Articles" ng-model="form.search" ng-enter="search()" type="text">
+                <a class="diply-search-btn" href="javascript:void(0)" ng-click="search()">
+                    <i class="fa fa-search"></i>
+                </a>
+            </div>
+        </div>
+
+        <!-- Bottom: Legal -->
+        <div class="diply-explore-bottom hidden-xs">
+            <hr>
+            <a class="link-right" href="/static/privacy">Privacy Policy</a>
+            <a class="link-right" href="/static/terms">Terms of Use</a>
+            <a class="link-right" href="/static/help">Help</a><!-- Replace this with fancy modal ASAP -->
+
+            <a href="/static/about">About Us</a>
+            <a href="/static/advertise">Advertise</a>
+        </div>
+    </div>
+</div></ng-include>
+        <!-- / Explore Shelf -->
+    </div><!-- /.diply-nav -->
+</div>
+
+
+
+    <!-- uiView:  --><div class="ng-scope" ui-view="" id="testBody"><!-- Dat Header -->
+<!-- ngInclude: undefined --><ng-include class="ng-scope" src="%27/Content/static/diply-new-angular/src/app/header/header.html%27"><!-- header-mask [MASK]-->
+<div style="opacity: 0;" class="header-mask ng-scope" ng-controller="HeaderController">
+    <!-- Header Container [Columns go here]-->
+    <div style="min-width: 400px;" class="header-container">
+
+
+
+        <!-- ngRepeat: column in columns track by $index --><div style="width: 100px; transform: translate3d(0px, 0px, 0px);" class="header-column ng-scope" ng-repeat="column in columns track by $index">
+            <!-- Column Item---------------------------------------------[SET 1]  -->
+            <!-- ngRepeat: tile in columns[$index] --><a class="header-column-item ng-scope" ng-repeat="tile in columns[$index]" href="/different-solutions/what-is-under-the-floorboards/109955" alt="..." style="background: url(&quot;http://cdn.diply.com/img/fb54cbbd-0882-4d05-b23c-6163f6eed88f_t.jpg&quot;) no-repeat scroll center top / cover  transparent; height: 90px;">
+                <!-- column-item-info [Only shows on hover]-->
+                <div class="column-item-info">
+                    <span class="h3 white ng-binding">They Moved Into This Old House, What They Found Is So Shocking We're Adding A Warning</span>
+                    <!--<span class="header-sm-attr white">By dandeering for Diply News</span>-->
+                </div>
+                <i class="fa fa-chevron-circle-right"></i>
+            </a><!-- end ngRepeat: tile in columns[$index] --><a class="header-column-item ng-scope" ng-repeat="tile in columns[$index]" href="/different-solutions/trends-summer-2015/109958" alt="..." style="background: url(&quot;http://cdn.diply.com/img/3faada2b-8461-4ac3-81a4-a395f5e45dfb_t.jpg&quot;) no-repeat scroll center top / cover  transparent; height: 90px;">
+                <!-- column-item-info [Only shows on hover]-->
+                <div class="column-item-info">
+                    <span class="h3 white ng-binding">19 Shocking Must-Know Things To Look Forward To For Summer 2015</span>
+                    <!--<span class="header-sm-attr white">By dandeering for Diply News</span>-->
+                </div>
+                <i class="fa fa-chevron-circle-right"></i>
+            </a><!-- end ngRepeat: tile in columns[$index] --><a class="header-column-item ng-scope" ng-repeat="tile in columns[$index]" href="/auntyacid/ways-to-win-at-parenting-by-pranking/109183" alt="..." style="background: url(&quot;http://cdn.diply.com/img/8b09db18-b05a-468d-8d75-534193930f6c_t.jpg&quot;) no-repeat scroll center top / cover  transparent; height: 90px;">
+                <!-- column-item-info [Only shows on hover]-->
+                <div class="column-item-info">
+                    <span class="h3 white ng-binding">24 Ways To Prank Your Kids</span>
+                    <!--<span class="header-sm-attr white">By dandeering for Diply News</span>-->
+                </div>
+                <i class="fa fa-chevron-circle-right"></i>
+            </a><!-- end ngRepeat: tile in columns[$index] --><a class="header-column-item ng-scope" ng-repeat="tile in columns[$index]" href="/different-solutions/vodka-hacks/109605" alt="..." style="background: url(&quot;http://cdn.diply.com/img/79b4e9f6-1043-4ac0-94f3-705e53b80c77_t.jpg&quot;) no-repeat scroll center top / cover  transparent; height: 90px;">
+                <!-- column-item-info [Only shows on hover]-->
+                <div class="column-item-info">
+                    <span class="h3 white ng-binding">17 Vodka Hacks That Will Blow Your Mind</span>
+                    <!--<span class="header-sm-attr white">By dandeering for Diply News</span>-->
+                </div>
+                <i class="fa fa-chevron-circle-right"></i>
+            </a><!-- end ngRepeat: tile in columns[$index] --><a class="header-column-item ng-scope" ng-repeat="tile in columns[$index]" href="/different-solutions/worlds-strangest-collections/109596" alt="..." style="background: url(&quot;http://cdn.diply.com/img/9e29a6ba-c540-4935-b8cc-5d12749b9293_t.jpg&quot;) no-repeat scroll center top / cover  transparent; height: 90px;">
+                <!-- column-item-info [Only shows on hover]-->
+                <div class="column-item-info">
+                    <span class="h3 white ng-binding">Obsessed: Some Of The World's Strangest Collections</span>
+                    <!--<span class="header-sm-attr white">By dandeering for Diply News</span>-->
+                </div>
+                <i class="fa fa-chevron-circle-right"></i>
+            </a><!-- end ngRepeat: tile in columns[$index] --><a class="header-column-item ng-scope" ng-repeat="tile in columns[$index]" href="/diply-news/you-can-play-pac-man-google-maps-april-fools/109696" alt="..." style="background: url(&quot;http://cdn.diply.com/img/ab34ba49-1c3f-4560-b6cb-29f2717fcca6_t.jpg&quot;) no-repeat scroll center top / cover  transparent; height: 90px;">
+                <!-- column-item-info [Only shows on hover]-->
+                <div class="column-item-info">
+                    <span class="h3 white ng-binding">You Can Now Play Pac-Man In Google Maps</span>
+                    <!--<span class="header-sm-attr white">By dandeering for Diply News</span>-->
+                </div>
+                <i class="fa fa-chevron-circle-right"></i>
+            </a><!-- end ngRepeat: tile in columns[$index] -->
+            <!-- Column Item-->
+        </div><!-- end ngRepeat: column in columns track by $index --><div style="width: 100px; transform: translate3d(0px, -270px, 0px);" class="header-column ng-scope" ng-repeat="column in columns track by $index">
+            <!-- Column Item---------------------------------------------[SET 1]  -->
+            <!-- ngRepeat: tile in columns[$index] --><a class="header-column-item ng-scope" ng-repeat="tile in columns[$index]" href="/different-solutions/intriguing-beautiful-living-spaces/107518" alt="..." style="background: url(&quot;http://cdn.diply.com/img/d3f2ad75-14a4-453e-8a07-694b489fb4f9_t.jpg&quot;) no-repeat scroll center top / cover  transparent; height: 90px;">
+                <!-- column-item-info [Only shows on hover]-->
+                <div class="column-item-info">
+                    <span class="h3 white ng-binding">16 Of The World's Most Intriguing And Beautiful Living Spaces</span>
+                    <!--<span class="header-sm-attr white">By dandeering for Diply News</span>-->
+                </div>
+                <i class="fa fa-chevron-circle-right"></i>
+            </a><!-- end ngRepeat: tile in columns[$index] --><a class="header-column-item ng-scope" ng-repeat="tile in columns[$index]" href="/different-solutions/before-and-after-cats-grown-up/109444" alt="..." style="background: url(&quot;http://cdn.diply.com/img/9bf59bdb-ef8a-4292-a13e-4e3c3f99f393_t.jpg&quot;) no-repeat scroll center top / cover  transparent; height: 90px;">
+                <!-- column-item-info [Only shows on hover]-->
+                <div class="column-item-info">
+                    <span class="h3 white ng-binding">19 Before And After Photos Of Cats That Prove That They're Always Kittens At Heart</span>
+                    <!--<span class="header-sm-attr white">By dandeering for Diply News</span>-->
+                </div>
+                <i class="fa fa-chevron-circle-right"></i>
+            </a><!-- end ngRepeat: tile in columns[$index] --><a class="header-column-item ng-scope" ng-repeat="tile in columns[$index]" href="/diply-news/hangry-debate-resolved-doctors-weigh-in/109237" alt="..." style="background: url(&quot;http://cdn.diply.com/img/2ba027a0-969a-457d-9378-62031b5a1b56_t.jpg&quot;) no-repeat scroll center top / cover  transparent; height: 90px;">
+                <!-- column-item-info [Only shows on hover]-->
+                <div class="column-item-info">
+                    <span class="h3 white ng-binding">Feeling Hangry? A Doctor Explains If You Really Can Be</span>
+                    <!--<span class="header-sm-attr white">By dandeering for Diply News</span>-->
+                </div>
+                <i class="fa fa-chevron-circle-right"></i>
+            </a><!-- end ngRepeat: tile in columns[$index] --><a class="header-column-item ng-scope" ng-repeat="tile in columns[$index]" href="/different-solutions/facts-about-disney-world/109296" alt="..." style="background: url(&quot;http://cdn.diply.com/img/37a5ceea-1594-49e2-a4bd-1c19177ab97c_t.jpg&quot;) no-repeat scroll center top / cover  transparent; height: 90px;">
+                <!-- column-item-info [Only shows on hover]-->
+                <div class="column-item-info">
+                    <span class="h3 white ng-binding">20 Fascinating Facts You Don't Know About Walt Disney Resorts</span>
+                    <!--<span class="header-sm-attr white">By dandeering for Diply News</span>-->
+                </div>
+                <i class="fa fa-chevron-circle-right"></i>
+            </a><!-- end ngRepeat: tile in columns[$index] --><a class="header-column-item ng-scope" ng-repeat="tile in columns[$index]" href="/different-solutions/diy-home-decorating-ideas/109160" alt="..." style="background: url(&quot;http://cdn.diply.com/img/c5add14f-32de-4804-ac3e-307269780b21_t.jpg&quot;) no-repeat scroll center top / cover  transparent; height: 90px;">
+                <!-- column-item-info [Only shows on hover]-->
+                <div class="column-item-info">
+                    <span class="h3 white ng-binding">20 Home Decorating Ideas That Are Ridiculous and Amazing</span>
+                    <!--<span class="header-sm-attr white">By dandeering for Diply News</span>-->
+                </div>
+                <i class="fa fa-chevron-circle-right"></i>
+            </a><!-- end ngRepeat: tile in columns[$index] --><a class="header-column-item ng-scope" ng-repeat="tile in columns[$index]" href="/diply-news/batman-animated-movie-adam-west-burt-ward/109170" alt="..." style="background: url(&quot;http://cdn.diply.com/img/e6fbd9c4-c8d6-4b7b-98e2-320150d50409_t.jpg&quot;) no-repeat scroll center top / cover  transparent; height: 90px;">
+                <!-- column-item-info [Only shows on hover]-->
+                <div class="column-item-info">
+                    <span class="h3 white ng-binding">Holy Reboot Batman! Batman '66 Animated Movie Coming</span>
+                    <!--<span class="header-sm-attr white">By dandeering for Diply News</span>-->
+                </div>
+                <i class="fa fa-chevron-circle-right"></i>
+            </a><!-- end ngRepeat: tile in columns[$index] -->
+            <!-- Column Item-->
+        </div><!-- end ngRepeat: column in columns track by $index --><div style="width: 100px; transform: translate3d(0px, 0px, 0px);" class="header-column ng-scope" ng-repeat="column in columns track by $index">
+            <!-- Column Item---------------------------------------------[SET 1]  -->
+            <!-- ngRepeat: tile in columns[$index] --><a class="header-column-item ng-scope" ng-repeat="tile in columns[$index]" href="/different-solutions/easter-egg-surprises-for-kids-not-chocolate/106267" alt="..." style="background: url(&quot;http://cdn.diply.com/img/b014b233-906b-4c91-bef4-70d525537db2_t.jpg&quot;) no-repeat scroll center top / cover  transparent; height: 90px;">
+                <!-- column-item-info [Only shows on hover]-->
+                <div class="column-item-info">
+                    <span class="h3 white ng-binding">21 Fun Things To Hide Inside Your Kids' Easter Eggs</span>
+                    <!--<span class="header-sm-attr white">By dandeering for Diply News</span>-->
+                </div>
+                <i class="fa fa-chevron-circle-right"></i>
+            </a><!-- end ngRepeat: tile in columns[$index] --><a class="header-column-item ng-scope" ng-repeat="tile in columns[$index]" href="/diply-news/26-things-we-learned-last-week/108202" alt="..." style="background: url(&quot;http://cdn.diply.com/img/6f78e191-b0a0-43b8-83af-2d37c09e2977_t.jpg&quot;) no-repeat scroll center top / cover  transparent; height: 90px;">
+                <!-- column-item-info [Only shows on hover]-->
+                <div class="column-item-info">
+                    <span class="h3 white ng-binding">The 26 Things We Learned Last Week</span>
+                    <!--<span class="header-sm-attr white">By dandeering for Diply News</span>-->
+                </div>
+                <i class="fa fa-chevron-circle-right"></i>
+            </a><!-- end ngRepeat: tile in columns[$index] --><a class="header-column-item ng-scope" ng-repeat="tile in columns[$index]" href="/different-solutions/surprising-facts-about-china/108454" alt="..." style="background: url(&quot;http://cdn.diply.com/img/f7957982-dd10-4cbc-9f7b-e8f517b9bf33_t.jpg&quot;) no-repeat scroll center top / cover  transparent; height: 90px;">
+                <!-- column-item-info [Only shows on hover]-->
+                <div class="column-item-info">
+                    <span class="h3 white ng-binding">11 Completely Surprising Facts That You'll Want To Know About China</span>
+                    <!--<span class="header-sm-attr white">By dandeering for Diply News</span>-->
+                </div>
+                <i class="fa fa-chevron-circle-right"></i>
+            </a><!-- end ngRepeat: tile in columns[$index] --><a class="header-column-item ng-scope" ng-repeat="tile in columns[$index]" href="/different-solutions/dogs-who-made-poor-life-choices/107739" alt="..." style="background: url(&quot;http://cdn.diply.com/img/eae8117e-c845-4139-8ea0-1f54a5daad9c_t.jpg&quot;) no-repeat scroll center top / cover  transparent; height: 90px;">
+                <!-- column-item-info [Only shows on hover]-->
+                <div class="column-item-info">
+                    <span class="h3 white ng-binding">21 Dogs Who Made Poor Life Choices</span>
+                    <!--<span class="header-sm-attr white">By dandeering for Diply News</span>-->
+                </div>
+                <i class="fa fa-chevron-circle-right"></i>
+            </a><!-- end ngRepeat: tile in columns[$index] --><a class="header-column-item ng-scope" ng-repeat="tile in columns[$index]" href="/diply-news/instagram-removes-photos-menstrual-period-sorry/108510" alt="..." style="background: url(&quot;http://cdn.diply.com/img/d4b7233a-cea2-4097-9621-0751ac703823_t.jpg&quot;) no-repeat scroll center top / cover  transparent; height: 90px;">
+                <!-- column-item-info [Only shows on hover]-->
+                <div class="column-item-info">
+                    <span class="h3 white ng-binding">Instagram Apologizes After Repeatedly Removing Photos Of Menstrual Blood</span>
+                    <!--<span class="header-sm-attr white">By dandeering for Diply News</span>-->
+                </div>
+                <i class="fa fa-chevron-circle-right"></i>
+            </a><!-- end ngRepeat: tile in columns[$index] --><a class="header-column-item ng-scope" ng-repeat="tile in columns[$index]" href="/different-solutions/diy-mason-jar-projects/108064" alt="..." style="background: url(&quot;http://cdn.diply.com/img/5972896a-cd4c-42fc-8d78-6d6ecd58c65e_t.jpg&quot;) no-repeat scroll center top / cover  transparent; height: 90px;">
+                <!-- column-item-info [Only shows on hover]-->
+                <div class="column-item-info">
+                    <span class="h3 white ng-binding">20 Amazing Things You Can Do With Mason Jars</span>
+                    <!--<span class="header-sm-attr white">By dandeering for Diply News</span>-->
+                </div>
+                <i class="fa fa-chevron-circle-right"></i>
+            </a><!-- end ngRepeat: tile in columns[$index] -->
+            <!-- Column Item-->
+        </div><!-- end ngRepeat: column in columns track by $index --><div style="width: 100px; transform: translate3d(0px, -270px, 0px);" class="header-column ng-scope" ng-repeat="column in columns track by $index">
+            <!-- Column Item---------------------------------------------[SET 1]  -->
+            <!-- ngRepeat: tile in columns[$index] --><a class="header-column-item ng-scope" ng-repeat="tile in columns[$index]" href="/different-solutions/reeses-cups-recipes/107420" alt="..." style="background: url(&quot;http://cdn.diply.com/img/8dcf97ae-60ca-4a7d-8c0b-956e5a9731f1_t.jpg&quot;) no-repeat scroll center top / cover  transparent; height: 90px;">
+                <!-- column-item-info [Only shows on hover]-->
+                <div class="column-item-info">
+                    <span class="h3 white ng-binding">15 Ways To Make Reese's Cups Even More Delicious</span>
+                    <!--<span class="header-sm-attr white">By dandeering for Diply News</span>-->
+                </div>
+                <i class="fa fa-chevron-circle-right"></i>
+            </a><!-- end ngRepeat: tile in columns[$index] --><a class="header-column-item ng-scope" ng-repeat="tile in columns[$index]" href="/different-solutions/nintendo-facts/98828" alt="..." style="background: url(&quot;http://cdn.diply.com/img/2691b7e1-fb86-448f-93ae-1b87afa2e3fd_t.jpg&quot;) no-repeat scroll center top / cover  transparent; height: 90px;">
+                <!-- column-item-info [Only shows on hover]-->
+                <div class="column-item-info">
+                    <span class="h3 white ng-binding">16 Nintendo Facts That Are Sure To Boggle Your Brain</span>
+                    <!--<span class="header-sm-attr white">By dandeering for Diply News</span>-->
+                </div>
+                <i class="fa fa-chevron-circle-right"></i>
+            </a><!-- end ngRepeat: tile in columns[$index] --><a class="header-column-item ng-scope" ng-repeat="tile in columns[$index]" href="/diply-news/ashton-kutcher-makes-petition-to-get-equally-accessible-baby-changing-tables-in-restrooms/107813" alt="..." style="background: url(&quot;http://cdn.diply.com/img/70b169e2-bb3d-4fa4-a753-fceed0f3d2d9_t.jpg&quot;) no-repeat scroll center top / cover  transparent; height: 90px;">
+                <!-- column-item-info [Only shows on hover]-->
+                <div class="column-item-info">
+                    <span class="h3 white ng-binding">Ashton Kutcher Starts Petition To Get Baby Changing Tables In Men's Restrooms</span>
+                    <!--<span class="header-sm-attr white">By dandeering for Diply News</span>-->
+                </div>
+                <i class="fa fa-chevron-circle-right"></i>
+            </a><!-- end ngRepeat: tile in columns[$index] --><a class="header-column-item ng-scope" ng-repeat="tile in columns[$index]" href="/different-solutions/woah-would-you-look-at-that/108147" alt="..." style="background: url(&quot;http://cdn.diply.com/img/9b953c64-ee26-4a6e-b126-b1b504e409fa_t.jpg&quot;) no-repeat scroll center top / cover  transparent; height: 90px;">
+                <!-- column-item-info [Only shows on hover]-->
+                <div class="column-item-info">
+                    <span class="h3 white ng-binding">25 Of The Most Truly Fascinating Photos</span>
+                    <!--<span class="header-sm-attr white">By dandeering for Diply News</span>-->
+                </div>
+                <i class="fa fa-chevron-circle-right"></i>
+            </a><!-- end ngRepeat: tile in columns[$index] --><a class="header-column-item ng-scope" ng-repeat="tile in columns[$index]" href="/different-solutions/emergency-fashion-hacks/107711" alt="..." style="background: url(&quot;http://cdn.diply.com/img/a6fc8729-f3d3-4ec9-8703-10e4a1dec2e5_t.jpg&quot;) no-repeat scroll center top / cover  transparent; height: 90px;">
+                <!-- column-item-info [Only shows on hover]-->
+                <div class="column-item-info">
+                    <span class="h3 white ng-binding">20 Emergency Fashion Hacks Every Woman Should Know</span>
+                    <!--<span class="header-sm-attr white">By dandeering for Diply News</span>-->
+                </div>
+                <i class="fa fa-chevron-circle-right"></i>
+            </a><!-- end ngRepeat: tile in columns[$index] --><a class="header-column-item ng-scope" ng-repeat="tile in columns[$index]" href="/diply-news/ted-cruz-obamacare-cnn/107780" alt="..." style="background: url(&quot;http://cdn.diply.com/img/9f5b29e5-7d50-46f2-90b0-e50c84430e55_t.jpg&quot;) no-repeat scroll center top / cover  transparent; height: 90px;">
+                <!-- column-item-info [Only shows on hover]-->
+                <div class="column-item-info">
+                    <span class="h3 white ng-binding">Ted Cruz To Sign Up For Obamacare</span>
+                    <!--<span class="header-sm-attr white">By dandeering for Diply News</span>-->
+                </div>
+                <i class="fa fa-chevron-circle-right"></i>
+            </a><!-- end ngRepeat: tile in columns[$index] -->
+            <!-- Column Item-->
+        </div><!-- end ngRepeat: column in columns track by $index --><div style="width: 100px; transform: translate3d(0px, 0px, 0px);" class="header-column ng-scope" ng-repeat="column in columns track by $index">
+            <!-- Column Item---------------------------------------------[SET 1]  -->
+            <!-- ngRepeat: tile in columns[$index] --><a class="header-column-item ng-scope" ng-repeat="tile in columns[$index]" href="/different-solutions/celebrities-who-are-related/61316" alt="..." style="background: url(&quot;http://cdn.diply.com/img/f5321824-10af-4314-b79c-6c49ad19e0be_t.jpg&quot;) no-repeat scroll center top / cover  transparent; height: 90px;">
+                <!-- column-item-info [Only shows on hover]-->
+                <div class="column-item-info">
+                    <span class="h3 white ng-binding">15 Celebrities You Didn't Know Were Related</span>
+                    <!--<span class="header-sm-attr white">By dandeering for Diply News</span>-->
+                </div>
+                <i class="fa fa-chevron-circle-right"></i>
+            </a><!-- end ngRepeat: tile in columns[$index] --><a class="header-column-item ng-scope" ng-repeat="tile in columns[$index]" href="/different-solutions/hippity-hoppity-easters-on-its-way/105890" alt="..." style="background: url(&quot;http://cdn.diply.com/img/b21d5149-13c9-4bc6-9210-a59b0adb724f_t.jpg&quot;) no-repeat scroll center top / cover  transparent; height: 90px;">
+                <!-- column-item-info [Only shows on hover]-->
+                <div class="column-item-info">
+                    <span class="h3 white ng-binding">22 Ways To Hop Your Easter To Perfection</span>
+                    <!--<span class="header-sm-attr white">By dandeering for Diply News</span>-->
+                </div>
+                <i class="fa fa-chevron-circle-right"></i>
+            </a><!-- end ngRepeat: tile in columns[$index] --><a class="header-column-item ng-scope" ng-repeat="tile in columns[$index]" href="/diply-news/tripadvisor-announced-its-annual-awards-worlds-top-25-travel-desinations/107712" alt="..." style="background: url(&quot;http://cdn.diply.com/img/edc249f9-86c3-449c-8a62-53998b705da0_t.jpg&quot;) no-repeat scroll center top / cover  transparent; height: 90px;">
+                <!-- column-item-info [Only shows on hover]-->
+                <div class="column-item-info">
+                    <span class="h3 white ng-binding">Wanderlust Essentials: The World's Top Travel Destinations Of 2015</span>
+                    <!--<span class="header-sm-attr white">By dandeering for Diply News</span>-->
+                </div>
+                <i class="fa fa-chevron-circle-right"></i>
+            </a><!-- end ngRepeat: tile in columns[$index] --><a class="header-column-item ng-scope" ng-repeat="tile in columns[$index]" href="/different-solutions/reduce-reuse-recycle/107727" alt="..." style="background: url(&quot;http://cdn.diply.com/img/e9020f4f-71dd-4b55-9bff-5a183f3ab998_t.jpg&quot;) no-repeat scroll center top / cover  transparent; height: 90px;">
+                <!-- column-item-info [Only shows on hover]-->
+                <div class="column-item-info">
+                    <span class="h3 white ng-binding">19 Ways To Repurpose And Reuse Your Kitchen Trash</span>
+                    <!--<span class="header-sm-attr white">By dandeering for Diply News</span>-->
+                </div>
+                <i class="fa fa-chevron-circle-right"></i>
+            </a><!-- end ngRepeat: tile in columns[$index] --><a class="header-column-item ng-scope" ng-repeat="tile in columns[$index]" href="/diply-news/angelina-jolie-has-ovaries-removed-to-minimize-cancer-risks-shares-experience-decision/107393" alt="..." style="background: url(&quot;http://cdn.diply.com/img/10a906af-4114-44a9-a3ec-89f1cb1a78fe_t.jpg&quot;) no-repeat scroll center top / cover  transparent; height: 90px;">
+                <!-- column-item-info [Only shows on hover]-->
+                <div class="column-item-info">
+                    <span class="h3 white ng-binding">Angelina Jolie Has Ovaries Removed To Minimize Cancer Risk</span>
+                    <!--<span class="header-sm-attr white">By dandeering for Diply News</span>-->
+                </div>
+                <i class="fa fa-chevron-circle-right"></i>
+            </a><!-- end ngRepeat: tile in columns[$index] --><a class="header-column-item ng-scope" ng-repeat="tile in columns[$index]" href="/i-love/creatures-that-look-like-they-dont-belong-on-earth/107545" alt="..." style="background: url(&quot;http://cdn.diply.com/img/f2ba33e2-7578-4220-a923-426c7c78e4bf_t.jpg&quot;) no-repeat scroll center top / cover  transparent; height: 90px;">
+                <!-- column-item-info [Only shows on hover]-->
+                <div class="column-item-info">
+                    <span class="h3 white ng-binding">16 Incredibly Alien-Like Creatures That Look Like They Do Not Belong On This Planet</span>
+                    <!--<span class="header-sm-attr white">By dandeering for Diply News</span>-->
+                </div>
+                <i class="fa fa-chevron-circle-right"></i>
+            </a><!-- end ngRepeat: tile in columns[$index] -->
+            <!-- Column Item-->
+        </div><!-- end ngRepeat: column in columns track by $index --><div style="width: 100px; transform: translate3d(0px, -270px, 0px);" class="header-column ng-scope" ng-repeat="column in columns track by $index">
+            <!-- Column Item---------------------------------------------[SET 1]  -->
+            <!-- ngRepeat: tile in columns[$index] --><a class="header-column-item ng-scope" ng-repeat="tile in columns[$index]" href="/different-solutions/dogs-excited-for-spring/106030" alt="..." style="background: url(&quot;http://cdn.diply.com/img/cbfdf7d0-fbd3-4e33-9b9a-c5b95805f8c3_t.jpg&quot;) no-repeat scroll center top / cover  transparent; height: 90px;">
+                <!-- column-item-info [Only shows on hover]-->
+                <div class="column-item-info">
+                    <span class="h3 white ng-binding">These 19 Dogs Are Super Stoked Spring Is Here!</span>
+                    <!--<span class="header-sm-attr white">By dandeering for Diply News</span>-->
+                </div>
+                <i class="fa fa-chevron-circle-right"></i>
+            </a><!-- end ngRepeat: tile in columns[$index] --><a class="header-column-item ng-scope" ng-repeat="tile in columns[$index]" href="/cool-things/traditional-easter-foods-cultures-around-the-world/107682" alt="..." style="background: url(&quot;http://cdn.diply.com/img/746df843-cac0-4c4c-802f-ede9fed307bf_t.jpg&quot;) no-repeat scroll center top / cover  transparent; height: 90px;">
+                <!-- column-item-info [Only shows on hover]-->
+                <div class="column-item-info">
+                    <span class="h3 white ng-binding">19 Easter Foods From Cultures Around The World</span>
+                    <!--<span class="header-sm-attr white">By dandeering for Diply News</span>-->
+                </div>
+                <i class="fa fa-chevron-circle-right"></i>
+            </a><!-- end ngRepeat: tile in columns[$index] --><a class="header-column-item ng-scope" ng-repeat="tile in columns[$index]" href="/different-solutions/why-cold-showers-are-better-for-you-and-the-environment/107091" alt="..." style="background: url(&quot;http://cdn.diply.com/img/ea028807-341a-46af-9956-c61ea94a0471_t.jpg&quot;) no-repeat scroll center top / cover  transparent; height: 90px;">
+                <!-- column-item-info [Only shows on hover]-->
+                <div class="column-item-info">
+                    <span class="h3 white ng-binding">Time To Cool Down: 12 Reasons Why Cold Showers Are Better For You And The Environment</span>
+                    <!--<span class="header-sm-attr white">By dandeering for Diply News</span>-->
+                </div>
+                <i class="fa fa-chevron-circle-right"></i>
+            </a><!-- end ngRepeat: tile in columns[$index] --><a class="header-column-item ng-scope" ng-repeat="tile in columns[$index]" href="/different-solutions/tasty-crock-pot-recipes/107347" alt="..." style="background: url(&quot;http://cdn.diply.com/img/955a04ba-6bef-43d6-9153-4e43abf25e40_t.jpg&quot;) no-repeat scroll center top / cover  transparent; height: 90px;">
+                <!-- column-item-info [Only shows on hover]-->
+                <div class="column-item-info">
+                    <span class="h3 white ng-binding">16 Tasty Crock-Pot Recipes That Save You Time</span>
+                    <!--<span class="header-sm-attr white">By dandeering for Diply News</span>-->
+                </div>
+                <i class="fa fa-chevron-circle-right"></i>
+            </a><!-- end ngRepeat: tile in columns[$index] --><a class="header-column-item ng-scope" ng-repeat="tile in columns[$index]" href="/trendyjoe/26-comedians-yearbook-pics-before-fame/107120" alt="..." style="background: url(&quot;http://cdn.diply.com/img/bb21d43b-ee42-4193-930b-0bde55675955_t.jpg&quot;) no-repeat scroll center top / cover  transparent; height: 90px;">
+                <!-- column-item-info [Only shows on hover]-->
+                <div class="column-item-info">
+                    <span class="h3 white ng-binding">26 Comedians Before They Were Famous: Yearbook Edition</span>
+                    <!--<span class="header-sm-attr white">By dandeering for Diply News</span>-->
+                </div>
+                <i class="fa fa-chevron-circle-right"></i>
+            </a><!-- end ngRepeat: tile in columns[$index] --><a class="header-column-item ng-scope" ng-repeat="tile in columns[$index]" href="/science-alert/mini-black-holes-could-prove-existence-parallel-universes/107168" alt="..." style="background: url(&quot;http://cdn.diply.com/img/69944745-b2db-40c0-9861-9ad7f9001c79_t.jpg&quot;) no-repeat scroll center top / cover  transparent; height: 90px;">
+                <!-- column-item-info [Only shows on hover]-->
+                <div class="column-item-info">
+                    <span class="h3 white ng-binding">Mini Black Holes Could Prove Existence Of Parallel Universes</span>
+                    <!--<span class="header-sm-attr white">By dandeering for Diply News</span>-->
+                </div>
+                <i class="fa fa-chevron-circle-right"></i>
+            </a><!-- end ngRepeat: tile in columns[$index] -->
+            <!-- Column Item-->
+        </div><!-- end ngRepeat: column in columns track by $index --><div style="width: 100px; transform: translate3d(0px, 0px, 0px);" class="header-column ng-scope" ng-repeat="column in columns track by $index">
+            <!-- Column Item---------------------------------------------[SET 1]  -->
+            <!-- ngRepeat: tile in columns[$index] --><a class="header-column-item ng-scope" ng-repeat="tile in columns[$index]" href="/different-solutions/dessert-pizza-recipes/106939" alt="..." style="background: url(&quot;http://cdn.diply.com/img/19ca9857-9627-4a28-aff8-81227016ad70_t.jpg&quot;) no-repeat scroll center top / cover  transparent; height: 90px;">
+                <!-- column-item-info [Only shows on hover]-->
+                <div class="column-item-info">
+                    <span class="h3 white ng-binding">13 Delicious Dessert Pizzas To Devour</span>
+                    <!--<span class="header-sm-attr white">By dandeering for Diply News</span>-->
+                </div>
+                <i class="fa fa-chevron-circle-right"></i>
+            </a><!-- end ngRepeat: tile in columns[$index] --><a class="header-column-item ng-scope" ng-repeat="tile in columns[$index]" href="/awesome-vine/starbucks-hacks-save-money/107251" alt="..." style="background: url(&quot;http://cdn.diply.com/img/171b1dfa-bf23-4eeb-bbe4-fc9f59137eee_t.jpg&quot;) no-repeat scroll center top / cover  transparent; height: 90px;">
+                <!-- column-item-info [Only shows on hover]-->
+                <div class="column-item-info">
+                    <span class="h3 white ng-binding">20 Starbucks Hacks That Save You Money</span>
+                    <!--<span class="header-sm-attr white">By dandeering for Diply News</span>-->
+                </div>
+                <i class="fa fa-chevron-circle-right"></i>
+            </a><!-- end ngRepeat: tile in columns[$index] --><a class="header-column-item ng-scope" ng-repeat="tile in columns[$index]" href="/different-solutions/geekiest-weddings-2014/106110" alt="..." style="background: url(&quot;http://cdn.diply.com/img/b141ab9f-6dc3-45e7-b6c0-d98a3958e648_t.jpg&quot;) no-repeat scroll center top / cover  transparent; height: 90px;">
+                <!-- column-item-info [Only shows on hover]-->
+                <div class="column-item-info">
+                    <span class="h3 white ng-binding">10 Of The Geekiest Weddings From 2014</span>
+                    <!--<span class="header-sm-attr white">By dandeering for Diply News</span>-->
+                </div>
+                <i class="fa fa-chevron-circle-right"></i>
+            </a><!-- end ngRepeat: tile in columns[$index] --><a class="header-column-item ng-scope" ng-repeat="tile in columns[$index]" href="/prettyricky/16-celebrities-who-actually-might-be-time-travelers/107134" alt="..." style="background: url(&quot;http://cdn.diply.com/img/7cdcb4e5-8fa3-4fd5-b60a-60944ee85502_t.jpg&quot;) no-repeat scroll center top / cover  transparent; height: 90px;">
+                <!-- column-item-info [Only shows on hover]-->
+                <div class="column-item-info">
+                    <span class="h3 white ng-binding">16 Celebrities Who Actually Might Be Time Travelers. </span>
+                    <!--<span class="header-sm-attr white">By dandeering for Diply News</span>-->
+                </div>
+                <i class="fa fa-chevron-circle-right"></i>
+            </a><!-- end ngRepeat: tile in columns[$index] --><a class="header-column-item ng-scope" ng-repeat="tile in columns[$index]" href="/diply-news/lawsuit-filed-after-high-levels-of-arsenic-wine/106256" alt="..." style="background: url(&quot;http://cdn.diply.com/img/6245929e-5517-4aa5-b8dc-b670330c79e7_t.jpg&quot;) no-repeat scroll center top / cover  transparent; height: 90px;">
+                <!-- column-item-info [Only shows on hover]-->
+                <div class="column-item-info">
+                    <span class="h3 white ng-binding">What's In Your Wine? Lawsuit Filed After Arsenic Found In Popular, Cheap US Wines</span>
+                    <!--<span class="header-sm-attr white">By dandeering for Diply News</span>-->
+                </div>
+                <i class="fa fa-chevron-circle-right"></i>
+            </a><!-- end ngRepeat: tile in columns[$index] --><a class="header-column-item ng-scope" ng-repeat="tile in columns[$index]" href="/different-solutions/munchkin-cat/106949" alt="..." style="background: url(&quot;http://cdn.diply.com/img/fb8d5be1-79f9-4bb3-be20-a2805bc11cad_t.jpg&quot;) no-repeat scroll center top / cover  transparent; height: 90px;">
+                <!-- column-item-info [Only shows on hover]-->
+                <div class="column-item-info">
+                    <span class="h3 white ng-binding">16 Reasons You'll Absolutely NEED A Munchkin Cat</span>
+                    <!--<span class="header-sm-attr white">By dandeering for Diply News</span>-->
+                </div>
+                <i class="fa fa-chevron-circle-right"></i>
+            </a><!-- end ngRepeat: tile in columns[$index] -->
+            <!-- Column Item-->
+        </div><!-- end ngRepeat: column in columns track by $index -->
+
+    </div><!-- header-container -->
+    <!-- diply-header-brand -->
+    <div class="diply-header-brand">
+        <!-- header-brand-logo -->
+        <div class="header-brand-logo">
+        </div>
+        <!-- header-brand-slogan -->
+    </div><!-- diply-header-brand [END]-->
+</div><!-- header-wrapper [MASK]-->
+<!-- Triangle Masks -->
+<!-- header-controller.js - Mask Behaviour -->
+<div class="triangle-mask ng-scope">
+    <div style="border-width: 36px 0px 0px 266.667px;" class="triangle-left"></div>
+    <div style="border-width: 0px 0px 36px 266.667px;" class="triangle-right"></div>
+</div>
+
+<!-- Create Inspire Share -->
+<div class="create-wrap ng-scope">
+    <div class="create-inspire-share">
+
+    </div>
+</div>  </ng-include>
+<!-- /Dat Header -->
+
+<!-- Dat Nav -->
+<!--<ng-include src="'/Content/static/diply-new-angular/src/app/nav/nav.html'"></ng-include>-->
+        <!-- Moved to _Nav.cshtml -->
+<!-- /Dat Nav -->
+
+<!-- uiView:  --><div class="ng-scope" ui-view=""></div><!-- this might not be needed -->
+
+<div class="diply-wrapper ng-scope">
+    <!--<div class="diply-row">-->
+        <!-- Content -->
+        <div class="diply-main">
+            <div class="diply-card-row clearfix">
+                <!-- LARGE CARD -->
+                <div class="diply-card card-wide">
+                    <a class="card-image" style="background-image: url(http://cdn.diply.com/img/de012455-6503-4c55-b70a-7cf1177c6659_m.jpg);" href="/different-solutions/circle-of-life-photos-age-gap-one-hundred-years-plus/115787">
+                        <p class="card-tag ng-binding">Inspirational</p>
+                    </a>
+                    <div class="card-info">
+                        <a href="/different-solutions/circle-of-life-photos-age-gap-one-hundred-years-plus/115787" class="card-info-headline ng-binding">The Circle Of Life: Family Photos With Age Gaps Of 100+ Years!</a>
+                        <div class="card-info-author">
+                            <div class="card-info-author-img" style="background-image: url(http://cdn.diply.com/img-user/174850a7-ae9e-4211-9cb7-151a0817cab6.jpg)"></div>
+                            <p>
+                               By <a class="ng-binding" href="/profile/michelle.pugle">michelle.pugle</a><br>For <a class="ng-binding" href="/different-solutions">Different Solutions</a>
+                            </p>
+                        </div>
+                        <p class="card-info-summary ng-binding">Family is everything &lt;3
+                        </p>
+                        <a class="card-info-more" href="/different-solutions/circle-of-life-photos-age-gap-one-hundred-years-plus/115787">Read This <i class="fa fa-chevron-right"></i></a>
+                    </div>
+                </div>
+                <!-- END LARGE CARD -->
+            </div>
+            <div class="diply-card-row clearfix">
+                <div class="diply-card-social">
+                    <p class="diply-social-title">Follow Us to Get More Diply</p>
+                    <!--<div class="diply-social-badges">-->
+                        <!--<a href="https://www.facebook.com/diply" target="_blank" alt="Like us on Facebook!" class="social-badge sb-fb"><i class="fa fa-facebook"></i></a>-->
+                        <!--<a href="https://twitter.com/diply" target="_blank" alt="Follow us on Twitter!" class="social-badge sb-tw"><i class="fa fa-twitter"></i></a>-->
+                        <!--<a href="https://plus.google.com/+Diply" target="_blank" alt="Join our Circle!" class="social-badge sb-gp"><i class="fa fa-google-plus"></i></a>-->
+                        <!--&lt;!&ndash;<br class="visible-xs" />&ndash;&gt;-->
+                        <!--<a href="https://instagram.com/diply/" target="_blank" alt="Follow us on Instagram" class="social-badge sb-ig sb-m-f"><i class="fa fa-instagram"></i></a>-->
+                        <!--<a href="https://www.pinterest.com/diply/" alt="Join us on Pinterest" target="_blank" class="social-badge sb-pi"><i class="fa fa-pinterest"></i></a>-->
+                        <!--<a href="https://www.youtube.com/diply" alt="Follow us on YouTube"  target="_blank" class="social-badge sb-yt"><i class="fa fa-youtube"></i></a>-->
+                        <!--&lt;!&ndash;<a href="mailto:info@goviralinc.com" alt="Get in Touch!" class="social-badge sb-em"><i class="fa fa-envelope"></i></a>&ndash;&gt;-->
+                    <!--</div>-->
+                    <div class="diply-sb-holder">
+                        <a class="sb-round sb-fb" href="https://www.facebook.com/diply" target="_blank">
+                            <i class="fa fa-fw fa-facebook"></i>
+                        </a>
+                        <a class="sb-round sb-tw" href="https://twitter.com/diply" target="_blank">
+                            <i class="fa fa-fw fa-twitter"></i>
+                        </a>
+                        <a class="sb-round sb-gp" href="https://plus.google.com/+Diply" target="_blank">
+                            <i class="fa fa-fw fa-google-plus"></i>
+                        </a>
+                        <a class="sb-round sb-ig" href="https://instagram.com/diply/" target="_blank">
+                            <i class="fa fa-fw fa-instagram"></i>
+                        </a>
+                        <a class="sb-round sb-pi" href="https://www.pinterest.com/diply/" target="_blank">
+                            <i class="fa fa-fw fa-pinterest"></i>
+                        </a>
+                        <a class="sb-round sb-yt" href="https://www.youtube.com/diply" target="_blank">
+                            <i class="fa fa-fw fa-youtube"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="diply-card-row clearfix">
+                <!-- SMALL CARD LEFT -->
+                <div class="diply-card card-left">
+                    <a class="card-image" style="background-image: url(http://cdn.diply.com/img/549041a8-9eed-42c8-9343-2c66bf367b2d_m.jpg)" href="/different-solutions/creative-pies/115253">
+                        <p class="card-tag ng-binding">Food</p>
+                    </a>
+                    <div class="card-info">
+                        <a href="/different-solutions/creative-pies/115253" class="card-info-headline ng-binding">16 Of The Most Creative Pies Ever</a>
+                        <div class="card-info-author">
+                            <p>
+                                By <a class="ng-binding" href="/profile/Moira.Ghazal">Moira.Ghazal</a> for <a class="ng-binding" href="/different-solutions">Different Solutions</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <!-- END SMALL CARD LEFT -->
+                <!-- SMALL CARD RIGHT - SPONSORED -->
+                <div class="diply-card card-right" rel="diply">
+                    <a class="card-image" style="background-image: url(http://cdn.diply.com/img/246ed946-e7e7-4ba7-85c7-2ae9efc665ed_m.jpg)" href="/different-solutions/puppies-going-home-car-ride/114865">
+                        <p class="card-tag ng-binding">Animals</p>
+                    </a>
+                    <div class="card-info">
+                        <a href="/different-solutions/puppies-going-home-car-ride/114865" class="card-info-headline ng-binding">21 Adorable Puppies Going Home For The First Time</a>
+                        <div class="card-info-author">
+                            <p>
+                                By <a class="ng-binding" href="/profile/michelle.pugle">michelle.pugle</a> for <a class="ng-binding" href="/different-solutions">Different Solutions</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <!-- END SMALL CARD RIGHT - SPONSORED -->
+            </div>
+
+            <div class="diply-card-row clearfix">
+                <!-- SMALL CARD LEFT -->
+                <div class="diply-card card-left">
+                    <a class="card-image" style="background-image: url(http://cdn.diply.com/img/4717d59e-2876-43a6-bb63-ff0754050dd2_m.jpg)" href="/diply-news/study-finds-shopping-affects-brain-similar-to-sex/115429">
+                        <p class="card-tag ng-binding">Lifestyle</p>
+                    </a>
+                    <div class="card-info">
+                        <a href="/diply-news/study-finds-shopping-affects-brain-similar-to-sex/115429" class="card-info-headline ng-binding">Could Finding Great Deals Be The Same As Having Good...</a>
+                        <div class="card-info-author">
+                            <p>
+                                By <a class="ng-binding" href="/profile/L.Glee">L.Glee</a> for <a class="ng-binding" href="/diply-news">DiplyNews</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <!-- END SMALL CARD LEFT -->
+                <!-- SMALL CARD RIGHT - SPONSORED -->
+                <div class="diply-card card-right" rel="diply">
+                    <a class="card-image" style="background-image: url(http://cdn.diply.com/img/1c1091d8-4b70-460a-963a-368aa9353342_m.jpg)" href="/different-solutions/baby-hacks/87274">
+                        <p class="card-tag ng-binding">Parenting</p>
+                        <div class="card-tag-img" style=""></div>
+                    </a>
+                    <div class="card-info">
+                        <a href="/different-solutions/baby-hacks/87274" class="card-info-headline ng-binding">21 Super Simple Life-Saving Baby Hacks</a>
+                        <div class="card-info-author">
+                            <p>
+                                By <a class="ng-binding" href="/profile/ariel.vaisbort">ariel.vaisbort</a> for <a class="ng-binding" href="/different-solutions">Different Solutions</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <!-- END SMALL CARD RIGHT - SPONSORED -->
+            </div>
+
+            <!-- Vid Card -->
+            <div class="diply-card-row clearfix">
+                <!-- LARGE CARD -->
+                <div class="diply-card card-wide">
+                    <a class="card-image" style="background-image: url(http://cdn.diply.com/img/53a18267-78fc-4b71-8db6-9bf4414a1460_m.jpg)" href="/funny-videos/airport-passport-mamma-mia-craze/116123">
+                        <p class="card-tag ng-binding">Entertainment</p>
+                        <!--<div class="card-tag-img" style=""></div>-->
+                    </a>
+                    <div class="card-info">
+                        <a href="/funny-videos/airport-passport-mamma-mia-craze/116123" class="card-info-headline ng-binding">At The Airport He Hands Her His Passport. Suddenly She Climbs Over The Desk And Does THIS! Wow!</a>
+                        <div class="card-info-author">
+                            <div class="card-info-author-img" style="background-image: url(https://graph.facebook.com/100003397794407/picture)"></div>
+                            <p>
+                                By <a class="ng-binding" href="/profile/christyn.andrade">christyn.andrade</a><br>for <a class="ng-binding" href="/funny-videos">Funny Videos</a>
+                            </p>
+                        </div>
+                        <p class="card-info-summary ng-binding">He looks SO awkward! 
+                        </p>
+                        <a class="card-info-more" href="javascript:void(0)">Read This <i class="fa fa-chevron-right"></i></a>
+                    </div>
+                </div>
+                <!-- END LARGE CARD -->
+            </div>
+
+            <!-- Create Card-->
+            <!--div class="diply-card-row clearfix hidden-xs">
+                <div class="diply-card card-create">
+                    <div class="create-header display-table">
+                        <div class="display-cell" style="text-align:center;">
+                            <h3 class="create-card-title">Join the Diply Community!</h3>
+                            <a href="javascript:void(0)" class="diply-cta-btn" id="cta-btn">Start Creating</a>
+                        </div>
+                    </div>
+                    <div class="create-container">
+                        <a href="javascript:void(0)" class="diply-signup-btn diply-signup-facebook">
+                            <i class="fa fa-facebook"></i>
+                            &nbsp;Sign Up With Facebook
+                        </a>
+                        <a href="javascript:void(0)" class="diply-signup-btn diply-signup-twitter">
+                            <i class="fa fa-twitter"></i>
+                            &nbsp;Sign Up with Twitter
+                        </a>
+                        <hr />
+                        Already Have An Account? <a href="javascript:void(0)">Sign In</a>
+                    </div>
+                </div>
+            </div-->
+
+        </div>
+        <!-- Sidebar -->
+        <!-- ngInclude: undefined --><ng-include class="diply-sidebar hidden-md hidden-sm ng-scope" src="%27/Content/static/diply-new-angular/src/app/sidebar/sidebar.html%27"><!-- Diply Sidebar - Only calls -->
+
+    <!-- Must Reads -->
+    <!-- ngInclude: undefined --><ng-include class="ng-scope" src="%27/Content/static/diply-new-angular/src/app/sidebar/must-read.html%27"><!-- Must Read -->
+<div class="must-read hidden-xs ng-scope">
+    <!--Title-->
+    <h2 class="black">Must Reads</h2>
+    <!--Table-->
+
+    <!--Must Read Item Row-->
+    <!-- ngRepeat: item in content.sidebar.mustRead --><a class="must-read-item ng-scope" href="/different-solutions/outdoor-party-hacks-summer/115177" alt="Article Title goes here plz" target="_self" ng-repeat="item in content.sidebar.mustRead">
+        <!--Title or Description-->
+        <div class="must-read-title ng-binding">
+            16 Outdoor Party Hacks You've Got To Try This Summer
+        </div>
+        <!--Thumbnail-->
+        <div class="must-read-tmb" style="background:url(http://cdn.diply.com/img/ee3fd94a-d98d-43d1-a5eb-93da72d70ab2_m.jpg)no-repeat top center; background-size:cover;">
+            
+            <!-- this <div class="mini-badge ...> should only be injected on posts that are being featured for a specific reason.. LOL, HOT, Trending.. ETC -->
+            <!-- The master class is .mini-badge accompanied by a sister class.
+            The Available classes are:
+            ------ .awesome-badge
+            ------ .cute-badge
+            ------ .hot-badge
+            ------ .fail-badge
+            ------ .lol-badge
+            ------ .shocking-badge
+            -->
+            <!--__--''--__--''--__ **** BADGES **** IMPORTANT INFO __--''--__--''--__-->
+            <div class="mini-badge"></div>
+            <!--__--''--__--''--__--__--''--__--''--__--__--''--__--''--__--__--''--__-->
+        </div>
+    </a><!-- end ngRepeat: item in content.sidebar.mustRead --><a class="must-read-item ng-scope" href="/different-solutions/celeb-look-a-like-dopplegangers/114925" alt="Article Title goes here plz" target="_self" ng-repeat="item in content.sidebar.mustRead">
+        <!--Title or Description-->
+        <div class="must-read-title ng-binding">
+            23 Regular People Who Look JUST Like Celebrities
+        </div>
+        <!--Thumbnail-->
+        <div class="must-read-tmb" style="background:url(http://cdn.diply.com/img/44b51c9d-8509-4055-b653-71308b8d6232_m.jpg)no-repeat top center; background-size:cover;">
+            
+            <!-- this <div class="mini-badge ...> should only be injected on posts that are being featured for a specific reason.. LOL, HOT, Trending.. ETC -->
+            <!-- The master class is .mini-badge accompanied by a sister class.
+            The Available classes are:
+            ------ .awesome-badge
+            ------ .cute-badge
+            ------ .hot-badge
+            ------ .fail-badge
+            ------ .lol-badge
+            ------ .shocking-badge
+            -->
+            <!--__--''--__--''--__ **** BADGES **** IMPORTANT INFO __--''--__--''--__-->
+            <div class="mini-badge"></div>
+            <!--__--''--__--''--__--__--''--__--''--__--__--''--__--''--__--__--''--__-->
+        </div>
+    </a><!-- end ngRepeat: item in content.sidebar.mustRead --><a class="must-read-item ng-scope" href="/different-solutions/free-date-ideas/114326" alt="Article Title goes here plz" target="_self" ng-repeat="item in content.sidebar.mustRead">
+        <!--Title or Description-->
+        <div class="must-read-title ng-binding">
+            12 Free Date Ideas To Woo Your Honey
+        </div>
+        <!--Thumbnail-->
+        <div class="must-read-tmb" style="background:url(http://cdn.diply.com/img/ab8223e8-47a6-4d30-9930-5975d0e57d4e_m.jpg)no-repeat top center; background-size:cover;">
+            
+            <!-- this <div class="mini-badge ...> should only be injected on posts that are being featured for a specific reason.. LOL, HOT, Trending.. ETC -->
+            <!-- The master class is .mini-badge accompanied by a sister class.
+            The Available classes are:
+            ------ .awesome-badge
+            ------ .cute-badge
+            ------ .hot-badge
+            ------ .fail-badge
+            ------ .lol-badge
+            ------ .shocking-badge
+            -->
+            <!--__--''--__--''--__ **** BADGES **** IMPORTANT INFO __--''--__--''--__-->
+            <div class="mini-badge"></div>
+            <!--__--''--__--''--__--__--''--__--''--__--__--''--__--''--__--__--''--__-->
+        </div>
+    </a><!-- end ngRepeat: item in content.sidebar.mustRead --><a class="must-read-item ng-scope" href="/different-solutions/daddy-daughter-photos-deserve-award/111843" alt="Article Title goes here plz" target="_self" ng-repeat="item in content.sidebar.mustRead">
+        <!--Title or Description-->
+        <div class="must-read-title ng-binding">
+            19 Daddy-Daughter Photos That Deserve An Award
+        </div>
+        <!--Thumbnail-->
+        <div class="must-read-tmb" style="background:url(http://cdn.diply.com/img/2cd060b5-05bd-49e2-b501-f61cb5fc373a_m.jpg)no-repeat top center; background-size:cover;">
+            
+            <!-- this <div class="mini-badge ...> should only be injected on posts that are being featured for a specific reason.. LOL, HOT, Trending.. ETC -->
+            <!-- The master class is .mini-badge accompanied by a sister class.
+            The Available classes are:
+            ------ .awesome-badge
+            ------ .cute-badge
+            ------ .hot-badge
+            ------ .fail-badge
+            ------ .lol-badge
+            ------ .shocking-badge
+            -->
+            <!--__--''--__--''--__ **** BADGES **** IMPORTANT INFO __--''--__--''--__-->
+            <div class="mini-badge"></div>
+            <!--__--''--__--''--__--__--''--__--''--__--__--''--__--''--__--__--''--__-->
+        </div>
+    </a><!-- end ngRepeat: item in content.sidebar.mustRead --><a class="must-read-item ng-scope" href="/different-solutions/people-struggling-technology/115780" alt="Article Title goes here plz" target="_self" ng-repeat="item in content.sidebar.mustRead">
+        <!--Title or Description-->
+        <div class="must-read-title ng-binding">
+            16 People Having A Really Tough Time With Technology.
+        </div>
+        <!--Thumbnail-->
+        <div class="must-read-tmb" style="background:url(http://cdn.diply.com/img/02bd8a6e-a7c1-4636-b4b7-819c5a80869f_m.jpg)no-repeat top center; background-size:cover;">
+            
+            <!-- this <div class="mini-badge ...> should only be injected on posts that are being featured for a specific reason.. LOL, HOT, Trending.. ETC -->
+            <!-- The master class is .mini-badge accompanied by a sister class.
+            The Available classes are:
+            ------ .awesome-badge
+            ------ .cute-badge
+            ------ .hot-badge
+            ------ .fail-badge
+            ------ .lol-badge
+            ------ .shocking-badge
+            -->
+            <!--__--''--__--''--__ **** BADGES **** IMPORTANT INFO __--''--__--''--__-->
+            <div class="mini-badge"></div>
+            <!--__--''--__--''--__--__--''--__--''--__--__--''--__--''--__--__--''--__-->
+        </div>
+    </a><!-- end ngRepeat: item in content.sidebar.mustRead -->
+    <!--Must Read Item Row-->
+
+    <!--<!--Must Read Item Row-->
+    <!--<a class="must-read-item" href="#" alt="Article Title goes here plz" target="_self">-->
+        <!--<!--Title or Description-->
+        <!--<div class="must-read-title">-->
+            <!--Lights Announces New US Tour In Support Of Little Machines In...-->
+        <!--</div>-->
+        <!--<!--Thumbnail-->
+        <!--<div class="must-read-tmb" style="background:url('http://static2.businessinsider.com/image/542f06aa69bedd966789a608-1200-706/screen%20shot%202014-10-03%20at%204.26.51%20pm.png')no-repeat top center; background-size:cover;"></div>-->
+    <!--</a>-->
+    <!--<!--Must Read Item Row-->
+
+    <!--<!--Must Read Item Row-->
+    <!--<a class="must-read-item" href="#" alt="Article Title goes here plz" target="_self">-->
+        <!--<!--Title or Description-->
+        <!--<div class="must-read-title">-->
+            <!--Lights Announces New US Tour In Support Of Little Machines In...-->
+        <!--</div>-->
+        <!--<!--Thumbnail-->
+        <!--<div class="must-read-tmb" style="background:url('http://static2.businessinsider.com/image/542f06aa69bedd966789a608-1200-706/screen%20shot%202014-10-03%20at%204.26.51%20pm.png')no-repeat top center; background-size:cover;"></div>-->
+    <!--</a>-->
+    <!--<!--Must Read Item Row-->
+
+    <!--<!--Must Read Item Row-->
+    <!--<a class="must-read-item" href="#" alt="Article Title goes here plz" target="_self">-->
+        <!--<!--Title or Description-->
+        <!--<div class="must-read-title">-->
+            <!--Lights Announces New US Tour In Support Of Little Machines In...-->
+        <!--</div>-->
+        <!--<!--Thumbnail-->
+        <!--<div class="must-read-tmb" style="background:url('http://static2.businessinsider.com/image/542f06aa69bedd966789a608-1200-706/screen%20shot%202014-10-03%20at%204.26.51%20pm.png')no-repeat top center; background-size:cover;"></div>-->
+    <!--</a>-->
+    <!--<!--Must Read Item Row-->
+
+    <!--<!--Must Read Item Row-->
+    <!--<a class="must-read-item" href="#" alt="Article Title goes here plz" target="_self">-->
+        <!--<!--Title or Description-->
+        <!--<div class="must-read-title">-->
+            <!--Lights Announces New US Tour In Support Of Little Machines In...-->
+        <!--</div>-->
+        <!--<!--Thumbnail-->
+        <!--<div class="must-read-tmb" style="background:url('http://static2.businessinsider.com/image/542f06aa69bedd966789a608-1200-706/screen%20shot%202014-10-03%20at%204.26.51%20pm.png')no-repeat top center; background-size:cover;"></div>-->
+    <!--</a>-->
+    <!--<!--Must Read Item Row-->
+
+   <!---->
+    
+</div>
+<!-- Must Read [EMD]--></ng-include>
+    <!-- Must Reads [END]-->
+
+    <!-- Original Productions -->
+    <!-- ngInclude: undefined --><ng-include class="ng-scope" src="%27/Content/static/diply-new-angular/src/app/sidebar/original-productions.html%27"><div class="original-productions ng-scope">
+    <!-- Title -->
+    <h2 class="black">Original Productions</h2>
+    <!-- Top Community Content [Start]-->
+
+    <!--Top Community Item - [COVER IMG]-->
+    <!-- ngRepeat: item in content.sidebar.productions --><a class="original-prod-item ng-scope" style="background:url(http://cdn.diply.com/img/cdeee541-450b-4518-b027-f4c13880ba82_m.jpg) no-repeat top center; background-size:cover;" href="/diply-productions/disney-villains-forgotten/102926" alt="6 Disney Villains You Forgot" target="_self" ng-repeat="item in content.sidebar.productions">
+        <!-- Play Button here -->
+        <i class="fa fa-play fa-lg mini-play"></i>
+        <!--!!! Item Info - HOVER ONLY !!!-->
+        <div class="prod-item-info">           
+            <!-- Article Blurb-->
+            <p class="ng-binding">6 Disney Villains You Forgot</p>
+            <span class="prod-author-name ng-binding">By Moira.Ghazal</span>
+        </div>
+    </a><!-- end ngRepeat: item in content.sidebar.productions --><a class="original-prod-item ng-scope" style="background:url(http://cdn.diply.com/img/c486341e-53af-473e-b6d6-0f2c562dc64b_m.jpg) no-repeat top center; background-size:cover;" href="/diply-productions/when-getting-an-office-pet-goes-wrong/105975" alt="When Getting An Office Pet Goes Wrong" target="_self" ng-repeat="item in content.sidebar.productions">
+        <!-- Play Button here -->
+        <i class="fa fa-play fa-lg mini-play"></i>
+        <!--!!! Item Info - HOVER ONLY !!!-->
+        <div class="prod-item-info">           
+            <!-- Article Blurb-->
+            <p class="ng-binding">When Getting An Office Pet Goes Wrong</p>
+            <span class="prod-author-name ng-binding">By rozin.abbas</span>
+        </div>
+    </a><!-- end ngRepeat: item in content.sidebar.productions --><a class="original-prod-item ng-scope" style="background:url(http://cdn.diply.com/img/9d974212-9a11-4576-883c-155a99b3bef8_m.jpg) no-repeat top center; background-size:cover;" href="/diply-productions/diaper-magic-diply-video/114375" alt="He Pours This Blue Liquid Over A Diaper. When I Saw Why? I HAD To Try This! It's BRILLIANT!" target="_self" ng-repeat="item in content.sidebar.productions">
+        <!-- Play Button here -->
+        <i class="fa fa-play fa-lg mini-play"></i>
+        <!--!!! Item Info - HOVER ONLY !!!-->
+        <div class="prod-item-info">           
+            <!-- Article Blurb-->
+            <p class="ng-binding">He Pours This Blue Liquid Over A Diaper. When I Saw Why? I HAD To...</p>
+            <span class="prod-author-name ng-binding">By christyn.andrade</span>
+        </div>
+    </a><!-- end ngRepeat: item in content.sidebar.productions --><a class="original-prod-item ng-scope" style="background:url(http://cdn.diply.com/img/5b846b46-219f-4e15-a022-582b0530706f_m.jpg) no-repeat top center; background-size:cover;" href="/different-solutions/soap-microwave-at-home-science/115273" alt="He Puts A Bar Of Soap In The Microwave. Minutes Later? WOW!" target="_self" ng-repeat="item in content.sidebar.productions">
+        <!-- Play Button here -->
+        <i class="fa fa-play fa-lg mini-play"></i>
+        <!--!!! Item Info - HOVER ONLY !!!-->
+        <div class="prod-item-info">           
+            <!-- Article Blurb-->
+            <p class="ng-binding">He Puts A Bar Of Soap In The Microwave. Minutes Later? WOW!</p>
+            <span class="prod-author-name ng-binding">By christyn.andrade</span>
+        </div>
+    </a><!-- end ngRepeat: item in content.sidebar.productions -->
+    <!--Item [END]-->
+
+    <!--&lt;!&ndash;Top Community Item - [COVER IMG]&ndash;&gt;-->
+    <!--<a class="original-prod-item" style="background:url('http://static.cdn.ea.com/battlelog/prod/954660ddbe53df808c23a0ba948e7971/en_US/blog/wp-content/uploads/2013/09/Battlefield-4-Paracel-Storm-1-640x360.jpg?v=1379090887.53') no-repeat top center; background-size:cover;" href="#" alt="...TITLE..." target="_self">-->
+        <!--&lt;!&ndash; Play Button here &ndash;&gt;-->
+        <!--<i class="fa fa-play fa-lg mini-play"></i>-->
+        <!--&lt;!&ndash;!!! Item Info - HOVER ONLY !!!&ndash;&gt;-->
+        <!--<div class="prod-item-info">-->
+            <!--&lt;!&ndash; Article Blurb&ndash;&gt;-->
+            <!--<p>Awe-inspiring Places That You Wouldn't Believe Actually Exist</p>-->
+            <!--<span class="prod-author-name">By John Smith</span>-->
+        <!--</div>-->
+    <!--</a>-->
+    <!--&lt;!&ndash;Item [END]&ndash;&gt;-->
+
+    <!--&lt;!&ndash;Top Community Item - [COVER IMG]&ndash;&gt;-->
+    <!--<a class="original-prod-item" style="background:url('http://static.cdn.ea.com/battlelog/prod/954660ddbe53df808c23a0ba948e7971/en_US/blog/wp-content/uploads/2013/09/Battlefield-4-Paracel-Storm-1-640x360.jpg?v=1379090887.53') no-repeat top center; background-size:cover;" href="#" alt="...TITLE..." target="_self">-->
+        <!--&lt;!&ndash; Play Button here &ndash;&gt;-->
+        <!--<i class="fa fa-play fa-lg mini-play"></i>-->
+        <!--&lt;!&ndash;!!! Item Info - HOVER ONLY !!!&ndash;&gt;-->
+        <!--<div class="prod-item-info">-->
+            <!--&lt;!&ndash; Article Blurb&ndash;&gt;-->
+            <!--<p>Awe-inspiring Places That You Wouldn't Believe Actually Exist</p>-->
+            <!--<span class="prod-author-name">By John Smith</span>-->
+        <!--</div>-->
+    <!--</a>-->
+    <!--&lt;!&ndash;Item [END]&ndash;&gt;-->
+
+    <!--&lt;!&ndash;Top Community Item - [COVER IMG]&ndash;&gt;-->
+    <!--<a class="original-prod-item" style="background:url('http://static.cdn.ea.com/battlelog/prod/954660ddbe53df808c23a0ba948e7971/en_US/blog/wp-content/uploads/2013/09/Battlefield-4-Paracel-Storm-1-640x360.jpg?v=1379090887.53') no-repeat top center; background-size:cover;" href="#" alt="...TITLE..." target="_self">-->
+        <!--&lt;!&ndash; Play Button here &ndash;&gt;-->
+        <!--<i class="fa fa-play fa-lg mini-play"></i>-->
+        <!--&lt;!&ndash;!!! Item Info - HOVER ONLY !!!&ndash;&gt;-->
+        <!--<div class="prod-item-info">-->
+            <!--&lt;!&ndash; Article Blurb&ndash;&gt;-->
+            <!--<p>Awe-inspiring Places That You Wouldn't Believe Actually Exist</p>-->
+            <!--<span class="prod-author-name">By John Smith</span>-->
+        <!--</div>-->
+    <!--</a>-->
+    <!--&lt;!&ndash;Item [END]&ndash;&gt;-->
+
+    <!--&lt;!&ndash;Top Community Item - [COVER IMG]&ndash;&gt;-->
+    <!--<a class="original-prod-item" style="background:url('http://static.cdn.ea.com/battlelog/prod/954660ddbe53df808c23a0ba948e7971/en_US/blog/wp-content/uploads/2013/09/Battlefield-4-Paracel-Storm-1-640x360.jpg?v=1379090887.53') no-repeat top center; background-size:cover;" href="#" alt="...TITLE..." target="_self">-->
+        <!--&lt;!&ndash; Play Button here &ndash;&gt;-->
+        <!--<i class="fa fa-play fa-lg mini-play"></i>-->
+        <!--&lt;!&ndash;!!! Item Info - HOVER ONLY !!!&ndash;&gt;-->
+        <!--<div class="prod-item-info">-->
+            <!--&lt;!&ndash; Article Blurb&ndash;&gt;-->
+            <!--<p>Awe-inspiring Places That You Wouldn't Believe Actually Exist</p>-->
+            <!--<span class="prod-author-name">By John Smith</span>-->
+        <!--</div>-->
+    <!--</a>-->
+    <!--&lt;!&ndash;Item [END]&ndash;&gt;-->
+
+
+
+ 
+    
+</div></ng-include>
+    <!-- Original Productions [END]-->
+
+    <!-- Top Community -->
+    <!--<ng-include src="'/Content/static/diply-new-angular/src/app/sidebar/top-community.html'"></ng-include>-->
+    <!-- Top Community [END]-->
+
+    <!-- Diply News -->
+    <!-- ngInclude: undefined --><ng-include class="ng-scope" src="%27/Content/static/diply-new-angular/src/app/sidebar/diply-news.html%27"><!-- Must Read -->
+<div class="diply-news ng-scope">
+    <!--Title-->
+    <h2 class="black">Diply News</h2>
+    <!--Table-->
+
+    <!--Must Read Item Row-->
+    <!-- ngRepeat: item in content.sidebar.news --><a class="must-read-item ng-scope" href="/diply-news/instagram-updates-nudity-policy/115954" alt="Article Title goes here plz" target="_self" ng-repeat="item in content.sidebar.news">
+        <!--Title or Description-->
+        <div class="must-read-title ng-binding">
+            Artistic Or Not, Instagram Is Nixing The (Female)...
+            <span class="published-on ng-binding">1 days ago</span>
+        </div>
+        <!--Thumbnail-->
+        <div class="must-read-tmb" style="background:url(http://cdn.diply.com/img/ea5d4be9-3c55-4aa5-a457-2c9b54b0faa5_m.jpg)no-repeat top center; background-size:cover;"></div>
+    </a><!-- end ngRepeat: item in content.sidebar.news --><a class="must-read-item ng-scope" href="/diply-news/astronauts-receive-spacex-shipment-get-espresso-machine-cristoforetti/115849" alt="Article Title goes here plz" target="_self" ng-repeat="item in content.sidebar.news">
+        <!--Title or Description-->
+        <div class="must-read-title ng-binding">
+            Astronauts Receive SpaceX Shipment, Get Their Espresso...
+            <span class="published-on ng-binding">1 days ago</span>
+        </div>
+        <!--Thumbnail-->
+        <div class="must-read-tmb" style="background:url(http://cdn.diply.com/img/69cf7182-20fa-4caa-a0f3-568d98607850_m.jpg)no-repeat top center; background-size:cover;"></div>
+    </a><!-- end ngRepeat: item in content.sidebar.news --><a class="must-read-item ng-scope" href="/diply-news/iwishmyteachernew-campaign-social-media-teacher/115834" alt="Article Title goes here plz" target="_self" ng-repeat="item in content.sidebar.news">
+        <!--Title or Description-->
+        <div class="must-read-title ng-binding">
+            "I Wish My Teacher Knew" - Teacher Shares Heartbreaking...
+            <span class="published-on ng-binding">1 days ago</span>
+        </div>
+        <!--Thumbnail-->
+        <div class="must-read-tmb" style="background:url(http://cdn.diply.com/img/71eef2cb-e5fc-4ce8-a6bb-ceee4fb8940e_m.jpg)no-repeat top center; background-size:cover;"></div>
+    </a><!-- end ngRepeat: item in content.sidebar.news --><a class="must-read-item ng-scope" href="/diply-news/report-soldiers-still-pessimistic-despite-optimism-program/115753" alt="Article Title goes here plz" target="_self" ng-repeat="item in content.sidebar.news">
+        <!--Title or Description-->
+        <div class="must-read-title ng-binding">
+            Report: Soldiers Still Pessimistic Despite $287M...
+            <span class="published-on ng-binding">1 days ago</span>
+        </div>
+        <!--Thumbnail-->
+        <div class="must-read-tmb" style="background:url(http://cdn.diply.com/img/631386c1-d179-458d-a90f-a91422e99df5_m.jpg)no-repeat top center; background-size:cover;"></div>
+    </a><!-- end ngRepeat: item in content.sidebar.news -->
+
+    <!--&lt;!&ndash;Must Read Item Row&ndash;&gt;-->
+    <!--<a class="must-read-item" href="#" alt="Article Title goes here plz" target="_self">-->
+        <!--&lt;!&ndash;Title or Description&ndash;&gt;-->
+        <!--<div class="must-read-title">-->
+            <!--Marshawn Lynch: "I'm Here So I Won't Get Fined"-->
+            <!--<span class="published-on">2 days ago</span>-->
+        <!--</div>-->
+        <!--&lt;!&ndash;Thumbnail&ndash;&gt;-->
+        <!--<div class="must-read-tmb" style="background:url('http://static2.businessinsider.com/image/542f06aa69bedd966789a608-1200-706/screen%20shot%202014-10-03%20at%204.26.51%20pm.png')no-repeat top center; background-size:cover;"></div>-->
+    <!--</a>-->
+    <!--&lt;!&ndash;Must Read Item Row&ndash;&gt;-->
+    <!--<a class="must-read-item" href="#" alt="Article Title goes here plz" target="_self">-->
+        <!--&lt;!&ndash;Title or Description&ndash;&gt;-->
+        <!--<div class="must-read-title">-->
+            <!--Marshawn Lynch: "I'm Here So I Won't Get Fined"-->
+            <!--<span class="published-on">2 days ago</span>-->
+        <!--</div>-->
+        <!--&lt;!&ndash;Thumbnail&ndash;&gt;-->
+        <!--<div class="must-read-tmb" style="background:url('http://static2.businessinsider.com/image/542f06aa69bedd966789a608-1200-706/screen%20shot%202014-10-03%20at%204.26.51%20pm.png')no-repeat top center; background-size:cover;"></div>-->
+    <!--</a>-->
+    <!--&lt;!&ndash;Must Read Item Row&ndash;&gt;-->
+    <!--<a class="must-read-item" href="#" alt="Article Title goes here plz" target="_self">-->
+        <!--&lt;!&ndash;Title or Description&ndash;&gt;-->
+        <!--<div class="must-read-title">-->
+            <!--Marshawn Lynch: "I'm Here So I Won't Get Fined"-->
+            <!--<span class="published-on">2 days ago</span>-->
+        <!--</div>-->
+        <!--&lt;!&ndash;Thumbnail&ndash;&gt;-->
+        <!--<div class="must-read-tmb" style="background:url('http://static2.businessinsider.com/image/542f06aa69bedd966789a608-1200-706/screen%20shot%202014-10-03%20at%204.26.51%20pm.png')no-repeat top center; background-size:cover;"></div>-->
+    <!--</a>-->
+    <!--&lt;!&ndash;Must Read Item Row&ndash;&gt;-->
+    <!--<a class="must-read-item" href="#" alt="Article Title goes here plz" target="_self">-->
+        <!--&lt;!&ndash;Title or Description&ndash;&gt;-->
+        <!--<div class="must-read-title">-->
+            <!--Marshawn Lynch: "I'm Here So I Won't Get Fined"-->
+            <!--<span class="published-on">2 days ago</span>-->
+        <!--</div>-->
+        <!--&lt;!&ndash;Thumbnail&ndash;&gt;-->
+        <!--<div class="must-read-tmb" style="background:url('http://static2.businessinsider.com/image/542f06aa69bedd966789a608-1200-706/screen%20shot%202014-10-03%20at%204.26.51%20pm.png')no-repeat top center; background-size:cover;"></div>-->
+    <!--</a>-->
+
+
+</div>
+<!-- Must Read [EMD]--></ng-include>
+    <!-- diply News [END]-->
+
+
+</ng-include>
+        <!-- Sidebar [END]-->
+    <!--</div>-->
+        <div class="diply-home-footer">
+            <img src="/Content/static/diply-new-angular/src/images/logo_blue.svg">
+            <div class="home-footer-links">
+                <a href="/static/about">About</a>
+                <!--<a href="mailto:info@goviralinc.com">Contact</a>-->
+                <a href="/static/terms">Terms of Service</a>
+                <a href="/static/advertise">Advertise</a>
+            </div>
+        </div>
+</div>
+
+
+<!-- Dat Footer -->
+<!--<ng-include src="''"></ng-include>-->
+<!-- /Dat Footer -->
+</div>
+
+    <script src="/bundles/new_homepage_scripts?v=xjZqMsV1Jxoj6gft1Bg3k52LoLtQwgMfPJ7YgwS2f6w1"></script>
+
+
+<!--<div data-ng-include="'templates/blocks/header.html'"></div>-->
+    <!-- Angular Base -->
+    
+
+    <!-- Components/Libs -->
+    
+
+    <!-- Main -->
+    
+
+    <!-- Services -->
+    
+
+    <!-- Controllers -->
+    
+
+    <!-- Directives -->
+    
+
+    <!-- Other -->
+    
+    
+
+
+</body></html>
