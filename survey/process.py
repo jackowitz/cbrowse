@@ -286,9 +286,16 @@ def fetch_reduced_urls(host, syn_url_dict, txt_out_file, csv_out_file, share_fil
         # (syn_list is actually a dictionary mapping each URL in the synonym set
         # to its number of occurrences)
 
+        # If sanity test fails, add # of reduced URLs to "untested due to sanity failure"
+
         fails = 0
+        sanity_untested = 0
         succs_w_match = 0
         succs_no_match = 0
+
+        # Don't perform any processing for sites with 0 synonym URL sets; this dilutes data
+        if len(syn_url_dict.keys()) == 0:
+                return syn_url_dict
 
         # TODO: this could be one file for all websites but this allows me to examine
         # intermediate results in failure cases
@@ -316,28 +323,39 @@ def fetch_reduced_urls(host, syn_url_dict, txt_out_file, csv_out_file, share_fil
                 # definitely return same hash as original
                 sanity_url = syn_url_list[0] 
                 helper.printd("Sanity Test URL: "+sanity_url+"\n")
-                fetch_and_compare(h,sanity_url,share_file,reduced_url_map,\
-                                  fails,succs_no_match,succs_w_match,True,\
-                                  sanity_retry_count)
-                        
-                for url in reduced_urls:
-                        helper.printd("Reduced url: "+url+"\n")
-                        (fails,succs_no_match,succs_w_match) = \
-                                fetch_and_compare(h,url,share_file,reduced_url_map,\
-                                                  fails,succs_no_match,succs_w_match,False,\
-                                                  reduced_retry_count)
+                (f,unt,snm,swm) = fetch_and_compare(h,sanity_url,share_file,reduced_url_map,\
+                                                    fails,succs_no_match,succs_w_match,\
+                                                    True,sanity_retry_count)
+
+                # unt > 0 indicates sanity test failed; don't test any reduced URLs corresponding
+                # to failed synonym set
+                if (unt > 0):
+                        sanity_untested += len(reduced_urls)
+                        for url in reduced_urls:
+                                helper.printd("Not testing reduced url due to sanity fail: "+url+"\n")
+                                reduced_url_map[url] = (False,'sanity fail')
+                else:
+                        for url in reduced_urls:
+                                helper.printd("Reduced url: "+url+"\n")
+                                (fails,untested,succs_no_match,succs_w_match) = \
+                                        fetch_and_compare(h,url,share_file,reduced_url_map,\
+                                                          fails,succs_no_match,succs_w_match,False,\
+                                                          reduced_retry_count)
                         
                 res_syn_url_dict[h] = (syn_url_list, reduced_url_map)
         
+        # TXT output
         fout.write("Host: "+host+"\n")
         fout.write("Fails: "+str(fails)+"\n")
+        fout.write("Untested due to sanity fail: "+str(sanity_untested)+"\n")
         fout.write("Succs no match: "+str(succs_no_match)+"\n")
         fout.write("Succs w/ match: "+str(succs_w_match)+"\n")
         fout.write("--------------------------------------\n")
 
         # CSV output
-        csvwriter.writerow([host,fails,succs_no_match,succs_w_match])
+        csvwriter.writerow([host,fails,sanity_untested,succs_no_match,succs_w_match])
 
+        # TODO: for additional processing?
         return res_syn_url_dict
 
 # fetches url, compares with original hash, updates value of fail, swm (success_w_match)
@@ -364,7 +382,7 @@ def fetch_and_compare(orig_h, url, share_file, reduced_url_map, \
                         else:
                                 fail += 1
                                 reduced_url_map[url] = (False,'')
-                                return (fail,snm,swm)
+                                return (fail,0,snm,swm)
 
                 # Search for synonym set hash in resources of fetched page
                 # This is necessary because the reduced URL might redirect to a different
@@ -377,25 +395,27 @@ def fetch_and_compare(orig_h, url, share_file, reduced_url_map, \
                                         helper.printd("Sanity_check passed: \n"\
                                                       +"Orig URL: "+url+"\n"\
                                                       +"Matching URL: "+ret_url+"\n")
-                                        return (0,0,0)
+                                        return (0,0,0,0)
                                 else:
                                         helper.printd("Reduced URL match found: \n"\
                                                       +"Orig URL: "+url+"\n"\
                                                       +"Matching URL: "+ret_url+"\n")
                                         swm += 1
                                         reduced_url_map[url] = (True,ret_url)
-                                        return (fail,snm,swm)
+                                        return (fail,0,snm,swm)
                 
                 # No match found in resources of requested website
                 if sanity_check:
-                        assert False,"sanity check failed; no resource with matching hash found"
-                        return (0,0,0)
+                        #assert False,"sanity check failed; no resource with matching hash found"
+                        helper.printd("Sanity check failed: \n"\
+                                      +"Orig URL: "+url+"\n")
+                        return (0,1,0,0)
                 else:
                         helper.printd("No match found for reduced URL: "\
                                       +url)
                         snm += 1
                         reduced_url_map[url] = (True,'')
-                        return (fail,snm,swm)
+                        return (fail,0,snm,swm)
 
                 
                 

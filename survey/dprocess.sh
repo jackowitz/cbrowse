@@ -11,7 +11,7 @@ rm -iv $syndatafile
 rm -iv $syndatacsvfile
 
 echo "Domain,Syn URL Sets,Reduced URLs" > $syndatacsvfile
-echo "Domain,Failed Reduced URL fetches,Successful Reduced URL fetches no match,\
+echo "Domain,Failed Reduced URL fetches,Untested Reduced URLs,Successful Reduced URL fetches no match,\
 Successful Reduced URL fetches with match" > $synfetchcsvfile
 
 for hostdir in results/*; do
