@@ -72,9 +72,23 @@ Result: More of the websites are passing the sanity test, although not all. Fina
 	getting some reduced URLs to hash to the same contents as the original syn-
 	onym set.
 
+Date  : 4/20/15 23:00
+Test 6: Changed script to check all resources for the desired hash
+Result: Script still hanging sometimes, also sometimes inexplicably failing sanity
+	test even now; maybe I should be checking both content hash and resource
+	body hash
+
 Date  : 
-Test 6: In the cases where the reduced URL is hashing to the same contents as the 
+Test x: In the cases where the reduced URL is hashing to the same contents as the 
         original synonym URL, it would be useful to confirm that the contents aren't
 	just an empty page of some kind.
 Result: 
-     	
+
+
+================================================================================
+Future work:
+
+Based on which reduced URLs check out, identify parameters that might be unnecessary
+even in consistent URLs;
+     ie. reducing URLs that are consistent throughout fetches but still might contain
+         unnecessary information

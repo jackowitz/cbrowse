@@ -7,6 +7,11 @@ fi
 
 archdir='archive'
 archno=$( ls $archdir | wc -l )
+archno=$((archno/4))
+datafile='syndata.txt'
+datacsv='syndata.csv'
+fetchfile='synfetchresults.txt'
+fetchcsv='synfetchresults.csv'
 
 if [ $# -eq 1 ]
 then
@@ -15,6 +20,7 @@ fi
 
 srcdir='resultstats/agg'
 echo 'creating archive '$archno
-cp -uv $srcdir'/syndata.txt' $archdir'/sd'$archno'.txt'
-cp -uv $srcdir'/synfetchresults.txt' $archdir'/sf'$archno'.txt'
-
+cp -uv $srcdir'/'$datafile $archdir'/sd'$archno'.txt'
+cp -uv $srcdir'/'$fetchfile $archdir'/sf'$archno'.txt'
+cp -uv $srcdir'/'$datacsv $archdir'/sd'$archno'.csv'
+cp -uv $srcdir'/'$fetchcsv $archdir'/sf'$archno'.csv'
