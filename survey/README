@@ -10,13 +10,13 @@ About the directory hierarchy:
         |			     |
         +-----------+----------+     +------------+
         |	    |          |		  |
-	agg*       temp*     <tons of 	     <site dirs>
-		   	     .txt files>          |
-						  |
-						  |	
-			     	             <fetch no. dirs>
-					          |
-					       +--+-------+
+	agg*       temp*  <site dirs> 	     <site dirs>
+		   	       |	          |
+	+---------+------------+		  |
+	|	  |				  |	
+     fetched	site-detailed.txt          <fetch no. dirs>
+	|			   	          |
+     url[1-n].json			       +--+-------+
 					       |	  |
 					     <pages>   results.json
 					     
@@ -32,6 +32,11 @@ About the directory hierarchy:
         stored in "<hostname>/<fetch_num>/results.json"
 	- As long as the tester uses "map.sh" to generate the results, the input
 	  to dprocess.sh will be placed in the correct place
+
+      - Files created by synurl.fetch_reduced_urls are named based on a shortened
+        simplified version of the url being fetched. They should only be generated
+	and accessed by fetch_and_compare; otherwise, abstract out the function
+	that takes a URL and turns it into a json file name
 
 Testing process:
 ================================================================================

@@ -7,12 +7,14 @@ import csv
 
 import urltrie
 import urltable
+import synurl
 import helper
 
 
 sim_thresh = 0.60
 sanity_retry_count = 10
 reduced_retry_count = 3
+refetch_all = False
 
 def jaccard(sets):
 	if len(sets) == 0:
@@ -32,7 +34,22 @@ def jaccard(sets):
 
 
 def process_main(sys_args):
-	n_trials = len(sys_args)-1
+	n_trials = len(sys_args)-2
+        
+        # False by default; if false, tries to read result of fetching reduced
+        # URLs from a file, if true, refetches all whether or not file exists
+        refetch = sys_args[1]
+
+        # arg 2 is the first results/<site>/fetch/results.json file
+        host = sys_args[2].split('/')[1] 
+        print (host+"\n"+"="*80+"\n")
+
+        if refetch == '1':
+                helper.printd("Refetching all files\n")
+                refetch_all = True
+        else:
+                refetch_all = False
+
 	fail_count = 0
 
 	# List of Hash sets
@@ -65,7 +82,7 @@ def process_main(sys_args):
 	# saw different URLs or different contents at
 	# the same URL. Computes the Jaccard similarities
 	# for both.
-	for target in sys_args[1:]:
+	for target in sys_args[2:]:
 		host = target.split('/')[1]
 		with open(target) as data_file:
 			results = json.load(data_file)
@@ -103,7 +120,7 @@ def process_main(sys_args):
 	print "\n","="*80,"\n",
 
         print "Synonym URLs:"
-        synonym_url_dict = extract_synonym_urls(hash_url_dict)
+        synonym_url_dict = synurl.extract_synonym_urls(hash_url_dict)
         print_dict(synonym_url_dict)
         print "\n","="*80
 
@@ -123,10 +140,11 @@ def process_main(sys_args):
         syn_data_file = "resultstats/agg/syndata.txt"
         syn_csv_data_file = "resultstats/agg/syndata.csv"
         syn_csv_fetch_file = "resultstats/agg/synfetchresults.csv"
-        reduce_synonym_urls(synonym_url_dict)
-        print_reduced_urls(synonym_url_dict, False)
-        write_syn_url_data(host, synonym_url_dict, syn_data_file, syn_csv_data_file, False)
-        fetch_reduced_urls(host, synonym_url_dict, syn_fetch_file, syn_csv_fetch_file, share_file)
+        synurl.reduce_synonym_urls(synonym_url_dict, sim_thresh)
+        synurl.print_reduced_urls(synonym_url_dict, False)
+        synurl.write_syn_url_data(host, synonym_url_dict, syn_data_file, syn_csv_data_file, False)
+        synurl.fetch_reduced_urls(host, synonym_url_dict, syn_fetch_file, syn_csv_fetch_file,\
+                                  sanity_retry_count, reduced_retry_count, refetch_all)
 
 	
 
@@ -209,215 +227,6 @@ def extract_inconsistent_resources(url_hash_dict):
 			inconsistent_res_dict[url] = h_dict
 	return inconsistent_res_dict
 
-# Perform the inverse: make note of any different resources that contain the
-# same hash
-def extract_synonym_urls(hash_url_dict):
-        synonym_url_dict = {}
-        for h in hash_url_dict.keys():
-                url_dict = hash_url_dict[h]
-                if len(url_dict) > 1:
-                        synonym_url_dict[h] = url_dict
-        return synonym_url_dict
-
-# Reduce sets of synonym URLs and store the results in a table mapping hash to
-# a tuple that contains the original synonym url list and the reduced version
-def reduce_synonym_urls(syn_url_dict):
-        for h in syn_url_dict.keys():
-                syn_url_list = syn_url_dict[h]
-                reduced_urls = urltable.reduce_syn_urls(syn_url_list, sim_thresh)
-                syn_url_dict[h] = (syn_url_list,reduced_urls)
-
-# Print the list of reduced URLs and optionally the original sets from which
-# they were distilled
-def print_reduced_urls(syn_url_dict, show_sets):
-        for h in syn_url_dict.keys():
-                syn_url_list = syn_url_dict[h][0]
-                reduced_urls = syn_url_dict[h][1]
-                print h,":"
-                for red_url in reduced_urls:
-                        print "\t",red_url
-                if show_sets:
-                        for url in syn_url_list:
-                                print "\t\t",url
-
-# Write data on the number of synonym URL sets and total number of reduced URLs
-# for each host to 2 common files: one basic text file (more human readable)
-# and one csv file
-def write_syn_url_data(host, syn_url_dict, txt_out_file, csv_out_file, full_urls):
-        total_reduced_urls = 0
-        n_synonym_url_sets = len(syn_url_dict.keys())
-
-        fout = open(txt_out_file, 'a')
-        fout.write("Host: "+host+"\n")
-        fout.write("Number of synonym url sets: "+str(n_synonym_url_sets)+"\n")
-
-        fcsv = open(csv_out_file, 'ab')
-        csvwriter = csv.writer(fcsv)
-        
-        for h in syn_url_dict.keys():
-                reduced_urls = syn_url_dict[h][1]
-                total_reduced_urls += len(reduced_urls)
-                
-                #fout.write("Number of reduced urls: "+str(len(reduced_urls))+"\n")
-                if full_urls:
-                        fout.write(str(h)+":\n")
-                        for url in reduced_urls:
-                                fout.write("\t"+url+"\n")
-
-        fout.write("Number of reduced URLs: "+str(total_reduced_urls)+"\n")
-        fout.write("-"*60+"\n")
-        
-        csvwriter.writerow([host, n_synonym_url_sets, total_reduced_urls])
-
-
-
-def fetch_reduced_urls(host, syn_url_dict, txt_out_file, csv_out_file, share_file_base):
-
-        # Every reduced URL can fail, succeed but not match, or succeed and match
-        # This function will create a new table mapping each hash to a tuple of
-        # the form (syn_list, reduced_url_map) where reduced_url_map is a dictionary
-        # mapping each reduced URL to a tuple of the form (fetch_success?, matching_url)
-        # where success_url is the resource URL with the matching hash
-        # If the fetch was successful but the match wasn't, then matching URL will be 
-        # the empty string
-        # TODO: later do similarity check on success_url and reduced URL
-
-        # This hopefully allows flexible analysis to be done on the results later
-        # (syn_list is actually a dictionary mapping each URL in the synonym set
-        # to its number of occurrences)
-
-        # If sanity test fails, add # of reduced URLs to "untested due to sanity failure"
-
-        fails = 0
-        sanity_untested = 0
-        succs_w_match = 0
-        succs_no_match = 0
-
-        # Don't perform any processing for sites with 0 synonym URL sets; this dilutes data
-        if len(syn_url_dict.keys()) == 0:
-                return syn_url_dict
-
-        # TODO: this could be one file for all websites but this allows me to examine
-        # intermediate results in failure cases
-        share_file = share_file_base+"_"+host+".txt"
-
-        res_syn_url_dict = {}
-
-        # Will be used as single txt output file for reduced url data from all sites
-        fout = open(txt_out_file, 'a')
-
-        # Output same data as csv file for convenient graphing
-        fcsv = open(csv_out_file, 'ab')
-        csvwriter = csv.writer(fcsv)
-
-        for h in syn_url_dict.keys():
-                syn_url_list = sorted(syn_url_dict[h][0].keys())
-                                             
-                reduced_urls = syn_url_dict[h][1]
-                reduced_url_map = {}
-
-                assert (len(syn_url_list) > 0)
-                assert (len(reduced_urls) > 0)
-
-                # For sanity test; original URL from synonym set should
-                # definitely return same hash as original
-                sanity_url = syn_url_list[0] 
-                helper.printd("Sanity Test URL: "+sanity_url+"\n")
-                (f,unt,snm,swm) = fetch_and_compare(h,sanity_url,share_file,reduced_url_map,\
-                                                    fails,succs_no_match,succs_w_match,\
-                                                    True,sanity_retry_count)
-
-                # unt > 0 indicates sanity test failed; don't test any reduced URLs corresponding
-                # to failed synonym set
-                if (unt > 0):
-                        sanity_untested += len(reduced_urls)
-                        for url in reduced_urls:
-                                helper.printd("Not testing reduced url due to sanity fail: "+url+"\n")
-                                reduced_url_map[url] = (False,'sanity fail')
-                else:
-                        for url in reduced_urls:
-                                helper.printd("Reduced url: "+url+"\n")
-                                (fails,untested,succs_no_match,succs_w_match) = \
-                                        fetch_and_compare(h,url,share_file,reduced_url_map,\
-                                                          fails,succs_no_match,succs_w_match,False,\
-                                                          reduced_retry_count)
-                        
-                res_syn_url_dict[h] = (syn_url_list, reduced_url_map)
-        
-        # TXT output
-        fout.write("Host: "+host+"\n")
-        fout.write("Fails: "+str(fails)+"\n")
-        fout.write("Untested due to sanity fail: "+str(sanity_untested)+"\n")
-        fout.write("Succs no match: "+str(succs_no_match)+"\n")
-        fout.write("Succs w/ match: "+str(succs_w_match)+"\n")
-        fout.write("--------------------------------------\n")
-
-        # CSV output
-        csvwriter.writerow([host,fails,sanity_untested,succs_no_match,succs_w_match])
-
-        # TODO: for additional processing?
-        return res_syn_url_dict
-
-# fetches url, compares with original hash, updates value of fail, swm (success_w_match)
-# snm (success_no_match) in response
-# If sanity_check true, don't add result to reduced_url_map or update counter, just print
-# result
-# Retry count is a count of times that the method will retry before accepting failure;
-# It is recommended that it be high for sanity checks so as to avoid false failure
-def fetch_and_compare(orig_h, url, share_file, reduced_url_map, \
-                      fail, snm, swm, sanity_check, retry_count):
-        helper.printd("Fetching url "+url)
-        proc_fetch = subprocess.call(['slimerjs', 'fetchsyn.js', \
-                                      url, share_file])
-        with open(share_file) as data_file:
-                results = json.load(data_file)
-                
-                if results['status'] != 'success':
-                        # Initially retry upon failure
-                        if retry_count > 0:
-                                retry_count -= 1
-                                return fetch_and_compare(orig_h, url, share_file, \
-                                                         reduced_url_map, fail, snm, \
-                                                         swm, sanity_check, retry_count)
-                        else:
-                                fail += 1
-                                reduced_url_map[url] = (False,'')
-                                return (fail,0,snm,swm)
-
-                # Search for synonym set hash in resources of fetched page
-                # This is necessary because the reduced URL might redirect to a different
-                # URL or "fill in" missing parameters, but the hash still might be the same
-                for resource in results['resources']:
-                        ret_url = resource['url']
-                        ret_hash = resource['hash']
-                        if (ret_hash == orig_h):
-                                if sanity_check:
-                                        helper.printd("Sanity_check passed: \n"\
-                                                      +"Orig URL: "+url+"\n"\
-                                                      +"Matching URL: "+ret_url+"\n")
-                                        return (0,0,0,0)
-                                else:
-                                        helper.printd("Reduced URL match found: \n"\
-                                                      +"Orig URL: "+url+"\n"\
-                                                      +"Matching URL: "+ret_url+"\n")
-                                        swm += 1
-                                        reduced_url_map[url] = (True,ret_url)
-                                        return (fail,0,snm,swm)
-                
-                # No match found in resources of requested website
-                if sanity_check:
-                        #assert False,"sanity check failed; no resource with matching hash found"
-                        helper.printd("Sanity check failed: \n"\
-                                      +"Orig URL: "+url+"\n")
-                        return (0,1,0,0)
-                else:
-                        helper.printd("No match found for reduced URL: "\
-                                      +url)
-                        snm += 1
-                        reduced_url_map[url] = (True,'')
-                        return (fail,0,snm,swm)
-
-                
                 
 # TODO: Currently not using this
 def find_dict_by_k_v(dict_list, key, value):

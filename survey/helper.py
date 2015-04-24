@@ -1,6 +1,9 @@
 # Some basic helper functions
 
 import sys
+import string
+import re
+import unicodedata
 
 debug = True
 
@@ -39,3 +42,28 @@ def listReplace(l, X, Y):
         if v == X:
             l.pop(i)
             l.insert(i, Y)
+
+# Taken from
+# http://www.pythoncentral.io/check-file-exists-in-directory-python/
+def file_accessible(path,mode):
+    try:
+        f = open(path,mode)
+        f.close()
+    except IOError as e:
+        return False
+
+    return True
+
+# From
+# http://stackoverflow.com/questions/1276764/
+# stripping-everything-but-alphanumeric-chars-from-a-string-in-python
+def strip_non_alnum(s):
+    s = filter(str.isalnum, s)
+    return s
+
+# From
+# http://stackoverflow.com/questions/1207457/
+# convert-a-unicode-string-to-a-string-in-python-containing-extra-symbols
+def unicode_to_str(us):
+    return unicodedata.normalize('NFKD', us).encode('ascii','ignore')
+    

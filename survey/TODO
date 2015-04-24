@@ -4,7 +4,6 @@ TODO for final project
 Log number of URLs that fail the sanity test rather than just quitting
 Script still hangs sometimes
 Similarity check on URLs that return matching hash
-Exclude from synfetch data any sites that have 0 syn URLs
 Investigate why sanity check might be failing
 More data analysis!
 
