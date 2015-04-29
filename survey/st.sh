@@ -6,8 +6,8 @@ if [ $# -gt 0 ]; then
 
     mkdir -v "resultstats/"$1
 
-    # 1 stands for refetch
-    python process.py 1 $targets > $outfile
+    # 1 stands for refetch, 0 for not
+    python process.py 0 $targets > $outfile
     echo "Done"
 else
     echo "Usage; must specify a result directory"

@@ -15,6 +15,9 @@ sim_thresh = 0.60
 sanity_retry_count = 10
 reduced_retry_count = 3
 refetch_all = False
+num_file = "resultstats/temp/resbyfetch.csv"
+size_file = "resultstats/temp/sizeresbyfetch.csv"
+avg_categories_file = "resultstats/agg/resourcecategorizationdata.csv"
 
 def jaccard(sets):
 	if len(sets) == 0:
@@ -175,7 +178,12 @@ def process_main(sys_args):
         ###   - failure - URL will be reported as a failure for *this* fetch if size = 0
         ###   - synonym: contents appear multiple times fetches but URL varies
         ###   - Inconsistent: not a synonym URL, doesn't appear in all fetches
-        
+
+        n_succ_trials = n_trials - fail_count
+        stats_by_fetch = categorize_resources_by_fetch(res_lists, url_occ_dict, res_fail_dict, 
+                                                       synonym_url_dict, inconsistent_res_dict, n_succ_trials,
+                                                       True, num_file, size_file)
+        average_resource_stats(stats_by_fetch, n_succ_trials, avg_categories_file, host)
 
 # Maps any resource URL encountered to # of occurrences across all trials
 # To be consistent across all trials, total # of occurrences should be some
@@ -232,8 +240,18 @@ def update_url_hashes(url_hash_dict, hash_url_dict, res):
                         hash_url_dict[h] = new_url_dict
 	#return url_hash_dict
 
+# Record the number of times a resource fails; this will allow resources to be categorized
+# as totally consistent if the contents are all the same except for a failed fetch
 def update_res_fails(res_fail_dict, res):
-        return 0
+        for r in res:
+                r_url = r['url']
+                if r['size'] == 0:
+                        if r_url in res_fail_dict:
+                                res_fail_dict[r_url] += 1
+                        else:
+                                res_fail_dict[r_url] = 1
+                elif not (r_url in res_fail_dict):
+                        res_fail_dict[r_url] = 0
 
         
 
@@ -245,7 +263,7 @@ def extract_inconsistent_urls(url_occ_dict, n_trials, fail_count):
 		url_occs = url_occ_dict[url]
 		# This assertion only works if a resource is accessed at most once
 		# in a result page
-		#assert url_occs <= (n_trials-fail_count)
+		assert url_occs <= (n_trials-fail_count)
 		if url_occ_dict[url] < (n_trials-fail_count):
 			inconsistent_url_dict[url] = url_occs
 	return inconsistent_url_dict
@@ -259,15 +277,154 @@ def extract_inconsistent_resources(url_hash_dict):
 			inconsistent_res_dict[url] = h_dict
 	return inconsistent_res_dict
 
+
+def categorize_resources_by_fetch(res_lists, url_occ_dict, res_fail_dict, 
+                                  syn_url_dict, inconsistent_res_dict, n_succ_trials,
+                                  write_to_file, num_file, size_file):
+        stats_by_fetch = []
+        if write_to_file:
+                fnum = open(num_file, 'w')
+                writenums = csv.writer(fnum)
+                writenums.writerow(["Total","Consistent","Contents Inconsistent",
+                                    "Synonym", "Inconsistent", "Failed"])
+                fsize = open(size_file, 'w')
+                writesizes = csv.writer(fsize)
+                writesizes.writerow(["Total","Consistent","Contents Inconsistent",
+                                    "Synonym", "Inconsistent", "Failed"])
+
+
+        # Fetch stats values are dicts (number of resources, number of bytes)
+        for r_list in res_lists:
+                fetch_stats = {"Total" : {"n" : len(r_list), "b" : 0},
+                               "Consistent" : {"n" : 0, "b" : 0},
+                               "C_Inconsistent" : {"n" : 0, "b" : 0},
+                               "Synonym" : {"n" : 0, "b" : 0},
+                               "Inconsistent" : {"n" : 0, "b" : 0},
+                               "Failed" : {"n" : 0, "b" : 0}}
+                for r in r_list:
+                        r_url = r['url']
+                        r_hash = r['hash']
+                        r_sz = r['size']
+                        fetch_stats["Total"]["b"] += r_sz
+                        # Failed
+                        if r_sz == 0:
+                                fetch_stats["Failed"]["n"] += 1
+
+                        # Synonym
+                        elif r_hash in syn_url_dict:
+                                fetch_stats["Synonym"]["n"] += 1
+                                fetch_stats["Synonym"]["b"] += r_sz
+
+                        # Contents inconsistent
+                        elif r_url in inconsistent_res_dict:
+                                fetch_stats["C_Inconsistent"]["n"] += 1
+                                fetch_stats["C_Inconsistent"]["b"] += r_sz
+
+                        # Consistent
+                        else:
+                                url_occs = url_occ_dict[r_url]
+                                res_fails = res_fail_dict[r_url]
+                                if (url_occs - res_fails) == n_succ_trials:
+                                        fetch_stats["Consistent"]["n"] += 1
+                                        fetch_stats["Consistent"]["b"] += r_sz
+                                else:
+                                        fetch_stats["Inconsistent"]["n"] += 1
+                                        fetch_stats["Inconsistent"]["b"] += r_sz
+                stats_by_fetch.append(fetch_stats)
+        
+                if write_to_file:
+                        writenums.writerow([fetch_stats["Total"]["n"],
+                                            fetch_stats["Consistent"]["n"],
+                                            fetch_stats["C_Inconsistent"]["n"],
+                                            fetch_stats["Synonym"]["n"],
+                                            fetch_stats["Inconsistent"]["n"],
+                                            fetch_stats["Failed"]["n"]])
+                        writesizes.writerow([fetch_stats["Total"]["b"],
+                                             fetch_stats["Consistent"]["b"],
+                                             fetch_stats["C_Inconsistent"]["b"],
+                                             fetch_stats["Synonym"]["b"],
+                                             fetch_stats["Inconsistent"]["b"],
+                                             fetch_stats["Failed"]["b"]])
+        return stats_by_fetch
+
+
+def average_resource_stats(stats_by_fetch, n_succ_trials, out_file, host):
+        tot_sum = 0
+        cons_sum = 0
+        c_incons_sum = 0
+        syn_sum = 0
+        incons_sum = 0
+        failed_sum = 0
+
+        b_tot_sum = 0
+        b_cons_sum = 0
+        b_c_incons_sum = 0
+        b_syn_sum = 0
+        b_incons_sum = 0
+        b_failed_sum = 0
+
+        for stat_dict in stats_by_fetch:
+                tot_sum += stat_dict["Total"]["n"]
+                b_tot_sum += stat_dict["Total"]["b"]
+
+                cons_sum += stat_dict["Consistent"]["n"]
+                b_cons_sum += stat_dict["Consistent"]["b"]
+
+                c_incons_sum += stat_dict["C_Inconsistent"]["n"]
+                b_c_incons_sum += stat_dict["C_Inconsistent"]["b"]
+
+                syn_sum += stat_dict["Synonym"]["n"]
+                b_syn_sum += stat_dict["Synonym"]["b"]
+
+                incons_sum += stat_dict["Inconsistent"]["n"]
+                b_incons_sum += stat_dict["Inconsistent"]["b"]
+
+                failed_sum += stat_dict["Failed"]["n"]
+                b_failed_sum += stat_dict["Failed"]["b"]
+
+
+        avg_stats = {"Total" : {"n" : 0, "b" : 0},
+                         "Consistent" : {"n" : 0, "b" : 0},
+                         "C_Inconsistent" : {"n" : 0, "b" : 0},
+                         "Synonym" : {"n" : 0, "b" : 0},
+                         "Inconsistent" : {"n" : 0, "b" : 0},
+                         "Failed" : {"n" : 0, "b" : 0}}
+
+        if  n_succ_trials != 0:
+                avg_stats["Total"]["n"] = float(tot_sum)/n_succ_trials
+                avg_stats["Total"]["b"] = float(b_tot_sum)/n_succ_trials
+
+                avg_stats["Consistent"]["n"] = float(cons_sum)/n_succ_trials
+                avg_stats["Consistent"]["b"] = float(b_cons_sum)/n_succ_trials
+
+                avg_stats["C_Inconsistent"]["n"] = float(c_incons_sum)/n_succ_trials
+                avg_stats["C_Inconsistent"]["b"] = float(b_c_incons_sum)/n_succ_trials
+
+                avg_stats["Synonym"]["n"] = float(syn_sum)/n_succ_trials
+                avg_stats["Synonym"]["b"] = float(b_syn_sum)/n_succ_trials
+
+                avg_stats["Inconsistent"]["n"] = float(incons_sum)/n_succ_trials
+                avg_stats["Inconsistent"]["b"] = float(b_incons_sum)/n_succ_trials
+
+                avg_stats["Failed"]["n"] = float(failed_sum)/n_succ_trials
+                avg_stats["Failed"]["b"] = float(b_failed_sum)/n_succ_trials
+
+        fout = open(out_file, 'a')
+        csvwriter = csv.writer(fout)
+        csvwriter.writerow([host,
+                            avg_stats["Total"]["n"], avg_stats["Consistent"]["n"],
+                            avg_stats["C_Inconsistent"]["n"], avg_stats["Synonym"]["n"],
+                            avg_stats["Inconsistent"]["n"], avg_stats["Failed"]["n"],
+                            avg_stats["Total"]["b"], avg_stats["Consistent"]["b"],
+                            avg_stats["C_Inconsistent"]["b"], avg_stats["Synonym"]["b"],
+                            avg_stats["Inconsistent"]["b"], avg_stats["Failed"]["b"]])
+
+        return avg_stats
+
+                            
+        
+
                 
-# TODO: Currently not using this
-def find_dict_by_k_v(dict_list, key, value):
-        for d in dict_list:
-                if not (key in d.keys()):
-                        helper.printd("find_dict_by_k_v failed: "+key+", "+value+"\n")
-                        return {}
-                if d[key] == value:
-                        return d
 
 
 

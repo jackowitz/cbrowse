@@ -31,16 +31,21 @@ synfetchfile=$outdir"/agg/synfetchresults.txt"
 synfetchcsvfile=$outdir"/agg/synfetchresults.csv"
 syndatafile=$outdir"/agg/syndata.txt"
 syndatacsvfile=$outdir"/agg/syndata.csv"
+categoriescsvfile=$outdir"/agg/resourcecategorizationdata.csv"
 
 rm -iv $synfetchfile
 rm -iv $synfetchcsvfile
 rm -iv $syndatafile
 rm -iv $syndatacsvfile
+rm -iv $categoriescsvfile
 
 # Headers for shared CSV files
 echo "Domain,Syn URL Sets,Reduced URLs" > $syndatacsvfile
 echo "Domain,Failed Reduced URL fetches,Untested Reduced URLs,Successful Reduced URL fetches no match,\
 Successful Reduced URL fetches with match" > $synfetchcsvfile
+echo "Domain,Total Resources,Consistent Resources,Content-Inconsistent Resources,Synonym Resources,\
+Inconsistent Resources,Failed Resources" > $categoriescsvfile
+
 
 for hostdir in results/*; do
     targets=$(find $hostdir -name "results.json")
