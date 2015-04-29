@@ -97,3 +97,7 @@ Based on which reduced URLs check out, identify parameters that might be unneces
 even in consistent URLs;
      ie. reducing URLs that are consistent throughout fetches but still might contain
          unnecessary information
+
+Complicated parameter values that are themselves coded strings with key value
+     parameter representations - the uniquifying information might be "nested" in
+     a way that my URL processing algorithm isn't sophisticated enough to detect

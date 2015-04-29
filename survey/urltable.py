@@ -16,7 +16,7 @@
   as a value has a list of possible variations for the segment within a set
   of similar URLs.
 
-  The keys are tuples of the form (Seg #, Seg text) where the number is nec-
+  The keys are tuples of the form (Seg #, Seg text, seg ty) where the number is nec-
   essary because a dictionary is unordered and we ultimately want to be able
   to reconstruct the original URL in some recognizable way, which means main-
   taining the original order of the segments. The seg text is the text of the
@@ -46,9 +46,9 @@
    |   Key: (Segment # in URL, Segment Text or wildcard, segment type)
    |   Value: [list of possible variations on segment text or empty list]
    |  
-   |   -------------------------------------------------------
-   +-->|(Seg #, seg text)|  |  |  |  |  |  |  |  |  |  |  |  |
-       -------------------------------------------------------
+   |   ---------------------------------------------------------
+   +-->|(Seg #, seg text, seg ty)|  |  |  |  |  |  |  |  |  |  |
+       ---------------------------------------------------------
         |
         |
         +-->[] or list of variations in order of appearance
@@ -60,12 +60,17 @@ import helper
 import sys
 
 wild_sym = '##!!##'
+wild_code = -1
 scheme_code = 0
 netloc_code = 1
-param_code = 2
-path_code = 3
+path_code = 2
+param_code = 3
 query_code = 4
 frag_code = 5
+
+# Weight array for similarity test; weights correspond by index to codes
+wt_arr = [1,2,1,1,1,1]
+
 
 # Similarity threshold expressed as a percent of varying elements
 # within a URL
@@ -361,7 +366,7 @@ def intersect_urls(res_url, in_url):
         # needs to be removed
         if res_url_txt <> in_url_txt:
             new_res_txt = ""
-            #TODO: potentially change back
+            #TODO: Change back to leave empty parameters in reduced URLs
             #if res_url_ty == param_code or res_url_ty == query_code or res_url_ty == frag_code:
              #   r_key_name = res_url_txt.split("=",1)[0]
              #   i_key_name = res_url_txt.split("=",1)[0]

@@ -1,12 +1,125 @@
 TODO for final project
 ================================================================================
 
-Log number of URLs that fail the sanity test rather than just quitting
-Script still hangs sometimes
 Similarity check on URLs that return matching hash
 Investigate why sanity check might be failing
-More data analysis!
+Keep parameters with empty values in reduced URLs and re-run dprocess.sh,
+     compare results
+Finish simurl.py
 
+FINAL COUNTDOWN
+================================================================================
+
+Graph: % of URLs consistent vs # reduced/synonym URLs
+       % of hashes consistent vs # reduced/synonym
+
+Similar URLs vs. Synonym URLs by site
+       Restructure similarity sets to store most similar URLs across fetches
+       Many problems can arise with URLs being put into the wrong set
+       Sort *most* similar URLs into similarity sets
+       There should be a separate similarity set for every URL in a fetch
+       However, if some resources don't appear in all fetches, then I have
+             to be able to identify which resources should be sorted into
+	     an existing similarity set and which should establish their own
+       Suggested algorithm:
+       For all fetches construct a list of all the inconsistent URLs to be sorted
+           While the URL set isn't empty
+               For all URLs in the URL set
+	           Calculate similarity score with all existing sim URL sets
+		   Identify the similarity set for which the URL has the highest score
+		   If that score is above a similarity threshhold
+		       If that URL set already has a URL from this fetch
+		           If the sim score of that URL is higher
+		               This URL starts its own similarity set
+		           Else
+		               Add URL to that similarity set
+		               Add old URL back to the URL set
+	               Else 
+		           Add URL to that similarity set
+		   Else
+		       URL starts its own similarity set
+
+       The biggest remaining problem will be with equal similarity scores
+       Should there be a fixed tie-breaker?
+
+Decide which URLs matter for processing
+       Categories:
+           Consistent URLs - appear in all fetches, identical every time
+	   Inconsistent URLs - Identical URLs which return different contents
+	   Inconsistent resources - URLs which appear different every time
+	       - appear in not all fetches
+	       - Synonym URLs - unique across fetches, but same contents
+	       - Similar URLs - fulfill same structural purpose, but slightly
+	         varying structure and possibly different contents different 
+		 contents possible (ads, stock images...?)
+       Some of these categories overlap; there might be a hash which doesn't
+       appear in all successful fetches
+
+Given the pool of resource URLs for a site across all fetches, can we separate
+them into distinct categories? 
+       Might have to separate based on contents and structure?
+       If same contents and structure across all fetches -> consistent.
+       If same contents but variable structure -> synonym & possibly similar
+       If different contents and same structure -> inconsistent
+       If different contents and slightly varying structure -> similar (same structural purpose?)
+       If different contents and totally different structure -> unrelated
+
+================================================================================
+Questions to answer:
+================================================================================
+
+       Q:  When a new similarity set is created, should other URLs be retroactively
+           evaluated to see if they fit better into that similarity set?
+       A:
+
+       Q:  How to do length-independent, order-independent similarity?
+       A1: When a "wild" segment is encountered, the in-URL segment should be check-
+           ed against all possible variations; sim-score increased if *any* matches.
+	   This isn't order-independent; makes it easier for subsequent URLs to be
+	   added to the similarity set. This is OK because absolute sim score
+	   value only being compared against other URLs in same fetch; since all
+	   sim scores will tend to increase as there are more "options" for the 
+	   wild segments, sorting will not be less accurate but there will be no
+	   chance of a URL falling short of the similarity threshhold.
+
+       Q:  How to identify "extra" middle segments?
+       A:  Additional segments in the middle can screw up similarity checks; this
+           was the biggest obstacle to length-independent similarity checking in 
+	   urltable. One possibility is checking the parameter name. If two parameter,
+	   query, or frag segments are being compared and are of the form "key=value"
+	   and the keys don't match and one URL is longer, consider skipping the
+	   segment in the longer URL, adding some penalty to the similarity score,
+	   and seeing if the key of the next segment in the longer URL and the 
+	   current key match. Another possibility is using the segment type field
+	   as produced by the split_url function in URLtable.
+	   
+
+       Q:  How to deal with "extra" end segments?
+       A:  Similarity score is calculated as # matching segments / # total segments.
+           When evaluating whether to add a new "in"-URL to a similarity set, the
+	   score is calculated between the "in"-URL and the "intersection"-URL of
+	   the similarity set. The # matching segments refers to the number of seg-
+	   ments (which can be interrupted by "extra" middle segments) and the # total
+	   segments refers to max(# intersection_url segs, # in_url segs). Therefore 
+	   if the "intersection"-URL has fewer segments than the "in"-URL then the 
+	   # total segments will be greater, which will cause the in-URL to have a
+	   higher similarity score with another URL of the same length than with
+	   the shorter but otherwise identical intersect URL.
+
+       Q:  Should they be "union"-URLs rather than intersect URLs?
+       A:  This would seem to be consistent with the goal of making it *easier* for
+           subsequent URLs to be sorted into the similarity set rather than harder
+	   but intersect URLs are more useful for URL-reduction purposes. So perhaps
+	   I'll maintain both. An alternative approach would be to refuse to have URLs
+	   of different lengths in the same similarity set no matter what.
+
+
+       
+
+
+
+
+================================================================================
 
 Process.py
 --------------------------------------------------------------------------------

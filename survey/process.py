@@ -34,6 +34,7 @@ def jaccard(sets):
 
 
 def process_main(sys_args):
+        # Number of trials is number of target files - 2 (for script name & refetch flag)
 	n_trials = len(sys_args)-2
         
         # False by default; if false, tries to read result of fetching reduced
@@ -77,7 +78,15 @@ def process_main(sys_args):
         # the purpose of URL canonicalization
         hash_url_dict = {}
 
-	# Iterate over all of the runs for a given URL.
+        # Resource fail dict
+        # Maps each resource to the number of times it failed
+        res_fail_dict = {}
+
+        # List of lists of resources requested in each fetch
+        # A resource is represented as a dictionary {"url","hash","size"}
+        res_lists = []
+
+	# Iterate over all of the fetches for a given URL.
 	# We're particularly interested in whether they
 	# saw different URLs or different contents at
 	# the same URL. Computes the Jaccard similarities
@@ -92,17 +101,24 @@ def process_main(sys_args):
 				fail_count += 1
 				continue
 			
-			res = results['resources']
+                        # Need to remove duplicate URLs for categorization code to work
+                        # TODO: change this
+			res = helper.remove_dup_urls(results['resources'])
 			urls = [r['url'] for r in res]
 			hashes = [r['hash'] for r in res]
 			url_sets.append(set(urls))
 			hash_sets.append(set(hashes))
+                        res_lists.append(res)
 
 			update_url_occurrences(url_occ_dict, urls)
                         update_url_hashes(url_hash_dict, hash_url_dict, res)
+                        update_res_fails(res_fail_dict, res)
                         #hash_url_dict = update_hash_urls(hash_url_dict, res)
 
-							
+	
+        ### The following blocks write a ton of information to the file
+        ### 'resultstats/<host>/<host>-detalied.txt'
+						
 	fmt = '%24s: urls=%.3f hashes=%.3f fails=%02d'
 	print fmt % (host, jaccard(url_sets), jaccard(hash_sets), fail_count),
 	print "\n","="*80,"\n",
@@ -124,6 +140,7 @@ def process_main(sys_args):
         print_dict(synonym_url_dict)
         print "\n","="*80
 
+        # Interesting, but somewhat unhelpful data structure for sorting URLs
 	#print "Trie-parsed URLs:"
 	#parse_urls(inconsistent_url_dict.keys())
 	#print "\n","="*80,"\n",
@@ -134,10 +151,15 @@ def process_main(sys_args):
 	urltable.print_sim_url_tab(inconsistent_url_tab)
         print "\n","="*80
 
+
+        ### The following block attempts to strip all synonym URL sets to a single
+        ### reduced URL, and then evaluates whether the reduced URL is as valid as one
+        ### of the original synonym URLs
+
         print "Reduced Synonym URLs:"
         share_file = "resultstats/temp/synhash"
-        syn_fetch_file = "resultstats/agg/synfetchresults.txt"
         syn_data_file = "resultstats/agg/syndata.txt"
+        syn_fetch_file = "resultstats/agg/synfetchresults.txt"
         syn_csv_data_file = "resultstats/agg/syndata.csv"
         syn_csv_fetch_file = "resultstats/agg/synfetchresults.csv"
         synurl.reduce_synonym_urls(synonym_url_dict, sim_thresh)
@@ -146,7 +168,14 @@ def process_main(sys_args):
         synurl.fetch_reduced_urls(host, synonym_url_dict, syn_fetch_file, syn_csv_fetch_file,\
                                   sanity_retry_count, reduced_retry_count, refetch_all)
 
-	
+        ### The following block looks back at the resource lists for each fetch and sorts
+        ### every resource into one of the following categories for each fetch:
+        ###   - consistent URL and contents across all non-failed fetches
+        ###   - consistent URL but contents vary, appears in all non-failed fetches
+        ###   - failure - URL will be reported as a failure for *this* fetch if size = 0
+        ###   - synonym: contents appear multiple times fetches but URL varies
+        ###   - Inconsistent: not a synonym URL, doesn't appear in all fetches
+        
 
 # Maps any resource URL encountered to # of occurrences across all trials
 # To be consistent across all trials, total # of occurrences should be some
@@ -202,6 +231,9 @@ def update_url_hashes(url_hash_dict, hash_url_dict, res):
                         new_url_dict[url] = 1
                         hash_url_dict[h] = new_url_dict
 	#return url_hash_dict
+
+def update_res_fails(res_fail_dict, res):
+        return 0
 
         
 

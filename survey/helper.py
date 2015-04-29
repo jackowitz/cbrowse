@@ -67,3 +67,14 @@ def strip_non_alnum(s):
 def unicode_to_str(us):
     return unicodedata.normalize('NFKD', us).encode('ascii','ignore')
     
+
+def remove_dup_urls(resource_list):
+    seen = []
+    out_list = []
+    for res in resource_list:
+        url = res['url']
+        if not (url in seen):
+            seen.append(url)
+            out_list.append(res)
+    return out_list
+            
