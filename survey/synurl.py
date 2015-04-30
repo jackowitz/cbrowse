@@ -12,8 +12,7 @@ import csv
 outdir = "resultstats"
 aggdir = outdir+"/agg"
 
-# Perform the inverse: make note of any different resources that contain the
-# same hash
+# make note of any different resources whose contents hash to the same value 
 def extract_synonym_urls(hash_url_dict):
         synonym_url_dict = {}
         for h in hash_url_dict.keys():
@@ -80,19 +79,19 @@ def fetch_reduced_urls(host, syn_url_dict, txt_out_file, csv_out_file, sanity_re
                        reg_retry, refetch_all):
 
         # Every reduced URL can fail, succeed but not match, or succeed and match
+        # URLs can also remain untested if the sanity check for a set of reduced URLs fails
+        # If sanity test fails, add # of reduced URLs to "untested due to sanity failure"
+
         # This function will create a new table mapping each hash to a tuple of
         # the form (syn_list, reduced_url_map) where reduced_url_map is a dictionary
         # mapping each reduced URL to a tuple of the form (fetch_success?, matching_url)
         # where success_url is the resource URL with the matching hash
         # If the fetch was successful but the match wasn't, then matching URL will be 
         # the empty string
-        # TODO: later do similarity check on success_url and reduced URL
 
         # This hopefully allows flexible analysis to be done on the results later
         # (syn_list is actually a dictionary mapping each URL in the synonym set
         # to its number of occurrences)
-
-        # If sanity test fails, add # of reduced URLs to "untested due to sanity failure"
 
         fails = 0
         sanity_untested = 0
@@ -102,10 +101,6 @@ def fetch_reduced_urls(host, syn_url_dict, txt_out_file, csv_out_file, sanity_re
         # Don't perform any processing for sites with 0 synonym URL sets; this dilutes data
         if len(syn_url_dict.keys()) == 0:
                 return syn_url_dict
-
-        # TODO: this could be one file for all websites but this allows me to examine
-        # intermediate results in failure cases
-        # share_file = share_file_base+"_"+host+".txt"
 
         url_dir = outdir+"/"+host+"/fetched"
 
@@ -163,11 +158,11 @@ def fetch_reduced_urls(host, syn_url_dict, txt_out_file, csv_out_file, sanity_re
         # CSV output
         csvwriter.writerow([host,fails,sanity_untested,succs_no_match,succs_w_match])
 
-        # TODO: for additional processing?
+        # Return for potential additional processing
         return res_syn_url_dict
 
 
-# fetches url, compares with original hash, updates value of fail, swm (success_w_match)
+# fetches url, compares result with original hash, updates value of fail, swm (success_w_match)
 # snm (success_no_match) in response
 # If sanity_check true, don't add result to reduced_url_map or update counter, just print
 # result
@@ -180,12 +175,11 @@ def fetch_and_compare(orig_h, url, out_dir, reduced_url_map, \
         helper.printd("Fetching url "+url)
         # Strip non alphanumeric characters that might make script fail to create and
         # write to this file
-        # TODO: make sure this doesn't lead to any conflicts
         
         url_str = helper.strip_non_alnum(helper.unicode_to_str(url))[:64]
 
-        # use first 64 characters of url as filename; this shouldn't affect anything
-        # as the same function is creating and accessing these files
+        # use first 64 characters of url as filename to store results
+        # Currently, this function is the only one writing to and reading from these files
         share_file = (out_dir+"/"+url_str+".json")
         helper.printd("Output file: "+share_file)
         

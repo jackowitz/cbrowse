@@ -1,3 +1,37 @@
+Instructions for Quickstart:
+================================================================================
+
+Unzip the archive.
+
+First, execute a one-time setup script that creates a couple of directories
+that are hard-wired into the code of the processing system.
+
+     $ ./setup.sh
+
+Next, run the following command to generate the result files:
+
+     $ ./map.sh survey.js sites/alexa-3.txt 10
+
+Feel free to experiment with different values for the site list and the loop
+count, but you'll have to empty the results directory first.
+
+Next run a quick cleaning script:
+
+     $ ./clean.sh
+
+Next, execute the main processing script, and be prepared to wait a while the
+first time. The first time only, invoke the process script with the "-setup"
+flag to create directories necessary for the processed results.
+
+     $ ./dprocess.sh -setup
+
+If you want to preserve the aggregate data from running dprocess.sh, run the
+following command to copy several shared files to the "archive" directory.
+
+     $ ./arch [optional archive name]
+
+
+
 Assumptions I should mention:
 ================================================================================
 About the directory hierarchy:
@@ -16,12 +50,13 @@ About the directory hierarchy:
 	|	  |				  |	
      fetched	site-detailed.txt          <fetch no. dirs>
 	|			   	          |
-     url[1-n].json			       +--+-------+
+     url[1-64.json			       +--+-------+
 					       |	  |
 					     <pages>   results.json
 					     
-      - * The user must create all files with an * before running dprocess.sh
-      - ** To run map.sh, the empty directory results must exist
+      - * The user must run setup.sh to create these files before running dprocess.sh
+        the first time
+      - ** To run map.sh, the empty directory "results" must exist
       - process.py assumes that a directory "resultstats/temp" exists for 
         communicating with its synonym URL fetching subprocess
       - Also assumes that directory "resultstats/agg" exists which contains files 

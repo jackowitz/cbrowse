@@ -44,7 +44,8 @@ echo "Domain,Syn URL Sets,Reduced URLs" > $syndatacsvfile
 echo "Domain,Failed Reduced URL fetches,Untested Reduced URLs,Successful Reduced URL fetches no match,\
 Successful Reduced URL fetches with match" > $synfetchcsvfile
 echo "Domain,Total Resources,Consistent Resources,Content-Inconsistent Resources,Synonym Resources,\
-Inconsistent Resources,Failed Resources" > $categoriescsvfile
+Inconsistent Resources,Failed Resources,Total Resource bytes,Consistent Resource bytes,Content-Inconsistent\
+ Resource bytes,Synonym Resource bytes,Inconsistent Resource bytes,Failed Resource bytes" > $categoriescsvfile
 
 
 for hostdir in results/*; do

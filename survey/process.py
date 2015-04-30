@@ -37,17 +37,20 @@ def jaccard(sets):
 
 
 def process_main(sys_args):
-        # Number of trials is number of target files - 2 (for script name & refetch flag)
+        # Number of trials is (total number of args - 2) (for script name & refetch flag)
 	n_trials = len(sys_args)-2
         
         # False by default; if false, tries to read result of fetching reduced
         # URLs from a file, if true, refetches all whether or not file exists
         refetch = sys_args[1]
 
-        # arg 2 is the first results/<site>/fetch/results.json file
+        # arg 2 is the first results/<site>/<fetch_num>/results.json file
         host = sys_args[2].split('/')[1] 
         print (host+"\n"+"="*80+"\n")
 
+        # Instruction to synonym URL code to refetch all reduced URLs even if data corresponding
+        # to the fetch is found locally
+        # dprocess.sh will make it false by default unless invoked with the flag '-refetch'
         if refetch == '1':
                 helper.printd("Refetching all files\n")
                 refetch_all = True
@@ -83,6 +86,8 @@ def process_main(sys_args):
 
         # Resource fail dict
         # Maps each resource to the number of times it failed
+        # TODO: Not currently using this, but need to make sure failed resources aren't getting
+        # in the way of anything else
         res_fail_dict = {}
 
         # List of lists of resources requested in each fetch
@@ -105,7 +110,7 @@ def process_main(sys_args):
 				continue
 			
                         # Need to remove duplicate URLs for categorization code to work
-                        # TODO: change this
+                        # Ultimately, we would like to change this
 			res = helper.remove_dup_urls(results['resources'])
 			urls = [r['url'] for r in res]
 			hashes = [r['hash'] for r in res]
@@ -116,7 +121,6 @@ def process_main(sys_args):
 			update_url_occurrences(url_occ_dict, urls)
                         update_url_hashes(url_hash_dict, hash_url_dict, res)
                         update_res_fails(res_fail_dict, res)
-                        #hash_url_dict = update_hash_urls(hash_url_dict, res)
 
 	
         ### The following blocks write a ton of information to the file
@@ -186,11 +190,10 @@ def process_main(sys_args):
         average_resource_stats(stats_by_fetch, n_succ_trials, avg_categories_file, host)
 
 # Maps any resource URL encountered to # of occurrences across all trials
-# To be consistent across all trials, total # of occurrences should be some
-# multiple of the (n_trials-fail_count)(generally 1*(n_trials-fail_count) 
-# unless the resource url appears multiple times in the same result page)
+# To be consistent across all trials, total # of occurrences should be
+# equal to (n_trials-fail_count)
+# unless the resource url appears multiple times in the same result page
 def update_url_occurrences(url_occ_dict, urls):
-	# TODO: 
 	# For now, making the simplifying assumption that url can only occur
 	# once in a list of resources
 	for url in set(urls):
@@ -208,11 +211,11 @@ def update_url_hashes(url_hash_dict, hash_url_dict, res):
 		h = r['hash']
 		sz = r['size']
 
-		# ignore failed resource fetches
-		# TODO: check this
+		# ignore failed resource fetches - don't want URL to be treated
+                # as inconsistent just because fetch failed once
 		if sz == 0:
 			continue
-		# TODO: for now, skip duplicate URLs
+		# For now, skip duplicate URLs
 		if url in processed_urls:
 			continue
 		processed_urls.append(url)
@@ -255,8 +258,8 @@ def update_res_fails(res_fail_dict, res):
 
         
 
-# TODO: improve this; this method breaks down if a URL with the same resource
-# is accessed more than once in a single result page
+# Extract any URLs that don't appear in every fetch
+# The current algorithm for this breaks down if duplicate resources are allowed per fetch
 def extract_inconsistent_urls(url_occ_dict, n_trials, fail_count):
 	inconsistent_url_dict = {}
 	for url in sorted(url_occ_dict.keys()):
@@ -268,6 +271,7 @@ def extract_inconsistent_urls(url_occ_dict, n_trials, fail_count):
 			inconsistent_url_dict[url] = url_occs
 	return inconsistent_url_dict
 
+
 # Isolates any resources that returned more than one hash across all trials
 def extract_inconsistent_resources(url_hash_dict):
 	inconsistent_res_dict = {}
@@ -278,6 +282,7 @@ def extract_inconsistent_resources(url_hash_dict):
 	return inconsistent_res_dict
 
 
+# Categorize every resource into one of 6 categories
 def categorize_resources_by_fetch(res_lists, url_occ_dict, res_fail_dict, 
                                   syn_url_dict, inconsistent_res_dict, n_succ_trials,
                                   write_to_file, num_file, size_file):
@@ -323,8 +328,7 @@ def categorize_resources_by_fetch(res_lists, url_occ_dict, res_fail_dict,
                         # Consistent
                         else:
                                 url_occs = url_occ_dict[r_url]
-                                res_fails = res_fail_dict[r_url]
-                                if (url_occs - res_fails) == n_succ_trials:
+                                if url_occs == n_succ_trials:
                                         fetch_stats["Consistent"]["n"] += 1
                                         fetch_stats["Consistent"]["b"] += r_sz
                                 else:
@@ -348,6 +352,8 @@ def categorize_resources_by_fetch(res_lists, url_occ_dict, res_fail_dict,
         return stats_by_fetch
 
 
+# Compute the average number of URLs in each category across all trials and write
+# result to an aggregate data file
 def average_resource_stats(stats_by_fetch, n_succ_trials, out_file, host):
         tot_sum = 0
         cons_sum = 0
@@ -421,19 +427,10 @@ def average_resource_stats(stats_by_fetch, n_succ_trials, out_file, host):
 
         return avg_stats
 
-                            
-        
-
-                
-
-
 
  
 # Inserts list of urls into a trie-like data structure
 # Then prints the data structure
-# TODO: figure out what more you can do with this; eg. extracting
-# common prefixes, isolating where the differences occur between
-# similar URLs
 def parse_urls(url_list):
 	url_trie = {}
 	for url in url_list:

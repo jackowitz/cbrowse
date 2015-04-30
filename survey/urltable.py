@@ -33,8 +33,8 @@
 
   NB. Currently in the case of non-empty variation lists, the data structure just 
   lists all possible variations with no repetition, and therefore says nothing about
-  the number of occurrences of each variation. TODO: this might be useful to add,
-  (But considering the things that vary are often things like access ids, and they
+  the number of occurrences of each variation. This might be useful to add, but 
+  considering the things that vary are often things like access ids, and they
   are always different, it might not be necessary.
 
   list of similar URLs
@@ -82,6 +82,8 @@ def create_sim_url_tab(url_list, sim_thresh):
     return sim_url_table
 
 
+# Insert Url into one of the existing similarity sets or have it establish 
+# its own
 def insert_url(sim_url_table, new_url, sim_thresh):
     new_url_list = split_url(new_url)
     for tab_url in sim_url_table:
@@ -95,15 +97,10 @@ def insert_url(sim_url_table, new_url, sim_thresh):
     sim_url_table.append(new_tab_url)
     return
 
+
 # Tab URL keys are tuples of the form (seg #, seg text, seg type)
 # values are lists, either empty or containing the list of possible values
 # for the segment among similar URLs
-# New_URL_list is of form [(seg text, seg type)], all comparison should
-# be done on the basis of seg text, but both pieces of information must be
-# stored
-# NB: by not comparing seg types, this leaves open an unlikely bug where a
-# case like www.example.com/path/a and www.example.com/path?a could be 
-# stored as the same URL
 def update_tab_url(tab_url, new_url_list):
     tab_url_segs = sorted(tab_url.keys())
     assert len(tab_url_segs) == len(new_url_list)
@@ -129,11 +126,11 @@ def update_tab_url(tab_url, new_url_list):
             tab_url[(tab_url_n,wild_sym,tab_url_ty)] = []
             tab_url[(tab_url_n,wild_sym,tab_url_ty)].append(tab_url_txt)
             tab_url[(tab_url_n,wild_sym,tab_url_ty)].append(new_url_txt)
-    #return tab_url
+
 
 
 # New table URL is stored as a dictionary
-# Keys are tuples of the form (segment #, segment text)
+# Keys are tuples of the form (segment #, segment text, segment ty)
 # Values are initially empty lists; if value is a variation, segment text
 # will be replaced by wild_sym and value will hold a list of the possible
 # actual values of the segment text
@@ -144,6 +141,7 @@ def create_tab_url(new_url_list):
     return new_tab_url
 
 
+# Splits URL first into components, and then splits each component into segments
 def split_url(url):
     url_list = []
     scheme,netloc,path,params,query,fragment = urlparse.urlparse(url)
@@ -168,6 +166,7 @@ def split_url(url):
         out_list.append((i,seg_txt,seg_ty))
 
     return out_list
+
 
 # 2 URLs are similar under a given similarity threshhold if their respective
 # lists have a % of differences <= sim_thresh
@@ -195,18 +194,15 @@ def check_urls_sim(tab_url, new_url, sim_thresh):
             # for now, skip wild syms because they cause issues
             if tab_url_texts == wild_sym:
                 continue
-            # weight similarity in netloc twice as heavily
-            if tab_url_stypes[i] == netloc_code:
-                max_score += 2
-            else:
-                max_score += 1
+
+            # Increase max score by weight corresponding to segment type
+            max_score += wt_arr[tab_url_stypes[i]]
+
             # if text & type match exactly, sim_score increases
             if tab_url_stypes[i] == new_url_stypes[i]:
                 if tab_url_texts[i] == new_url_texts[i]:
-                    if new_url_stypes[i] == netloc_code:
-                        sim_score += 2
-                    else:
-                        sim_score += 1
+                    sim_score += wt_arr[tab_url_stypes[i]]
+
                 # if name of parameter the same, sim_score increases
                 # NB: if params aren't of form x=y, this amounts to 
                 # testing the texts against each other directly
@@ -215,7 +211,8 @@ def check_urls_sim(tab_url, new_url, sim_thresh):
                     t_param_name = tab_url_texts[i].split('=',1)[0]
                     n_param_name = new_url_texts[i].split('=',1)[0]
                     if t_param_name == n_param_name:
-                        sim_score += 1
+                        sim_score += wt_arr[param_code]
+
         if ((float(sim_score)/max_score) < sim_thresh):
             return False
         else:
@@ -237,6 +234,7 @@ def print_sim_url_tab(sim_url_tab):
                     print "\t",seg_variation
         print '-'*40
 
+# Input is a url as a list of segments, output is a single reconstructed URL string
 def reconstruct_url(tab_url_list):
 
     tab_url_ns = helper.strip(tab_url_list,0)
@@ -284,6 +282,7 @@ def repl_wild(text,num):
         text += ("::"+ (str(num)))
     return text
 
+
 # Reduce a set of similar URLs to list of simplified URLs that represent the most
 # reduced versions of the different URL templates across URLs in the set
 def reduce_syn_urls(syn_url_list, sim_thresh):
@@ -315,7 +314,6 @@ def reduce_syn_urls(syn_url_list, sim_thresh):
                     continue
         if not found_match:
             res_urls.append(url)
-    
 
     for res_url in res_urls:
         res_url_final = remove_empty_segs(res_url)
@@ -323,6 +321,7 @@ def reduce_syn_urls(syn_url_list, sim_thresh):
         out_urls.append(out_url)
 
     return out_urls
+
 
 def remove_empty_segs(url_list):
     out_url = []
