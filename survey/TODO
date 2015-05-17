@@ -1,28 +1,240 @@
 TODO for final project
 ================================================================================
+
+Similarity check on URLs that return matching hash
+Investigate why sanity check might be failing
+Keep parameters with empty values in reduced URLs and re-run dprocess.sh,
+     compare results
+Finish simurl.py
+
+FINAL COUNTDOWN
+================================================================================
+
+Graph: % of URLs consistent vs # reduced/synonym URLs
+       % of hashes consistent vs # reduced/synonym
+
+Similar URLs vs. Synonym URLs by site
+       Restructure similarity sets to store most similar URLs across fetches
+       Many problems can arise with URLs being put into the wrong set
+       Sort *most* similar URLs into similarity sets
+       There should be a separate similarity set for every URL in a fetch
+       However, if some resources don't appear in all fetches, then I have
+             to be able to identify which resources should be sorted into
+	     an existing similarity set and which should establish their own
+       Suggested algorithm:
+       For all fetches construct a list of all the inconsistent URLs to be sorted
+           While the URL set isn't empty
+               For all URLs in the URL set
+	           Calculate similarity score with all existing sim URL sets
+		   Identify the similarity set for which the URL has the highest score
+		   If that score is above a similarity threshhold
+		       If that URL set already has a URL from this fetch
+		           If the sim score of that URL is higher
+		               This URL starts its own similarity set
+		           Else
+		               Add URL to that similarity set
+		               Add old URL back to the URL set
+	               Else 
+		           Add URL to that similarity set
+		   Else
+		       URL starts its own similarity set
+
+       The biggest remaining problem will be with equal similarity scores
+       Should there be a fixed tie-breaker?
+
+Decide which URLs matter for processing
+       Categories:
+           Consistent URLs - appear in all fetches, identical every time
+	   Inconsistent URLs - Identical URLs which return different contents
+	   Inconsistent resources - URLs which appear different every time
+	       - appear in not all fetches
+	       - Synonym URLs - unique across fetches, but same contents
+	       - Similar URLs - fulfill same structural purpose, but slightly
+	         varying structure and possibly different contents different 
+		 contents possible (ads, stock images...?)
+       Some of these categories overlap; there might be a hash which doesn't
+       appear in all successful fetches
+
+Given the pool of resource URLs for a site across all fetches, can we separate
+them into distinct categories? 
+       Might have to separate based on contents and structure?
+       If same contents and structure across all fetches -> consistent.
+       If same contents but variable structure -> synonym & possibly similar
+       If different contents and same structure -> inconsistent
+       If different contents and slightly varying structure -> similar (same structural purpose?)
+       If different contents and totally different structure -> unrelated
+
+================================================================================
+Questions to answer:
+================================================================================
+
+       Q:  When a new similarity set is created, should other URLs be retroactively
+           evaluated to see if they fit better into that similarity set?
+       A:
+
+       Q:  How to do length-independent, order-independent similarity?
+       A1: When a "wild" segment is encountered, the in-URL segment should be check-
+           ed against all possible variations; sim-score increased if *any* matches.
+	   This isn't order-independent; makes it easier for subsequent URLs to be
+	   added to the similarity set. This is OK because absolute sim score
+	   value only being compared against other URLs in same fetch; since all
+	   sim scores will tend to increase as there are more "options" for the 
+	   wild segments, sorting will not be less accurate but there will be no
+	   chance of a URL falling short of the similarity threshhold.
+
+       Q:  How to identify "extra" middle segments?
+       A:  Additional segments in the middle can screw up similarity checks; this
+           was the biggest obstacle to length-independent similarity checking in 
+	   urltable. One possibility is checking the parameter name. If two parameter,
+	   query, or frag segments are being compared and are of the form "key=value"
+	   and the keys don't match and one URL is longer, consider skipping the
+	   segment in the longer URL, adding some penalty to the similarity score,
+	   and seeing if the key of the next segment in the longer URL and the 
+	   current key match. Another possibility is using the segment type field
+	   as produced by the split_url function in URLtable.
+	   
+
+       Q:  How to deal with "extra" end segments?
+       A:  Similarity score is calculated as # matching segments / # total segments.
+           When evaluating whether to add a new "in"-URL to a similarity set, the
+	   score is calculated between the "in"-URL and the "intersection"-URL of
+	   the similarity set. The # matching segments refers to the number of seg-
+	   ments (which can be interrupted by "extra" middle segments) and the # total
+	   segments refers to max(# intersection_url segs, # in_url segs). Therefore 
+	   if the "intersection"-URL has fewer segments than the "in"-URL then the 
+	   # total segments will be greater, which will cause the in-URL to have a
+	   higher similarity score with another URL of the same length than with
+	   the shorter but otherwise identical intersect URL.
+
+       Q:  Should they be "union"-URLs rather than intersect URLs?
+       A:  This would seem to be consistent with the goal of making it *easier* for
+           subsequent URLs to be sorted into the similarity set rather than harder
+	   but intersect URLs are more useful for URL-reduction purposes. So perhaps
+	   I'll maintain both. An alternative approach would be to refuse to have URLs
+	   of different lengths in the same similarity set no matter what.
+
+
+       
+
+
+
+
+================================================================================
+
 Process.py
 --------------------------------------------------------------------------------
 
+MAYBE	  - Improve the inconsistent URL finding algorithm specifically in the case
+	    where a URL appears multiple times in a single result dictionary
+MAYBE	  - Also consider just tabulating all URLs, not just inconsistent ones
+DONE  	  - Do a top level reverse mapping from hash to all URLs that produce the 
+	    hash; we're particularly interested in sets of URLs that produce the 
+	    same hash because they automatically have unnecessary information
+MAYBE	  - Possibly examine ALL URLs for potentially redundant information
+	    - Harder to isolate unnecessary parts of URL if the unnecessary parts
+	      are consistent across all calls, but this should be part of the 
+	      analysis nevertheless
+	  - Might want some way to map each hash to a unique, smaller number
+	    so it's easier to detect hash equivalence by eye
+DONE      - Take reduced URLs, pipe them to slimer and hash returns
+DONE        - For each reduced URL, determine whether or not it was successful in 
+	      returning the same contents
+	    - Find a way to get the original results with some reduction
+	    - Add a basic sanity test that re-fetches one of the URLs in the syn-
+	      onym set and hashes its contents and compares that to the stored
+	      hash
+
+
+
 Urltable.py
 --------------------------------------------------------------------------------
-	  - Looks like there can also be queries or params in other parts of the
-	    URL... So have to do splitting within each section
-	  - Perhaps allow a customizable "similarity threshold", meaning a number
+MAYBE	  - Looks like there can also be queries or params in other parts of the
+	    URL... So have to do splitting within each 
+IN PROG	  - Perhaps allow a customizable "similarity threshold", meaning a number
 	    of differences to tolerate before considreing something a separate URL
 	    or could there be a way of determining this dynamically?
-	    - Need to improve the similarity threshold; some URLs have a ton of params
+DONE	    - Need to improve the similarity threshold; some URLs have a ton of params
 	      that are different but are fundamentally the same but can't lower sim
 	      threshold universally; perhaps weight different segments higher?
-	    - For example, if all netloc segments and path same, URLs very likely 
+DONE	    - For example, if all netloc segments and path same, URLs very likely 
 	      should be considered similar
-	  - There is additional splitting that should be done; examples:
+NOT DOING - There is additional splitting that should be done; examples:
 	    - amazon.com, https://pixel.adsafeprotected.com... commas within query
 	      javascript? param is called "jsinfo"
 	    - At the same time, there are sometimes unique comma-separated lists of 
 	      numbers as param values; necessarily want to split those
+IN PROG	  - Right now urls of different lengths are automatically not similar; may-
+	      be this shouldn't be the case?
+	    - See ebay.com-detailed.txt
+	    - http://srx.main.ebayrtm.com/rtm... one has an extra parameter
+	    - Maybe tie into weighting certain parts of URL more highly? netloc?
+	    - If the names of all the parameters are the same but one URL has one
+	      more, those actually might be good candidates for similarity
+NOT DOING - Want some way to associate a hash with each inconsistent URL such that
+	    - If a group of similar URLs all share a hash, a new URL can be const-
+	      tructed that eliminates their unnecessary uniqueifying parts
+DONE	  - Need to fix intersect URLs so that it can handle URLs of different lens
+	    and potentially somewhat different #s of segments
+	    - Consider: extra segment in the middle
+	    - Extra segment at the end
+	    - Equal # of segments, but different types
+	    - Ended up just accepting that a set of synonym URLs might not be red-
+	      ucible to a single reduced URL if the structure of the synonym URLs
+	      isn't sufficiently similar
+	  - Improve intersect URL to maintain as much non-unique parts of URLs as
+	    possible
+	    - Some param values are long encoded strings with only a small difference
+	      in the whole string
+	    - See huffingtonpost, "syndication.twitter.com"
+	  - Improve URL insertion to maintain a separate similarity set to correspond
+	    to each resource
+	    - This means that 
+
+	      
 
 Urltrie.py
 --------------------------------------------------------------------------------
-	    
+
+
+survey.js (fetchsyn.js)
+--------------------------------------------------------------------------------
+DONE	  - Need to pipe simplified URLs from process.py back to this
+DONE	  - Probably a lighter-weight version of this though; just want the hash
+	    of their contents
+	  - Currently NONE of the fetches are returning the same contents.
+	    - Need to figure out why:
+	    - URL reduction not working well?
+	    - Some other error with script?
+	    - Appears in some case that the existence of a seemingly meaningless
+	      parameter matters, even if its value doesn't; ie. a new value won't
+	      be automatically generated by the website
+	    - in the case of this widget I get an "access denied" message
+
+
+================================================================================
+Final product spec
+================================================================================
+	- Possibly taking consistent parts of returned webpages and somehow
+	  reconstructing the sites returned by Slimer and archiving them?
+	- Removing or somehow standardizing the inconistent elements before arc-
+	  hiving or at least modifying the elements in some way to show that
+	  they might not be part of the "common browsing experience"
+	- Currently displaying the plain html page displays something that is 
+	  barely anything like the original page in most cases
+	- How can I synthesize something that looks like the actual original
+	  page with all the inconsistent elements removed or somehow marked?
+	  Do I have to somehow automatically save all the relevant media files?
+	
+
+URLs for illustration:
+================================================================================
+	  
+Reduced:
+http://platform.twitter.com/widgets/follow_button.5f46501ecfda1c3e1c05dd3e24875611.en.html/#_=&dnt=false&id=twitter-widget-0&lang=en&screen_name=imgur&show_count=false&show_screen_name=false&size=m
+
+2 Reducees:
+http://platform.twitter.com/widgets/follow_button.5f46501ecfda1c3e1c05dd3e24875611.en.html#_=1421944306177&dnt=false&id=twitter-widget-0&lang=en&screen_name=imgur&show_count=false&show_screen_name=false&size=m
+http://platform.twitter.com/widgets/follow_button.5f46501ecfda1c3e1c05dd3e24875611.en.html#_=1421944306280&dnt=false&id=twitter-widget-0&lang=en&screen_name=imgur&show_count=false&show_screen_name=false&size=m
+
 
 

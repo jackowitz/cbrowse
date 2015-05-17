@@ -1,0 +1,138 @@
+Instructions for Quickstart:
+================================================================================
+
+Unzip the archive.
+
+First, execute a one-time setup script that creates a couple of directories
+that are hard-wired into the code of the processing system.
+
+     $ ./setup.sh
+
+Next, run the following command to generate the result files:
+
+     $ ./map.sh survey.js sites/alexa-3.txt 10
+
+Feel free to experiment with different values for the site list and the loop
+count, but you'll have to empty the results directory first.
+
+Next run a quick cleaning script:
+
+     $ ./clean.sh
+
+Next, execute the main processing script, and be prepared to wait a while the
+first time. The first time only, invoke the process script with the "-setup"
+flag to create directories necessary for the processed results.
+
+     $ ./dprocess.sh -setup
+
+If you want to preserve the aggregate data from running dprocess.sh, run the
+following command to copy several shared files to the "archive" directory.
+
+     $ ./arch [optional archive name]
+
+
+
+Assumptions I should mention:
+================================================================================
+About the directory hierarchy:
+      
+                    survey
+		      |
+	+-------------+--------------+
+	|			     |
+      resultstats*                results**
+        |			     |
+        +-----------+----------+     +------------+
+        |	    |          |		  |
+	agg*       temp*  <site dirs> 	     <site dirs>
+		   	       |	          |
+	+---------+------------+		  |
+	|	  |				  |	
+     fetched	site-detailed.txt          <fetch no. dirs>
+	|			   	          |
+     url[1-64.json			       +--+-------+
+					       |	  |
+					     <pages>   results.json
+					     
+      - * The user must run setup.sh to create these files before running dprocess.sh
+        the first time
+      - ** To run map.sh, the empty directory "results" must exist
+      - process.py assumes that a directory "resultstats/temp" exists for 
+        communicating with its synonym URL fetching subprocess
+      - Also assumes that directory "resultstats/agg" exists which contains files 
+        that aggregate some data from processing all websites
+      - If the tester wants to save these aggregate data files, it is important to 
+        copy them somewhere else because otherwise dprocess.sh will try to delete them
+      - dprocess.sh assumes result json files are called results.json and
+        stored in "<hostname>/<fetch_num>/results.json"
+	- As long as the tester uses "map.sh" to generate the results, the input
+	  to dprocess.sh will be placed in the correct place
+
+      - Files created by synurl.fetch_reduced_urls are named based on a shortened
+        simplified version of the url being fetched. They should only be generated
+	and accessed by fetch_and_compare; otherwise, abstract out the function
+	that takes a URL and turns it into a json file name
+
+Testing process:
+================================================================================
+Date  : 4/17/15 15:00
+Test 1: Piped reduced URLs with empty params left to slimer, hashed results and 
+        compared to hash of original synonym set
+Result: NONE of the reduced URLs produced contents which hashed to the same value
+	as the original resource
+
+Date  : 4/18/15 14:00
+Test 2: Piped Reduced URLs with non-matching segments completely removed to slimer,
+        hashed results and compared to original synonym hash
+Result: For huffingtonpost.com, which had a massive 92 reduced URLs from 41 synonym
+	URL sets, not one reduced URL result hashed to the same value
+
+Date  : 4/18/15 17:00
+Test 3: Sanity test: re-fetch one of the urls in the original synonym set and hash
+        its contents, compare to original stored hash for synonym set
+	If it isn't the same, that suggests maybe there are time-sensitive params
+	within the URLs that no longer check out, causing the reduced URLs to fail
+Result: Sanity test is failing on all links. That should not be the case. Is the
+	problem slimer, or something in my program?
+
+Date  : 4/19/15 13:00
+Test 4: Re-generated all input data using map.sh script, re-ran dprocess.sh
+Result: Again came to conclusion that every site which has a reduced URL and runs
+	sanity check is failing the assertion that result of fetching sanity check
+	is same as original hash associated with sanity URL
+	(see process.py, fetch_reduced_urls)
+
+Date  : 4/19/15 16:00
+Test 5:	Determined something was funky with the fetchsyn.js script, and realized
+        that I'm comparing the wrong 2 hashes. Instead of comparing the hash of
+	the page contents with the hash of the result body, when re-fetching the
+	reduced URLs I should search the returned resources for the URL I fetched
+	and compare its hash with the original hash.
+Result: More of the websites are passing the sanity test, although not all. Finally
+	getting some reduced URLs to hash to the same contents as the original syn-
+	onym set.
+
+Date  : 4/20/15 23:00
+Test 6: Changed script to check all resources for the desired hash
+Result: Script still hanging sometimes, also sometimes inexplicably failing sanity
+	test even now; maybe I should be checking both content hash and resource
+	body hash
+
+Date  : 
+Test x: In the cases where the reduced URL is hashing to the same contents as the 
+        original synonym URL, it would be useful to confirm that the contents aren't
+	just an empty page of some kind.
+Result: 
+
+
+================================================================================
+Future work:
+
+Based on which reduced URLs check out, identify parameters that might be unnecessary
+even in consistent URLs;
+     ie. reducing URLs that are consistent throughout fetches but still might contain
+         unnecessary information
+
+Complicated parameter values that are themselves coded strings with key value
+     parameter representations - the uniquifying information might be "nested" in
+     a way that my URL processing algorithm isn't sophisticated enough to detect

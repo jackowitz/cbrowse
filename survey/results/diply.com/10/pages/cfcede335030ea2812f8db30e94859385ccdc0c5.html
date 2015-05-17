@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html class="ng-scope" ng-app="diplyApp"><head lang="en"><style type="text/css">@charset "UTF-8";[ng\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide:not(.ng-hide-animate){display:none !important;}ng\:form{display:block;}</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <!-- Render Styles from Bundle -->
+    
+    <link href="/Content/new_homepage_styles?v=E51A63LYiJJMKsPG2U1CMvrmLFL3PFAq0Oh303y9VpY1" rel="stylesheet">
+
+    
+    
+    
+    <link href="http://fonts.googleapis.com/css?family=Roboto:400,100,500,700,300" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    <title>Diply.com | Go for a Dip!</title>
+
+
+    <!-- fav and touch icons -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/Content/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="/Content/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="/Content/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="/Content/ico/apple-touch-icon-57-precomposed.png">
+    <link rel="shortcut icon" type="image/x-icon" href="/content/ico/favicon.ico">
+
+
+    <base href="/">
+
+</head>
+<body>
+    
+    <div class="diply-modal-cover" id="js_modal_cover" data-active-modal="">
+        <!-- SIGN IN MODAL-->
+        <div class="diply-modal" id="diply_signin_modal" onclick="Modal.Core.default(event)">
+            <a class="modal-close visible-xs" href="javascript:void(0)" onclick="Modal.Signin.hide()">
+                <i class="fa fa-fw fa-times"></i>
+            </a>
+            <div class="modal-header">
+                <div class="modal-header-title">
+                    Join the Diply Community
+                </div>
+                <div class="modal-header-subtitle">
+                    We have double dip donuts!
+                </div>
+            </div>
+            <div class="modal-body signin-body">
+<form class="ng-pristine ng-valid" action="/account/externallogin" method="post"><input name="__RequestVerificationToken" value="h-SvPCWDeM9QIb87Gwa8KhdgvDDchpgoq5QHwviC_XztRCsvsUDBP6c0XInvwwP3f7PnCsVFlMM1Ac740O6yEz26MOI1" type="hidden">                    <input name="provider" id="providerInput" type="hidden">
+                    <button value="facebook" onclick="javascript: $('#providerInput').val('facebook'); $(this).parent().submit();" class="diply-signup-btn diply-signup-facebook">
+                        <i class="fa fa-fw fa-facebook"></i>
+                         Sign In With Facebook
+                    </button>
+                    <button value="twitter" onclick="javascript: $('#providerInput').val('twitter'); $(this).parent().submit();" class="diply-signup-btn diply-signup-twitter">
+                        <i class="fa fa-fw fa-twitter"></i>
+                         Sign In with Twitter
+                    </button>
+                    <button value="googleplus" onclick="javascript: $('#providerInput').val('google'); $(this).parent().submit();" class="diply-signup-btn diply-signup-google">
+                        <i class="fa fa-fw fa-google-plus"></i>
+                         Sign In with Google
+                    </button>
+</form>
+                
+
+                <hr>
+
+                Don't Have An Account? Click a Service to Make One!
+            </div>
+        </div>
+        <!-- END SIGN IN MODAL -->
+        <!-- GENERAL PURPOSE MODAL -->
+        <div class="diply-modal" id="diply_general_modal" onclick="Modal.Core.default(event)">
+            <div class="modal-header">
+                <div class="modal-header-title"></div>
+                <div class="modal-header-subtitle"></div>
+            </div>
+            <div class="modal-body"></div>
+        </div>
+    </div>
+
+
+    
+<div class="diply-nav-anti-jitterbug">
+    <div class="diply-nav ng-scope" ng-controller="NavController">
+        <div class="diply-float-wrap relative">
+            <div class="display-table">
+                <div class="display-row relative">
+                    <div class="display-cell diply-brand-nav">
+                        <a href="/" ui-sref="home" onclick="angularizer.Home.scrollToTop()">
+                            <img src="/Content/static/Diply-New-Designs/diply-logo-nav.png" alt="Diply: Go For a Dip!">
+                        </a>
+                    </div><!-- /.diply-brand -->
+
+                    <div class="diply-navlinks-float">
+                        <div class="diply-navlink nohover">
+                                    <!-- SIGN IN MODAL -->
+                                <div class="diply-nav-create">
+                                    <a href="javascript:void(0)" class="diply-nav-create-btn no-user" onclick="Modal.Signin.show()">
+                                        Sign In
+                                    </a>
+                                </div>
+                                    <!-- END SIGN IN MODAL -->
+                        </div>
+                        <a class="diply-navlink" id="nav-explore">
+                            <p class="navlink-text explore">Explore</p>
+                        </a>
+                        <a href="/c/videos" class="diply-navlink hidden-sm hidden-xs">
+                            <p class="navlink-text">Watch</p>
+                        </a>
+                        <a href="/c/life/fun" class="diply-navlink hidden-sm hidden-xs">
+                            <p class="navlink-text">Laugh</p>
+                        </a>
+                        <a href="/c/life/inspirational" class="diply-navlink hidden-sm hidden-xs">
+                            <p class="navlink-text">Inspire</p>
+                        </a>
+
+
+
+                    </div><!-- /.diply-navlinks-float -->
+                </div>
+            </div>
+        </div><!-- /.diply-float-wrap -->
+        <!-- Explore Shelf -->
+        <!-- ngInclude: undefined --><ng-include class="ng-scope" src="%27/Content/static/diply-new-angular/src/app/explore/explore.html%27"><div class="diply-explore-shelf ng-scope" ng-controller="ExploreController">
+    <div class="diply-explore-inner">
+    <a class="diply-explore-close" href="javascript:void(0)"><i class="fa fa-fw fa-times"></i></a>
+        <!-- Left Side: Trending -->
+        <div class="diply-explore-left">
+            <a href="" class="left-image hidden-xs" style="background-image: url();">
+                <div class="left-image-overlay">
+                    <span class="h3 white image-overlay-text ng-binding"></span>
+                </div>
+            </a>
+            <a href="" class="left-image hidden-xs" style="background-image: url();">
+                <div class="left-image-overlay">
+                    <span class="h3 white image-overlay-text ng-binding"></span>
+                </div>
+            </a>
+            <!-- Would like to remove hidden-xs from two above if possible -->
+            <a href="" class="left-image hidden-xs" style="background-image: url();">
+                <div class="left-image-overlay">
+                    <span class="h3 white image-overlay-text ng-binding"></span>
+                </div>
+            </a>
+            <a href="" class="left-image hidden-xs" style="background-image: url();">
+                <div class="left-image-overlay">
+                    <span class="h3 white image-overlay-text ng-binding"></span>
+                </div>
+            </a>
+        </div>
+
+        <!-- Right Side: Cats(Meow)/Search -->
+        <div class="diply-explore-right">
+            <div class="top-row">
+                <h3 class="explore-heading">Looking for Something?</h3>
+            </div>
+            <div class="middle-row">
+                <div class="right-col">
+                    <ul class="cat-list">
+                        <li>
+                            <a href="/c/life/animals">
+                                <i class="fa fa-fw fa-paw"></i>
+                                Animals
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/c/life/diy">
+                                <i class="fa fa-fw fa-paint-brush"></i>
+                                DIY
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/c/life/entertainment-life">
+                                <i class="fa fa-fw fa-star"></i>
+                                Entertainment
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/c/culture/food-life">
+                                <i class="fa fa-fw fa-cutlery"></i>
+                                Food
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="right-col">
+                    <ul class="cat-list">
+                        <li>
+                            <a href="/c/life/inspirational">
+                                <i class="fa fa-fw fa-lightbulb-o"></i>
+                                Inspire
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/c/life/fun">
+                                <i class="fa fa-fw fa-smile-o"></i>
+                                Laugh
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/c/life">
+                                <i class="fa fa-fw fa-heart"></i>
+                                Life
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/c/news">
+                                <i class="fa fa-fw fa-newspaper-o"></i>
+                                News
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="right-col">
+                    <ul class="cat-list">
+                        <li>
+                            <a href="/c/culture/photography">
+                                <i class="fa fa-fw fa-camera"></i>
+                                Photography
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/c/style">
+                                <i class="fa fa-fw fa-group"></i>
+                                Style
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/shop">
+                                <i class="fa fa-fw fa-shopping-cart"></i>
+                                Shop
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/c/culture/tech">
+                                <i class="fa fa-fw fa-desktop"></i>
+                                Technology
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="bottom-row">
+                <input class="diply-search ng-pristine ng-untouched ng-valid" placeholder="Search Articles" ng-model="form.search" ng-enter="search()" type="text">
+                <a class="diply-search-btn" href="javascript:void(0)" ng-click="search()">
+                    <i class="fa fa-search"></i>
+                </a>
+            </div>
+        </div>
+
+        <!-- Bottom: Legal -->
+        <div class="diply-explore-bottom hidden-xs">
+            <hr>
+            <a class="link-right" href="/static/privacy">Privacy Policy</a>
+            <a class="link-right" href="/static/terms">Terms of Use</a>
+            <a class="link-right" href="/static/help">Help</a><!-- Replace this with fancy modal ASAP -->
+
+            <a href="/static/about">About Us</a>
+            <a href="/static/advertise">Advertise</a>
+        </div>
+    </div>
+</div></ng-include>
+        <!-- / Explore Shelf -->
+    </div><!-- /.diply-nav -->
+</div>
+
+
+
+    <!-- uiView:  --><div class="ng-scope" ui-view="" id="testBody"><!-- Dat Header -->
+<!-- ngInclude: undefined -->
+<!-- /Dat Header -->
+
+<!-- Dat Nav -->
+<!--<ng-include src="'/Content/static/diply-new-angular/src/app/nav/nav.html'"></ng-include>-->
+        <!-- Moved to _Nav.cshtml -->
+<!-- /Dat Nav -->
+
+<!-- uiView:  --><div class="ng-scope" ui-view=""></div><!-- this might not be needed -->
+
+<div class="diply-wrapper ng-scope">
+    <!--<div class="diply-row">-->
+        <!-- Content -->
+        <div class="diply-main">
+            <div class="diply-card-row clearfix">
+                <!-- LARGE CARD -->
+                <div class="diply-card card-wide">
+                    <a class="card-image" style="background-image: url();" href="">
+                        <p class="card-tag ng-binding"></p>
+                    </a>
+                    <div class="card-info">
+                        <a href="" class="card-info-headline ng-binding"></a>
+                        <div class="card-info-author">
+                            <div class="card-info-author-img" style="background-image: url()"></div>
+                            <p>
+                               By <a class="ng-binding" href="/profile/"></a><br>For <a class="ng-binding" href="/"></a>
+                            </p>
+                        </div>
+                        <p class="card-info-summary ng-binding">
+                        </p>
+                        <a class="card-info-more" href="">Read This <i class="fa fa-chevron-right"></i></a>
+                    </div>
+                </div>
+                <!-- END LARGE CARD -->
+            </div>
+            <div class="diply-card-row clearfix">
+                <div class="diply-card-social">
+                    <p class="diply-social-title">Follow Us to Get More Diply</p>
+                    <!--<div class="diply-social-badges">-->
+                        <!--<a href="https://www.facebook.com/diply" target="_blank" alt="Like us on Facebook!" class="social-badge sb-fb"><i class="fa fa-facebook"></i></a>-->
+                        <!--<a href="https://twitter.com/diply" target="_blank" alt="Follow us on Twitter!" class="social-badge sb-tw"><i class="fa fa-twitter"></i></a>-->
+                        <!--<a href="https://plus.google.com/+Diply" target="_blank" alt="Join our Circle!" class="social-badge sb-gp"><i class="fa fa-google-plus"></i></a>-->
+                        <!--&lt;!&ndash;<br class="visible-xs" />&ndash;&gt;-->
+                        <!--<a href="https://instagram.com/diply/" target="_blank" alt="Follow us on Instagram" class="social-badge sb-ig sb-m-f"><i class="fa fa-instagram"></i></a>-->
+                        <!--<a href="https://www.pinterest.com/diply/" alt="Join us on Pinterest" target="_blank" class="social-badge sb-pi"><i class="fa fa-pinterest"></i></a>-->
+                        <!--<a href="https://www.youtube.com/diply" alt="Follow us on YouTube"  target="_blank" class="social-badge sb-yt"><i class="fa fa-youtube"></i></a>-->
+                        <!--&lt;!&ndash;<a href="mailto:info@goviralinc.com" alt="Get in Touch!" class="social-badge sb-em"><i class="fa fa-envelope"></i></a>&ndash;&gt;-->
+                    <!--</div>-->
+                    <div class="diply-sb-holder">
+                        <a class="sb-round sb-fb" href="https://www.facebook.com/diply" target="_blank">
+                            <i class="fa fa-fw fa-facebook"></i>
+                        </a>
+                        <a class="sb-round sb-tw" href="https://twitter.com/diply" target="_blank">
+                            <i class="fa fa-fw fa-twitter"></i>
+                        </a>
+                        <a class="sb-round sb-gp" href="https://plus.google.com/+Diply" target="_blank">
+                            <i class="fa fa-fw fa-google-plus"></i>
+                        </a>
+                        <a class="sb-round sb-ig" href="https://instagram.com/diply/" target="_blank">
+                            <i class="fa fa-fw fa-instagram"></i>
+                        </a>
+                        <a class="sb-round sb-pi" href="https://www.pinterest.com/diply/" target="_blank">
+                            <i class="fa fa-fw fa-pinterest"></i>
+                        </a>
+                        <a class="sb-round sb-yt" href="https://www.youtube.com/diply" target="_blank">
+                            <i class="fa fa-fw fa-youtube"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="diply-card-row clearfix">
+                <!-- SMALL CARD LEFT -->
+                <div class="diply-card card-left">
+                    <a class="card-image" style="background-image: url()" href="">
+                        <p class="card-tag ng-binding"></p>
+                    </a>
+                    <div class="card-info">
+                        <a href="" class="card-info-headline ng-binding"></a>
+                        <div class="card-info-author">
+                            <p>
+                                By <a class="ng-binding" href="/profile/"></a> for <a class="ng-binding" href="/"></a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <!-- END SMALL CARD LEFT -->
+                <!-- SMALL CARD RIGHT - SPONSORED -->
+                <div class="diply-card card-right" rel="diply">
+                    <a class="card-image" style="background-image: url()" href="">
+                        <p class="card-tag ng-binding"></p>
+                    </a>
+                    <div class="card-info">
+                        <a href="" class="card-info-headline ng-binding"></a>
+                        <div class="card-info-author">
+                            <p>
+                                By <a class="ng-binding" href="/profile/"></a> for <a class="ng-binding" href="/"></a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <!-- END SMALL CARD RIGHT - SPONSORED -->
+            </div>
+
+            <div class="diply-card-row clearfix">
+                <!-- SMALL CARD LEFT -->
+                <div class="diply-card card-left">
+                    <a class="card-image" style="background-image: url()" href="">
+                        <p class="card-tag ng-binding"></p>
+                    </a>
+                    <div class="card-info">
+                        <a href="" class="card-info-headline ng-binding"></a>
+                        <div class="card-info-author">
+                            <p>
+                                By <a class="ng-binding" href="/profile/"></a> for <a class="ng-binding" href="/"></a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <!-- END SMALL CARD LEFT -->
+                <!-- SMALL CARD RIGHT - SPONSORED -->
+                <div class="diply-card card-right" rel="diply">
+                    <a class="card-image" style="background-image: url()" href="">
+                        <p class="card-tag ng-binding"></p>
+                        <div class="card-tag-img" style=""></div>
+                    </a>
+                    <div class="card-info">
+                        <a href="" class="card-info-headline ng-binding"></a>
+                        <div class="card-info-author">
+                            <p>
+                                By <a class="ng-binding" href="/profile/"></a> for <a class="ng-binding" href="/"></a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <!-- END SMALL CARD RIGHT - SPONSORED -->
+            </div>
+
+            <!-- Vid Card -->
+            <div class="diply-card-row clearfix">
+                <!-- LARGE CARD -->
+                <div class="diply-card card-wide">
+                    <a class="card-image" style="background-image: url()" href="">
+                        <p class="card-tag ng-binding"></p>
+                        <!--<div class="card-tag-img" style=""></div>-->
+                    </a>
+                    <div class="card-info">
+                        <a href="" class="card-info-headline ng-binding"></a>
+                        <div class="card-info-author">
+                            <div class="card-info-author-img" style="background-image: url()"></div>
+                            <p>
+                                By <a class="ng-binding" href="/profile/"></a><br>for <a class="ng-binding" href="/"></a>
+                            </p>
+                        </div>
+                        <p class="card-info-summary ng-binding">
+                        </p>
+                        <a class="card-info-more" href="javascript:void(0)">Read This <i class="fa fa-chevron-right"></i></a>
+                    </div>
+                </div>
+                <!-- END LARGE CARD -->
+            </div>
+
+            <!-- Create Card-->
+            <!--div class="diply-card-row clearfix hidden-xs">
+                <div class="diply-card card-create">
+                    <div class="create-header display-table">
+                        <div class="display-cell" style="text-align:center;">
+                            <h3 class="create-card-title">Join the Diply Community!</h3>
+                            <a href="javascript:void(0)" class="diply-cta-btn" id="cta-btn">Start Creating</a>
+                        </div>
+                    </div>
+                    <div class="create-container">
+                        <a href="javascript:void(0)" class="diply-signup-btn diply-signup-facebook">
+                            <i class="fa fa-facebook"></i>
+                            &nbsp;Sign Up With Facebook
+                        </a>
+                        <a href="javascript:void(0)" class="diply-signup-btn diply-signup-twitter">
+                            <i class="fa fa-twitter"></i>
+                            &nbsp;Sign Up with Twitter
+                        </a>
+                        <hr />
+                        Already Have An Account? <a href="javascript:void(0)">Sign In</a>
+                    </div>
+                </div>
+            </div-->
+
+        </div>
+        <!-- Sidebar -->
+        <!-- ngInclude: undefined -->
+        <!-- Sidebar [END]-->
+    <!--</div>-->
+        <div class="diply-home-footer">
+            <img src="/Content/static/diply-new-angular/src/images/logo_blue.svg">
+            <div class="home-footer-links">
+                <a href="/static/about">About</a>
+                <!--<a href="mailto:info@goviralinc.com">Contact</a>-->
+                <a href="/static/terms">Terms of Service</a>
+                <a href="/static/advertise">Advertise</a>
+            </div>
+        </div>
+</div>
+
+
+<!-- Dat Footer -->
+<!--<ng-include src="''"></ng-include>-->
+<!-- /Dat Footer -->
+</div>
+
+    <script src="/bundles/new_homepage_scripts?v=xjZqMsV1Jxoj6gft1Bg3k52LoLtQwgMfPJ7YgwS2f6w1"></script>
+
+
+<!--<div data-ng-include="'templates/blocks/header.html'"></div>-->
+    <!-- Angular Base -->
+    
+
+    <!-- Components/Libs -->
+    
+
+    <!-- Main -->
+    
+
+    <!-- Services -->
+    
+
+    <!-- Controllers -->
+    
+
+    <!-- Directives -->
+    
+
+    <!-- Other -->
+    
+    
+
+
+</body></html>
